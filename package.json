@@ -1,0 +1,38 @@
+{
+  "name": "sjp-eng-scraper",
+  "version": "1.0.0",
+  "description": "Web scraper script using Node.js to extract news, notices, and announcements from https://eng.sjp.ac.lk and insert into Supabase",
+  "main": "scraper.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node scraper.js",
+    "scrape": "node scraper.js",
+    "dry-run": "node scraper.js --dry-run"
+  },
+  "keywords": [
+    "scraper",
+    "nodejs",
+    "supabase",
+    "cheerio",
+    "sjp"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
+    "cheerio": "^1.1.0",
+    "dotenv": "^18.0.8",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.30",
+    "tailwindcss": "^4.3.3",
+    "vite": "^6.4.4"
+  }
+}

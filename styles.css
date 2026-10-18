@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sjp-maroon-deep: #160205;
+  --color-sjp-maroon-dark: #3b060f;
+  --color-sjp-maroon: #5c0919;
+  --color-sjp-maroon-light: #800d24;
+  --color-sjp-maroon-vibrant: #9e1430;
+
+  --color-sjp-gold-dark: #b48505;
+  --color-sjp-gold: #f59e0b;
+  --color-sjp-gold-accent: #d4af37;
+  --color-sjp-gold-light: #fbbf24;
+  --color-sjp-gold-bright: #fde047;
+
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ==========================================================================
+   University of Sri Jayewardenepura - Signature Maroon & Gold Glassmorphism
+   Futuristic iOS 27 Glass System
+   ========================================================================== */
+
+/* Realistic iOS 27 Frosted Specular Glass Container */
+.ios27-glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Dark Specular Obsidian Maroon Glass */
+.ios27-glass-maroon {
+  background: linear-gradient(135deg, rgba(92, 9, 25, 0.35) 0%, rgba(22, 2, 5, 0.75) 100%);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
+  border: 1px solid rgba(245, 158, 11, 0.22);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.65),
+              inset 0 1px 1px 0 rgba(253, 224, 71, 0.25);
+}
+
+/* Interactive Card Glass */
+.ios27-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(22px) saturate(190%);
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ios27-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow: 0 24px 50px -10px rgba(92, 9, 25, 0.45),
+              0 0 30px -5px rgba(245, 158, 11, 0.35),
+              inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Glass Pill Buttons */
+.ios27-pill {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ios27-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-2px);
+}
+
+.ios27-pill.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d4af37 100%);
+  color: #160205 !important;
+  border-color: #fde047;
+  font-weight: 700;
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.55);
+}
+
+/* Modal Dialog Backdrop */
+.modal-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.open .modal-card {
+  transform: scale(1) translateY(0);
+}
+
+/* Keyframe Animations */
+@keyframes floatAmbient {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(25px, -30px) scale(1.08); }
+}
+
+@keyframes pulseGoldGlow {
+  0%, 100% { opacity: 0.4; filter: blur(110px); }
+  50% { opacity: 0.75; filter: blur(140px); }
+}
+
+.animate-float-slow {
+  animation: floatAmbient 12s ease-in-out infinite alternate;
+}
+
+.animate-pulse-glow {
+  animation: pulseGoldGlow 7s ease-in-out infinite;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* SPA Tab Pane Dynamic Transition */
+.tab-pane {
+  animation: fadeInTab 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInTab {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Interactive Navigation Tab Button */
+.nav-tab-btn {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-tab-btn.active-tab {
+  background: linear-gradient(135deg, #f59e0b 0%, #d4af37 100%) !important;
+  color: #160205 !important;
+  border-color: #fde047 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+/* Map Interactive Zone Hotspots */
+.map-hotspot {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.map-hotspot:hover, .map-hotspot.active-zone {
+  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.8));
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   Interactive Map Stylized Beacons & Floating Glassmorphism Tooltip
+   ========================================================================== */
+
+.map-beacon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), z-index 0.2s ease;
+  user-select: none;
+}
+
+.map-beacon:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 40;
+}
+
+.map-beacon.active-beacon {
+  transform: translate(-50%, -50%) scale(1.22);
+  z-index: 45;
+}
+
+.map-beacon-ping {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  opacity: 0.75;
+  animation: beaconPing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes beaconPing {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  75%, 100% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+
+.map-beacon.active-beacon .map-beacon-ping {
+  animation-duration: 1.6s;
+  opacity: 1;
+}
+
+.map-beacon-core {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.25s ease;
+}
+
+.map-beacon.active-beacon .map-beacon-core {
+  border-color: #fde047;
+  box-shadow: 0 0 25px 4px rgba(245, 158, 11, 0.8), inset 0 1px 2px 0 rgba(255, 255, 255, 0.9);
+}
+
+.map-beacon-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(15, 2, 5, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.map-beacon:hover .map-beacon-label,
+.map-beacon.active-beacon .map-beacon-label {
+  border-color: #f59e0b;
+  color: #fde047;
+  background: rgba(22, 2, 5, 0.95);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
+}
+
+/* Floating Glassmorphism Tooltip */
+.map-floating-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 60;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -100%) translateY(-14px);
+  width: 260px;
+}
+
+.map-floating-tooltip.hidden-tooltip {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -100%) translateY(-6px) scale(0.96);
+}
+
+/* Custom Scrollbar for side panel directory */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.3);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.6);
+}
+
+
