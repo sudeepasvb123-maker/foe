@@ -90,7 +90,7 @@ const FOE_DATA = {
       color: "from-sky-500/20 to-indigo-600/30",
       accent: "#38bdf8",
       icon: "bi-cpu-fill",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135416571.jpg",
       tagline: "Pioneering Intelligent Computing, Edge AI & Cloud Systems",
       overview: "The Department of Computer Engineering delivers deep mastery across algorithmic intelligence, computer architecture, secure networks, IoT embedded platforms, robotics, and scalable software systems.",
       degree: "B.Sc. Eng (Hons) in Computer Engineering (4 Years - IESL Recognized)",
@@ -116,7 +116,7 @@ const FOE_DATA = {
       color: "from-blue-500/20 to-cyan-600/30",
       accent: "#60a5fa",
       icon: "bi-lightning-charge-fill",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342.jpg",
       tagline: "Empowering Modern Smart Grids, VLSI & Next-Gen Telecom",
       overview: "Focused on clean renewable energy transitions, smart high-voltage grid stability, signal processing, VLSI microelectronics, biomedical instrumentation, and 5G/6G RF communications.",
       degree: "B.Sc. Eng (Hons) in Electrical & Electronic Engineering (4 Years)",
@@ -168,7 +168,7 @@ const FOE_DATA = {
       color: "from-emerald-500/20 to-teal-600/30",
       accent: "#34d399",
       icon: "bi-diagram-3-fill",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Lecture-Hall-L211A-New.jpg",
       tagline: "Fusing Foundational Mathematics, Management & Tech Leadership",
       overview: "Functions as the intellectual cornerstone of the Faculty, delivering rigorous mathematics, computational modeling, engineering management, entrepreneurship, professional ethics, and environmental law.",
       degree: "Academic Cornerstone supporting all B.Sc. Eng (Hons) streams",
@@ -194,17 +194,117 @@ const FOE_DATA = {
   // -------------------------------------------------------------------------
   facilities: [
     {
+      id: "fac-cfse",
+      title: "Center for Fire Safety Engineering",
+      altTitle: "Center for Fire Safety Engineering (CFSE)",
+      category: "research",
+      categoryName: "Premier Research & Safety Bay",
+      dept: "Civil & Mechanical Engineering",
+      isFeatured: true,
+      badge: "⭐ FEATURED • NATIONAL TESTING CENTER",
+      featuredTag: "🔥 National Center for Fire Safety Engineering",
+      accentGlow: "fire",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg",
+      gallery: [
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg",
+          title: "CFSE Main Testing Facility",
+          desc: "Dedicated heavy structures fire-resistance testing bay conforming to ISO 834 & ASTM standards"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611.jpg",
+          title: "Combustion & Flammability Testing Apparatus",
+          desc: "Cone calorimeter and thermal degradation measurement rigs"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+          title: "Computational Fire Dynamics & CFD Simulation Lab",
+          desc: "64-Core high-performance cluster running FDS and Pyrosim evacuation models"
+        }
+      ],
+      shortDesc: "Pioneering national research and testing facility dedicated to structural fire resistance, building flammability, smoke dynamics, and human evacuation engineering.",
+      fullDesc: "The Center for Fire Safety Engineering (CFSE) at the University of Sri Jayewardenepura is Sri Lanka's pioneering academic and consulting authority on fire safety engineering. The facility is equipped with specialized instrumentation for testing the structural fire endurance of reinforced concrete and steel members under furnace temperatures exceeding 1200°C, assessing the heat release rate of construction composites via cone calorimetry, modeling toxic smoke spread in complex atriums, and simulating occupant evacuation flow. CFSE collaborates closely with the Institution of Fire Engineers (UK), municipal fire brigades, and urban development regulators to formulate national building fire codes and conduct high-level forensic investigations.",
+      location: "CFSE Dedicated Bay, Heavy Structures Complex, Mattegoda",
+      hours: "Mon - Fri: 8:00 AM - 5:00 PM (Emergency Incident Analysis On-Call)",
+      features: [
+        "Full-scale structural fire testing furnace conforming to ISO 834, BS 476 & ASTM E119",
+        "Cone calorimeter apparatus for heat release rate (HRR), mass loss, and smoke generation",
+        "High-performance 64-core cluster running Fire Dynamics Simulator (FDS) & Smokeview",
+        "Human egress & crowd evacuation simulation workstations for high-rise buildings",
+        "Flame retardancy assessment for facade claddings, timber, polymer composites, and cables",
+        "Professional development and accredited safety certifications for building services engineers"
+      ],
+      specs: [
+        { label: "Furnace Capacity", value: "Up to 1200°C standard time-temperature curve" },
+        { label: "Standard Compliance", value: "ISO 834, BS 476, ASTM E119, NFPA 101" },
+        { label: "Simulation Power", value: "64-Core GPU/CPU CFD Fire Simulation Cluster" },
+        { label: "National Mandate", value: "National fire audit, forensic analysis & code development" }
+      ],
+      inCharge: "Director, Center for Fire Safety Engineering (CFSE)",
+      contactEmail: "cfse@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-auditorium",
+      title: "Full functioned auditorium",
+      altTitle: "Full-Functioned Faculty Auditorium & Performing Arts Complex",
+      category: "welfare",
+      categoryName: "Grand Convention & Arts Arena",
+      dept: "Faculty of Engineering",
+      isFeatured: true,
+      badge: "⭐ FEATURED • 650-SEAT AUDITORIUM",
+      featuredTag: "🎭 650-Seat Acoustic Theater & Grand Convention Hall",
+      accentGlow: "auditorium",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
+      gallery: [
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
+          title: "Main Grand Auditorium & Proscenium Stage",
+          desc: "Full view of the 650-seat tiered theater, proscenium arch, and motorized stage lighting grid"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-2.jpeg",
+          title: "Tiered Seating Gallery & Acoustic Timber Panels",
+          desc: "Sound-absorbing diffuser timber paneling engineered for optimal speech and musical resonance (RT60 = 1.1s)"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+          title: "Auditorium & Academic Complex Concourse",
+          desc: "Mattegoda complex main entrance and auditorium access concourse"
+        }
+      ],
+      shortDesc: "650-seat premier theater and convention complex featuring line-array surround sound, 4K digital laser projection, motorized stage lighting, and VIP production suites.",
+      fullDesc: "The Faculty Auditorium is a flagship 650-seat multifunctional theater and convention hall engineered to international acoustic standards. Designed to host university convocations, international research symposiums (such as ConTRE 2026), inaugural ceremonies, industry keynote summits, dramatic performances, and cultural galas. The hall is equipped with a digital Dante sound network powering JBL line-array speakers, automated stage curtains, a 4K 15,000-lumens panoramic laser projection system, multi-channel DMX stage lighting, central climate control, and digital broadcast suites for live international streaming.",
+      location: "Central Academic Block, Ground Level",
+      hours: "Available for Academic Conferences, Guest Lectures, Cultural Events & Ceremonies",
+      features: [
+        "650 cushioned theater seats with stepped sightlines, ergonomic armrests, and VIP mezzanine",
+        "JBL Line-Array concert sound system with Yamaha 32-channel digital mixing desk",
+        "4K Ultra-HD laser projection system with motorized 240-inch cinematic projection screen",
+        "Computerized stage lighting grid with motorized moving heads, follow spots, and DMX dimmers",
+        "Backstage VIP green rooms, dressing suites, rehearsal lounges, and guest reception lobbies",
+        "Multi-camera 4K broadcast recording and live streaming studio for global webinars"
+      ],
+      specs: [
+        { label: "Seating Capacity", value: "650 Tiered Theater Seats (inclusive of VIP Box)" },
+        { label: "Acoustic Metric", value: "Reverberation time RT60 = 1.1s with timber diffusers" },
+        { label: "Audio Architecture", value: "Yamaha Dante Digital Audio Network & Line-Array" },
+        { label: "Video & Projection", value: "4K Laser 15,000 Lumens & Dual Confidence Monitors" }
+      ],
+      inCharge: "Auditorium & Events Committee, Faculty of Engineering",
+      contactEmail: "auditorium@eng.sjp.ac.lk"
+    },
+    {
       id: "fac-library",
       title: "Faculty Central Library & E-Scholar Lounge",
       category: "library",
       categoryName: "Library & Research",
       dept: "All Faculty",
       badge: "Fully Air-Conditioned",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-2.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg",
       gallery: [
-        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-2.jpg",
         "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg",
-        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-4-1.jpg"
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-2.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-3.jpg"
       ],
       shortDesc: "Comprehensive engineering repository with silent zones, collaborative pods, and access to IEEE & ScienceDirect.",
       fullDesc: "The Faculty of Engineering Central Library serves as the academic nerve center. Featuring thousands of hardbound engineering reference treatises, international journals, digital workstations, and Scholar Bank access. Designed with sound-dampening acoustic glass walls, natural lighting, and high-speed Wi-Fi.",
@@ -226,10 +326,11 @@ const FOE_DATA = {
       categoryName: "Digital & IT",
       dept: "All Faculty",
       badge: "Gigabit Network",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/IT-Center.jpg",
       gallery: [
-        "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
-        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Image_u9f30vu9f30vu9f3.png"
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/IT-Center.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/IT_Lab.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Data-Centre-FOE.jpg"
       ],
       shortDesc: "High-speed campus network nerve center, enterprise server cluster, and student workstation terminal.",
       fullDesc: "The IT Centre powers high-speed fiber connectivity, student Wi-Fi access points across all lecture rooms and host complexes, secure VPNs, cloud identity services, and manages server farms hosting the LMS and MIS systems.",
@@ -399,9 +500,11 @@ const FOE_DATA = {
       categoryName: "Student Welfare",
       dept: "All Faculty",
       badge: "Active Campus",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/International-Study-Scholarship-Program-Announcement-Education-Instagram-Post-2-768x768-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527478083.jpg",
       gallery: [
-        "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/International-Study-Scholarship-Program-Announcement-Education-Instagram-Post-2-768x768-1.jpg"
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527478083.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527089422.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FB_IMG_1760579986985.jpg-Sanuri-Himalka.jpeg"
       ],
       shortDesc: "Fitness gymnasium, badminton courts, basketball pavilion, and cricket training grounds.",
       fullDesc: "Encouraging a well-balanced university life where engineering problem-solving meets athletic performance. Home to the Engineering Faculty cricket, rugby, badminton, and track teams competing in inter-faculty championships.",
@@ -423,9 +526,11 @@ const FOE_DATA = {
       categoryName: "Research Centers",
       dept: "All Faculty",
       badge: "Innovation Hub",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/test24.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/FOE-Win-Gold-at-National-AI-Awards-2026-1-scaled.jpg",
       gallery: [
-        "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/test24.jpg"
+        "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/FOE-Win-Gold-at-National-AI-Awards-2026-1-scaled.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611.jpg",
+        "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135416571.jpg"
       ],
       shortDesc: "Multidisciplinary research nexus fostering patents, industry collaborations, and postgraduate M.Phil / Ph.D. research.",
       fullDesc: "RCFE spearheads national technology transfers, sustainability initiatives, and high-impact publications. Hosts research symposiums, patent incubation desks, and industry roundtables.",
@@ -537,7 +642,7 @@ const FOE_DATA = {
       category: "academic",
       icon: "bi-display-fill",
       accent: "#ec4899",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
       hours: "Event Specific / 8:00 AM - 7:00 PM",
       desc: "500+ seat acoustic auditorium equipped for international symposiums, research conferences, guest lectures, and faculty cultural ceremonies.",
       tag: "Conferences & Ceremonies",
@@ -603,7 +708,7 @@ const FOE_DATA = {
       category: "department",
       icon: "bi-cpu-fill",
       accent: "#38bdf8",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135416571.jpg",
       hours: "Mon - Sat: 8:00 AM - 8:00 PM (Research 24/7)",
       desc: "AI & Machine Learning Innovation Lab, High-Performance GPU Cluster, Embedded IoT Suites, Computer Networks, and Cloud Systems centre.",
       tag: "Department Block",
@@ -625,7 +730,7 @@ const FOE_DATA = {
       category: "department",
       icon: "bi-lightning-charge-fill",
       accent: "#eab308",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342.jpg",
       hours: "Mon - Fri: 8:00 AM - 6:00 PM",
       desc: "High-voltage testing bay, smart grid simulator, power electronics suites, telecommunications microwave RF lab, and VLSI microchip design.",
       tag: "Department Block",
@@ -647,7 +752,7 @@ const FOE_DATA = {
       category: "department",
       icon: "bi-diagram-3-fill",
       accent: "#a855f7",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Lecture-Hall-L211A-New.jpg",
       hours: "Mon - Fri: 8:30 AM - 5:00 PM",
       desc: "Engineering mathematics, management sciences, computational social research, humanities, economics, and business innovation incubation.",
       tag: "Department Block",
@@ -668,7 +773,7 @@ const FOE_DATA = {
       category: "academic",
       icon: "bi-journal-bookmark-fill",
       accent: "#06b6d4",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-2.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg",
       hours: "Mon - Fri: 8:00 AM - 7:00 PM | Sat: 8:30 AM - 4:30 PM",
       desc: "Two-floor modern library with silent study cubicles, IEEE/Springer digital repository terminal rooms, and scholar collaborative group pods.",
       tag: "Academic Hub",
@@ -689,7 +794,7 @@ const FOE_DATA = {
       category: "academic",
       icon: "bi-stars",
       accent: "#ec4899",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/test24.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/FOE-Win-Gold-at-National-AI-Awards-2026-1-scaled.jpg",
       hours: "Mon - Fri: 8:30 AM - 5:30 PM",
       desc: "Multidisciplinary postgraduate research labs, Biomedical Engineering Research Centre (BME-REC), and patent incubation facilities.",
       tag: "Advanced Research",
@@ -730,7 +835,7 @@ const FOE_DATA = {
       category: "recreation",
       icon: "bi-music-note-beamed",
       accent: "#8b5cf6",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Image_u9f30vu9f30vu9f3.png",
       hours: "Open Campus Access",
       desc: "Tiered green lawn amphitheatre for faculty cultural performances, acoustic music fests, drama showcases, and student club assemblies.",
       tag: "Cultural & Performing Arts",
@@ -810,7 +915,7 @@ const FOE_DATA = {
       category: "sports",
       icon: "bi-activity",
       accent: "#10b981",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/International-Study-Scholarship-Program-Announcement-Education-Instagram-Post-2-768x768-1.jpg",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527478083.jpg",
       hours: "Daily: 6:00 AM - 8:30 PM",
       desc: "Comprehensive weight training arena, cardio equipment, stationary bikes, multi-gym stations, and table tennis facilities with qualified sports trainers.",
       tag: "Sports & Fitness",
@@ -830,7 +935,7 @@ const FOE_DATA = {
       category: "dining",
       icon: "bi-cup-straw",
       accent: "#06b6d4",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fr76qifr76qifr76.png",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FB_IMG_1760579986985.jpg-Sanuri-Himalka.jpeg",
       hours: "Daily: 6:30 AM - 8:00 PM",
       desc: "Dedicated sports cafeteria adjoining the gym pavilion offering protein bars, energy shakes, freshly blended citrus juices, and post-workout snacks.",
       tag: "Sports Dining",

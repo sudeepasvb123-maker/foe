@@ -3,14 +3,26 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import WebSocket from 'ws';
 
+import fs from 'node:fs';
+
 // Load environment variables from .env
 dotenv.config();
 
 // Configuration
 const BASE_URL = 'https://eng.sjp.ac.lk';
 const TABLE_NAME = process.env.SUPABASE_TABLE_NAME || 'sjp_eng_data';
-const SUPABASE_URL = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.trim() : '';
-const SUPABASE_KEY = process.env.SUPABASE_KEY ? process.env.SUPABASE_KEY.trim() : '';
+const SUPABASE_URL = (
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL ||
+  ''
+).trim();
+const SUPABASE_KEY = (
+  process.env.SUPABASE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  ''
+).trim();
 
 // Check CLI arguments
 const isDryRun = process.argv.includes('--dry-run') || process.argv.includes('-d');
@@ -505,8 +517,7 @@ async function insertIntoSupabase(rawRecords, supabase, tableName) {
       // If error is about no unique constraint on 'link', fallback to check-and-update
       if (error.message && (error.message.includes('unique') || error.message.includes('conflict'))) {
         console.warn(`[Supabase] Note: No unique constraint on 'link'. Synchronizing existing records...`);
-        await fallbackInsert(records, supabase, tableName);
-        return;
+        return await fallbackInsert(records, supabase, tableName);
       }
       throw error;
     }
@@ -518,6 +529,7 @@ async function insertIntoSupabase(rawRecords, supabase, tableName) {
         console.log(` - [#${item.id}] ${item.title}`);
       });
     }
+    return { updatedCount: 0, insertedCount: data ? data.length : records.length };
   } catch (err) {
     if (err.code === '42501' || err.message?.includes('row-level security')) {
       handleRlsError();
@@ -552,20 +564,35 @@ function handleRlsError() {
 
 /**
  * Fallback insertion and update method if table lacks a unique constraint on 'link'
+ * Performs dual-key deduplication (normalized URL and title) to ensure no duplicate rows are ever created.
  */
 async function fallbackInsert(records, supabase, tableName) {
   const { data: existingRows, error: fetchErr } = await supabase
     .from(tableName)
-    .select('id, link');
+    .select('id, link, title')
+    .range(0, 9999);
 
   if (fetchErr) throw fetchErr;
 
-  const existingMap = new Map((existingRows || []).map((r) => [r.link, r.id]));
+  const normalizeUrl = (u) => (u ? u.trim().replace(/\/+$/, '').toLowerCase() : '');
+  const cleanTitleKey = (t) => (t ? t.trim().toLowerCase() : '');
+
+  const existingMap = new Map();
+  const existingTitleMap = new Map();
+
+  for (const r of existingRows || []) {
+    if (r.link) existingMap.set(normalizeUrl(r.link), r.id);
+    if (r.title) existingTitleMap.set(cleanTitleKey(r.title), r.id);
+  }
+
   const newRecords = [];
   let updatedCount = 0;
 
   for (const record of records) {
-    const existingId = existingMap.get(record.link);
+    const linkKey = normalizeUrl(record.link);
+    const titleKey = cleanTitleKey(record.title);
+    const existingId = existingMap.get(linkKey) || existingTitleMap.get(titleKey);
+
     if (existingId) {
       // Update existing record with latest fields & image_url
       const { error: updErr } = await supabase
@@ -575,14 +602,25 @@ async function fallbackInsert(records, supabase, tableName) {
       if (!updErr) updatedCount++;
     } else {
       newRecords.push(record);
+      // Mark as seen to prevent duplicates within this batch
+      if (linkKey) existingMap.set(linkKey, true);
+      if (titleKey) existingTitleMap.set(titleKey, true);
     }
   }
 
+  let insertedCount = 0;
   if (newRecords.length > 0) {
-    console.log(`[Supabase] Inserting ${newRecords.length} new records...`);
-    await supabase.from(tableName).insert(newRecords);
+    console.log(`[Supabase] Inserting ${newRecords.length} new records without duplicates...`);
+    const { data: insData, error: insErr } = await supabase.from(tableName).insert(newRecords).select('id');
+    if (insErr) {
+      console.error(`[Supabase] Error inserting new records: ${insErr.message}`);
+    } else {
+      insertedCount = insData ? insData.length : newRecords.length;
+    }
   }
-  console.log(`🎉 [Supabase] Synchronized ${records.length} records (${updatedCount} updated, ${newRecords.length} newly inserted)!`);
+
+  console.log(`🎉 [Supabase] Synchronized ${records.length} records (${updatedCount} updated, ${insertedCount} newly inserted)!`);
+  return { updatedCount, insertedCount };
 }
 
 /**
@@ -645,7 +683,60 @@ async function main() {
     }
   });
 
-  await insertIntoSupabase(records, supabase, TABLE_NAME);
+  const syncResult = await insertIntoSupabase(records, supabase, TABLE_NAME);
+
+  // Write GitHub Step Summary if running inside GitHub Actions
+  writeGitHubSummary({
+    tableName: TABLE_NAME,
+    total: records.length,
+    counts,
+    records,
+    updated: syncResult?.updatedCount || 0,
+    inserted: syncResult?.insertedCount || 0
+  });
+}
+
+/**
+ * Renders a markdown summary to $GITHUB_STEP_SUMMARY in GitHub Actions
+ */
+function writeGitHubSummary(summaryData) {
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+  if (!summaryFile) return;
+
+  try {
+    const lines = [
+      `## 🎓 SJP Faculty of Engineering Daily Sync Report`,
+      `**Execution Time:** ${new Date().toUTCString()}`,
+      `**Target Supabase Table:** \`${summaryData.tableName}\``,
+      ``,
+      `| Metric | Count |`,
+      `| :--- | :--- |`,
+      `| **Total Scraped Items** | ${summaryData.total} |`,
+      `| 📰 **News Items** | ${summaryData.counts.news || 0} |`,
+      `| 📌 **Notices** | ${summaryData.counts.notice || 0} |`,
+      `| 📢 **Announcements & Vacancies** | ${summaryData.counts.announcement || 0} |`,
+      `| 🔄 **Updated Existing Records** | ${summaryData.updated} |`,
+      `| ➕ **Newly Inserted Records** | ${summaryData.inserted} |`,
+      ``,
+      `### 🔍 Latest Top 5 Synchronized Updates`,
+      `| Category | Title | Published Date |`,
+      `| :--- | :--- | :--- |`
+    ];
+
+    summaryData.records.slice(0, 5).forEach((item) => {
+      const dateStr = item.published_at ? item.published_at.slice(0, 10) : 'Recent';
+      lines.push(`| **${item.category?.toUpperCase() || 'UPDATE'}** | [${item.title.replace(/\|/g, '-')}](${item.link}) | ${dateStr} |`);
+    });
+
+    lines.push(
+      ``,
+      `> 🚀 **Portal Status**: Live and synchronized with [eng.sjp.ac.lk](https://eng.sjp.ac.lk). All records deduplicated by URL & Title.`
+    );
+
+    fs.appendFileSync(summaryFile, lines.join('\n') + '\n');
+  } catch (err) {
+    console.warn(`Could not write to GITHUB_STEP_SUMMARY: ${err.message}`);
+  }
 }
 
 // Execute

@@ -1,0 +1,52 @@
+name: Daily SJP Engineering Scraper & Sync
+
+on:
+  # Automated daily schedule: Runs daily at 02:00 UTC (07:30 AM Sri Lanka Standard Time)
+  schedule:
+    - cron: '0 2 * * *'
+
+  # Manual execution trigger from the GitHub Actions dashboard tab
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run only (scrape & test without writing to Supabase)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: sjp-portal-scraper
+  cancel-in-progress: false
+
+jobs:
+  sync-portal-data:
+    name: Scrape eng.sjp.ac.lk & Sync to Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🚀 Run SJP Portal Scraper & Synchronizer
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_KEY }}
+          SUPABASE_TABLE_NAME: ${{ secrets.SUPABASE_TABLE_NAME || 'sjp_eng_data' }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "Running in dry-run mode (--dry-run)..."
+            npm run dry-run
+          else
+            echo "Running automated live sync to Supabase table 'sjp_eng_data'..."
+            npm run scrape
+          fi

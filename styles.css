@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-sjp-maroon-deep: #160205;
   --color-sjp-maroon-dark: #3b060f;
@@ -18,8 +20,22 @@
 }
 
 /* ==========================================================================
+   Top Navigation Bar Auto-Hide on Scroll Down & Reveal on Scroll Up
+   ========================================================================== */
+#app-header {
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  will-change: transform;
+}
+
+#app-header.nav-hidden {
+  transform: translateY(-160%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
    University of Sri Jayewardenepura - Signature Maroon & Gold Glassmorphism
-   Futuristic iOS 27 Glass System
+   Futuristic iOS 27 Glass System (Adaptive Dark & Light Modes)
    ========================================================================== */
 
 /* Realistic iOS 27 Frosted Specular Glass Container */
@@ -32,6 +48,18 @@
               inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
 }
 
+html:not(.dark) .ios27-glass,
+[data-theme="light"] .ios27-glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 16px 40px -10px rgba(92, 9, 25, 0.08), 
+              0 4px 12px rgba(0, 0, 0, 0.03),
+              inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+}
+
 /* Dark Specular Obsidian Maroon Glass */
 .ios27-glass-maroon {
   background: linear-gradient(135deg, rgba(92, 9, 25, 0.35) 0%, rgba(22, 2, 5, 0.75) 100%);
@@ -40,6 +68,17 @@
   border: 1px solid rgba(245, 158, 11, 0.22);
   box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.65),
               inset 0 1px 1px 0 rgba(253, 224, 71, 0.25);
+}
+
+html:not(.dark) .ios27-glass-maroon,
+[data-theme="light"] .ios27-glass-maroon {
+  background: linear-gradient(135deg, rgba(255, 248, 249, 0.94) 0%, rgba(254, 242, 242, 0.88) 100%);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 20px 48px -10px rgba(92, 9, 25, 0.12),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  color: #1e293b;
 }
 
 /* Interactive Card Glass */
@@ -62,6 +101,28 @@
               inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
 }
 
+html:not(.dark) .ios27-card,
+[data-theme="light"] .ios27-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(92, 9, 25, 0.06),
+              0 4px 10px rgba(0, 0, 0, 0.03),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+}
+
+html:not(.dark) .ios27-card:hover,
+[data-theme="light"] .ios27-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 24px 45px -10px rgba(92, 9, 25, 0.16),
+              0 0 25px -4px rgba(245, 158, 11, 0.3),
+              inset 0 1px 2px 0 rgba(255, 255, 255, 0.95);
+}
+
 /* Glass Pill Buttons */
 .ios27-pill {
   background: rgba(255, 255, 255, 0.07);
@@ -75,6 +136,22 @@
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(245, 158, 11, 0.45);
   transform: translateY(-2px);
+}
+
+html:not(.dark) .ios27-pill,
+[data-theme="light"] .ios27-pill {
+  background: rgba(241, 245, 249, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: #334155;
+}
+
+html:not(.dark) .ios27-pill:hover,
+[data-theme="light"] .ios27-pill:hover {
+  background: rgba(226, 232, 240, 0.95);
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #0f172a;
 }
 
 .ios27-pill.active {
@@ -104,6 +181,19 @@
 
 .modal-backdrop.open .modal-card {
   transform: scale(1) translateY(0);
+}
+
+html:not(.dark) .modal-backdrop,
+[data-theme="light"] .modal-backdrop {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+html:not(.dark) .modal-card,
+[data-theme="light"] .modal-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #1e293b;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25);
 }
 
 /* Keyframe Animations */
@@ -237,6 +327,12 @@
   transition: all 0.25s ease;
 }
 
+html:not(.dark) .map-beacon-core,
+[data-theme="light"] .map-beacon-core {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.25), inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+}
+
 .map-beacon.active-beacon .map-beacon-core {
   border-color: #fde047;
   box-shadow: 0 0 25px 4px rgba(245, 158, 11, 0.8), inset 0 1px 2px 0 rgba(255, 255, 255, 0.9);
@@ -269,6 +365,24 @@
   box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
 }
 
+html:not(.dark) .map-beacon-label,
+[data-theme="light"] .map-beacon-label {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+html:not(.dark) .map-beacon:hover .map-beacon-label,
+html:not(.dark) .map-beacon.active-beacon .map-beacon-label,
+[data-theme="light"] .map-beacon:hover .map-beacon-label,
+[data-theme="light"] .map-beacon.active-beacon .map-beacon-label {
+  border-color: #f59e0b;
+  color: #92400e;
+  background: #ffffff;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+}
+
 /* Floating Glassmorphism Tooltip */
 .map-floating-tooltip {
   position: absolute;
@@ -283,6 +397,20 @@
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -100%) translateY(-6px) scale(0.96);
+}
+
+html:not(.dark) .map-floating-tooltip,
+[data-theme="light"] .map-floating-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.6) !important;
+  color: #1e293b;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
+}
+
+html:not(.dark) #campus-map-viewport,
+[data-theme="light"] #campus-map-viewport {
+  background: #0f0306;
+  border-color: rgba(203, 213, 225, 0.5);
 }
 
 /* Custom Scrollbar for side panel directory */
@@ -301,4 +429,149 @@
   background: rgba(245, 158, 11, 0.6);
 }
 
+html:not(.dark) .custom-scrollbar::-webkit-scrollbar-track,
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+html:not(.dark) .custom-scrollbar::-webkit-scrollbar-thumb,
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.5);
+}
+
+/* ==========================================================================
+   Universal Global Search System
+   ========================================================================== */
+.search-target-highlight {
+  animation: searchPulseGlow 2.5s ease-out forwards;
+}
+
+@keyframes searchPulseGlow {
+  0% {
+    box-shadow: 0 0 0 4px #f59e0b, 0 0 40px rgba(245, 158, 11, 0.75);
+    transform: scale(1.02);
+  }
+  50% {
+    box-shadow: 0 0 0 3px #f59e0b, 0 0 25px rgba(245, 158, 11, 0.5);
+    transform: scale(1.01);
+  }
+  100% {
+    box-shadow: none;
+    transform: scale(1);
+  }
+}
+
+.search-match-text {
+  color: #f59e0b;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html:not(.dark) .search-match-text,
+[data-theme="light"] .search-match-text {
+  color: #b45309;
+}
+
+/* ==========================================================================
+   Department Detailed View & Staff Photo Grid Styles
+   ========================================================================== */
+.dept-detail-fade-in {
+  animation: deptFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes deptFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.staff-photo-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.staff-photo-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 25px -4px rgba(245, 158, 11, 0.3);
+}
+
+html:not(.dark) .staff-photo-card:hover,
+[data-theme="light"] .staff-photo-card:hover {
+  box-shadow: 0 16px 36px -8px rgba(92, 9, 25, 0.15), 0 0 20px -4px rgba(245, 158, 11, 0.25);
+}
+
+/* ==========================================================================
+   Featured Facilities Highlights & Glowing Borders
+   ========================================================================== */
+.facility-card-featured-fire {
+  border: 2px solid rgba(249, 115, 22, 0.85) !important;
+  box-shadow: 0 0 32px -4px rgba(249, 115, 22, 0.4), 
+              0 20px 45px -10px rgba(0, 0, 0, 0.6) !important;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(22, 2, 5, 0.65) 100%) !important;
+  animation: fireGlowPulse 3s ease-in-out infinite alternate;
+}
+
+html:not(.dark) .facility-card-featured-fire,
+[data-theme="light"] .facility-card-featured-fire {
+  border: 2px solid rgba(234, 88, 12, 0.95) !important;
+  box-shadow: 0 0 28px -4px rgba(249, 115, 22, 0.35), 
+              0 16px 36px -10px rgba(154, 52, 18, 0.2) !important;
+  background: linear-gradient(135deg, rgba(255, 237, 213, 0.92) 0%, rgba(254, 242, 242, 0.95) 100%) !important;
+}
+
+.facility-card-featured-auditorium {
+  border: 2px solid rgba(245, 158, 11, 0.85) !important;
+  box-shadow: 0 0 32px -4px rgba(245, 158, 11, 0.4), 
+              0 20px 45px -10px rgba(0, 0, 0, 0.6) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(22, 2, 5, 0.65) 100%) !important;
+  animation: goldGlowPulse 3s ease-in-out infinite alternate;
+}
+
+html:not(.dark) .facility-card-featured-auditorium,
+[data-theme="light"] .facility-card-featured-auditorium {
+  border: 2px solid rgba(217, 119, 6, 0.95) !important;
+  box-shadow: 0 0 28px -4px rgba(245, 158, 11, 0.35), 
+              0 16px 36px -10px rgba(180, 83, 9, 0.2) !important;
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.92) 0%, rgba(254, 242, 242, 0.95) 100%) !important;
+}
+
+@keyframes fireGlowPulse {
+  0% {
+    box-shadow: 0 0 22px -4px rgba(249, 115, 22, 0.35), 0 16px 35px -10px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 42px 2px rgba(249, 115, 22, 0.65), 0 24px 50px -8px rgba(0, 0, 0, 0.65);
+  }
+}
+
+@keyframes goldGlowPulse {
+  0% {
+    box-shadow: 0 0 22px -4px rgba(245, 158, 11, 0.35), 0 16px 35px -10px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 42px 2px rgba(245, 158, 11, 0.65), 0 24px 50px -8px rgba(0, 0, 0, 0.65);
+  }
+}
+
+.featured-shimmer-badge {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+  background-size: 200% 100%;
+  animation: badgeShimmer 3s ease-in-out infinite;
+}
+
+.featured-fire-badge {
+  background: linear-gradient(90deg, #ea580c 0%, #f97316 50%, #ea580c 100%);
+  background-size: 200% 100%;
+  animation: badgeShimmer 3s ease-in-out infinite;
+}
+
+@keyframes badgeShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 

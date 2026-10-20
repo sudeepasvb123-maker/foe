@@ -125,32 +125,66 @@ node scraper.js --dry-run
 
 ---
 
-## ⏰ Automated Scheduling
+## ⏰ Automated Daily Scheduling & Synchronization
 
-### Option 1: GitHub Actions (Free Cron)
-Create `.github/workflows/scrape.yml` to run this scraper on a schedule (e.g., every 6 hours):
+Your portal stays automatically synchronized with official university updates without manual intervention or duplicate rows. You have two production-ready options:
 
-```yaml
-name: Run SJP Eng Scraper
-on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+### 🌟 Option 1: GitHub Actions (Recommended — Free & Fully Automated)
 
-jobs:
-  scrape:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: node scraper.js
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-```
+The workflow is pre-configured in [`.github/workflows/daily-scraper.yml`](.github/workflows/daily-scraper.yml). It triggers automatically every day at 02:00 UTC (07:30 AM Sri Lanka Time) and also provides a one-click manual run button.
 
-### Option 2: Windows Task Scheduler / Cron
-You can run `node C:\path\to\scraper.js` in a recurring task.
+#### Setup Steps:
+1. Push your repository to GitHub:
+   ```bash
+   git add .
+   git commit -m "Add automated daily scraper and GitHub Actions workflow"
+   git push origin main
+   ```
+2. In your GitHub repository, navigate to **Settings** -> **Secrets and variables** -> **Actions**.
+3. Under **Repository secrets**, click **New repository secret** and add:
+   - `SUPABASE_URL`: `https://zzirxpncvhqxhcjgbuek.supabase.co`
+   - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase `service_role` secret key from **Project Settings** -> **API**
+   - *(Optional)* `SUPABASE_TABLE_NAME`: `sjp_eng_data` (default)
+4. Test run immediately on demand:
+   - Go to the **Actions** tab on your GitHub repository.
+   - Click **Daily SJP Engineering Scraper & Sync** on the left menu.
+   - Click the **Run workflow** dropdown and click the green button.
+   - Once completed, view the execution summary to see all synchronized items and metrics!
+
+---
+
+### ⚡ Option 2: Supabase Edge Functions (with `pg_cron`)
+
+If you prefer running serverless directly within the Supabase ecosystem:
+
+1. **Edge Function Source Code**: Available at [`supabase/functions/sync-portal-data/index.ts`](supabase/functions/sync-portal-data/index.ts).
+2. **Deploy to Supabase**:
+   ```bash
+   npx supabase functions deploy sync-portal-data --no-verify-jwt
+   ```
+3. **Set Secrets in Supabase**:
+   ```bash
+   npx supabase secrets set SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
+4. **Schedule Daily Execution via SQL (`pg_cron`)**:
+   Open Supabase **SQL Editor** and run:
+   ```sql
+   CREATE EXTENSION IF NOT EXISTS pg_cron;
+   CREATE EXTENSION IF NOT EXISTS pg_net;
+
+   SELECT cron.schedule(
+     'daily-sjp-portal-sync',
+     '0 2 * * *', -- Daily at 02:00 UTC (07:30 AM SLST)
+     $$
+     SELECT net.http_post(
+       url := 'https://zzirxpncvhqxhcjgbuek.supabase.co/functions/v1/sync-portal-data',
+       headers := jsonb_build_object(
+         'Content-Type', 'application/json',
+         'Authorization', 'Bearer <YOUR_SUPABASE_SERVICE_ROLE_KEY>'
+       ),
+       body := '{}'::jsonb
+     ) AS request_id;
+     $$
+   );
+   ```
+

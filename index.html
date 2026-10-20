@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Official Announcements, Examination Notices, and News Portal for the Faculty of Engineering, University of Sri Jayewardenepura. Featuring signature USJ Maroon and Gold aesthetics with iOS 27 glassmorphism." />
   <meta name="theme-color" content="#5c0919" />
   <title>Faculty of Engineering Announcements | University of Sri Jayewardenepura</title>
+
+  <!-- Favicon: University of Sri Jayewardenepura Crest -->
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="shortcut icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
 
   <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,62 +30,62 @@
   <!-- Tailwind CSS & Custom Styles -->
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="bg-[#0e0205] text-slate-100 font-body min-h-screen relative overflow-x-hidden selection:bg-amber-500 selection:text-black">
+<body class="bg-[#faf7f7] text-slate-800 dark:bg-[#0e0205] dark:text-slate-100 font-body min-h-screen relative overflow-x-hidden selection:bg-amber-500 selection:text-black transition-colors duration-300">
 
   <!-- ========================================================================
        Landing Welcome Screen (iOS 27 Specular Glassmorphism Overlay)
        ======================================================================== -->
-  <aside id="welcome-screen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-[#080103]/90 backdrop-blur-2xl transition-all duration-700 ease-out overflow-y-auto" aria-label="Welcome Portal">
+  <aside id="welcome-screen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 dark:bg-[#080103]/90 backdrop-blur-2xl transition-all duration-700 ease-out overflow-y-auto" aria-label="Welcome Portal">
     
     <!-- Ambient Aurora Glows (Maroon & Gold) -->
-    <div class="fixed -top-32 -left-24 w-96 h-96 rounded-full bg-gradient-to-br from-[#800d24] via-[#5c0919] to-transparent opacity-75 blur-[120px] pointer-events-none animate-float-slow" aria-hidden="true"></div>
-    <div class="fixed -bottom-32 -right-24 w-96 h-96 rounded-full bg-gradient-to-tl from-[#f59e0b] via-[#d4af37] to-transparent opacity-45 blur-[130px] pointer-events-none animate-pulse-glow" aria-hidden="true"></div>
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[#5c0919]/35 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+    <div class="fixed -top-32 -left-24 w-96 h-96 rounded-full bg-gradient-to-br from-[#800d24] via-[#5c0919] to-transparent opacity-25 dark:opacity-75 blur-[120px] pointer-events-none animate-float-slow" aria-hidden="true"></div>
+    <div class="fixed -bottom-32 -right-24 w-96 h-96 rounded-full bg-gradient-to-tl from-[#f59e0b] via-[#d4af37] to-transparent opacity-20 dark:opacity-45 blur-[130px] pointer-events-none animate-pulse-glow" aria-hidden="true"></div>
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[#5c0919]/15 dark:bg-[#5c0919]/35 blur-[140px] pointer-events-none" aria-hidden="true"></div>
 
     <!-- Centered Glassmorphism Card (iOS 27 Style) -->
-    <div class="relative z-10 w-full max-w-2xl mx-auto rounded-3xl sm:rounded-[2.5rem] backdrop-blur-2xl bg-white/5 border border-white/10 shadow-2xl p-7 sm:p-11 text-center overflow-hidden transition-all transform duration-500 hover:border-amber-400/30">
+    <div class="relative z-10 w-full max-w-2xl mx-auto rounded-3xl sm:rounded-[2.5rem] backdrop-blur-2xl bg-white/90 dark:bg-white/5 border border-slate-200/90 dark:border-white/10 shadow-2xl p-7 sm:p-11 text-center overflow-hidden transition-all transform duration-500 hover:border-amber-400/40">
       
       <!-- Top Specular Shine Accent -->
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"></div>
+      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 dark:via-white/30 to-transparent pointer-events-none"></div>
 
       <!-- University Crest Emblem with Golden Radiance Halo -->
-      <div class="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-5 rounded-full p-1.5 bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 shadow-[0_0_40px_rgba(245,158,11,0.5)] flex items-center justify-center ring-4 ring-amber-400/20 group">
+      <div class="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-5 rounded-full p-1.5 bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 shadow-[0_0_40px_rgba(245,158,11,0.4)] flex items-center justify-center ring-4 ring-amber-400/20 group">
         <img src="logo.png" alt="University of Sri Jayewardenepura Crest" class="w-full h-full object-contain rounded-full drop-shadow-md" onerror="this.src='https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg'" />
       </div>
 
       <!-- Small Pill Tag: 'University of Sri Jayewardenepura' -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold text-amber-300 bg-black/40 border border-amber-500/30 shadow-md mb-4">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold text-amber-800 dark:text-amber-300 bg-slate-100/90 dark:bg-black/40 border border-amber-500/40 dark:border-amber-500/30 shadow-md mb-4">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
         <span>University of Sri Jayewardenepura</span>
       </div>
 
       <!-- Main Heading: 'Welcome to E-Fac, J'Pura' -->
-      <h1 class="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight text-white mb-2 leading-tight">
-        Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 drop-shadow-[0_2px_14px_rgba(245,158,11,0.35)]">E-Fac, J'Pura</span>
+      <h1 class="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight text-slate-900 dark:text-white mb-2 leading-tight">
+        Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 dark:from-amber-300 dark:via-amber-400 dark:to-amber-500 drop-shadow-[0_2px_14px_rgba(245,158,11,0.25)]">E-Fac, J'Pura</span>
       </h1>
 
       <!-- Subtitle: 'Faculty of Engineering' (Strictly NO Sinhala translation) -->
-      <p class="text-rose-200/90 text-sm sm:text-base font-semibold mb-4 tracking-wide">
+      <p class="text-rose-900 dark:text-rose-200/90 text-sm sm:text-base font-semibold mb-4 tracking-wide">
         Faculty of Engineering
       </p>
 
       <!-- Short Description -->
-      <p class="text-slate-300/90 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto mb-6 font-normal">
+      <p class="text-slate-600 dark:text-slate-300/90 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto mb-6 font-normal">
         Step into the unified digital portal of Sri Lanka's forward-thinking engineering faculty. Discover state-of-the-art laboratories, student facilities, the Mattegoda permanent complex, and internationally recognized engineering curricula.
       </p>
 
       <!-- Info Pills: 'IESL Recognition', 'Mattegoda Complex', '4 Disciplines • 24+ Labs' -->
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-8">
-        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 text-xs text-slate-200 shadow-sm hover:border-amber-400/40 transition-colors">
-          <span class="text-amber-400 font-bold">✓</span>
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-slate-100/90 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-200 shadow-sm hover:border-amber-400/40 transition-colors">
+          <span class="text-amber-500 font-bold">✓</span>
           <span class="font-medium">IESL Recognition</span>
         </div>
-        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 text-xs text-slate-200 shadow-sm hover:border-sky-400/40 transition-colors">
-          <span class="text-sky-400">🏛️</span>
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-slate-100/90 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-200 shadow-sm hover:border-sky-500/40 transition-colors">
+          <span class="text-sky-500">🏛️</span>
           <span class="font-medium">Mattegoda Complex</span>
         </div>
-        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 text-xs text-slate-200 shadow-sm hover:border-emerald-400/40 transition-colors">
-          <span class="text-emerald-400">🧪</span>
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-slate-100/90 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-200 shadow-sm hover:border-emerald-500/40 transition-colors">
+          <span class="text-emerald-500">🧪</span>
           <span class="font-medium">4 Disciplines • 24+ Labs</span>
         </div>
       </div>
@@ -106,18 +111,19 @@
   <!-- ========================================================================
        Futuristic Ambient Lighting (SJP Signature Maroon & Gold iOS 27 Glow)
        ======================================================================== -->
-  <div class="fixed -top-40 -left-20 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#800d24] via-[#5c0919] to-[#3b060f] opacity-45 blur-[140px] pointer-events-none animate-float-slow" aria-hidden="true"></div>
-  <div class="fixed top-1/4 -right-20 w-[650px] h-[650px] rounded-full bg-gradient-to-br from-[#f59e0b] via-[#d4af37] to-[#b48505] opacity-25 blur-[160px] pointer-events-none animate-pulse-glow" aria-hidden="true"></div>
-  <div class="fixed -bottom-40 left-1/4 w-[550px] h-[550px] rounded-full bg-[#5c0919] opacity-35 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="fixed -top-40 -left-20 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#800d24] via-[#5c0919] to-[#3b060f] opacity-15 dark:opacity-45 blur-[140px] pointer-events-none animate-float-slow" aria-hidden="true"></div>
+  <div class="fixed top-1/4 -right-20 w-[650px] h-[650px] rounded-full bg-gradient-to-br from-[#f59e0b] via-[#d4af37] to-[#b48505] opacity-12 dark:opacity-25 blur-[160px] pointer-events-none animate-pulse-glow" aria-hidden="true"></div>
+  <div class="fixed -bottom-40 left-1/4 w-[550px] h-[550px] rounded-full bg-[#5c0919] opacity-10 dark:opacity-35 blur-[140px] pointer-events-none" aria-hidden="true"></div>
 
   <!-- Subtle Futuristic Grid Pattern Overlay -->
-  <div class="fixed inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+  <div class="fixed inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
   <!-- ========================================================================
        Navigation Bar (Floating iOS 27 Specular Glass Island)
+       Auto-hides on scroll down, smoothly reveals on scroll up
        ======================================================================== -->
   <header class="sticky top-4 z-50 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="app-header">
-    <div class="ios27-glass rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-4 transition-all shadow-2xl">
+    <div class="ios27-glass rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-4 transition-all shadow-xl dark:shadow-2xl">
       
       <!-- SJP University Brand Crest & Title -->
       <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
@@ -126,64 +132,158 @@
             <img src="logo.png" alt="University of Sri Jayewardenepura Emblem" class="w-8 h-8 object-contain" onerror="this.src='https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg'" />
           </div>
           <div class="flex flex-col">
-            <span class="font-display font-extrabold text-sm sm:text-base text-white tracking-tight leading-tight flex items-center gap-1.5">
-              USJ <span class="text-amber-400">Engineering</span>
+            <span class="font-display font-extrabold text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight flex items-center gap-1.5">
+              USJ <span class="text-amber-600 dark:text-amber-400">Engineering</span>
             </span>
-            <span class="text-[11px] font-semibold text-amber-200/70 tracking-wide">
+            <span class="text-[11px] font-semibold text-rose-950/80 dark:text-amber-200/70 tracking-wide">
               Faculty of Engineering • J'Pura
             </span>
           </div>
         </div>
 
-        <!-- Mobile Quick Status / Theme (shown on small screens) -->
+        <!-- Mobile Quick Status / Search / Theme (shown on small screens) -->
         <div class="flex lg:hidden items-center gap-2">
-          <button class="w-8 h-8 rounded-full backdrop-blur-md bg-white/10 border border-white/20 text-white flex items-center justify-center text-xs" onclick="document.getElementById('theme-toggle').click()">
-            🌗
+          <button id="mobile-search-toggle" class="w-8 h-8 rounded-full backdrop-blur-md bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 border border-slate-300/80 dark:border-white/20 text-slate-800 dark:text-white flex items-center justify-center text-xs transition-all active:scale-90 cursor-pointer" aria-label="Open universal search" title="Search">
+            🔍
+          </button>
+          <button id="mobile-theme-toggle" class="w-8 h-8 rounded-full backdrop-blur-md bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 border border-slate-300/80 dark:border-white/20 text-slate-800 dark:text-white flex items-center justify-center text-xs transition-all active:scale-90 cursor-pointer" aria-label="Toggle dark/light theme" title="Toggle theme">
+            ☀️
           </button>
         </div>
       </div>
 
+      <!-- Mobile Expandable Search Bar Row -->
+      <div id="mobile-search-row" class="w-full hidden lg:hidden pt-2 pb-1 border-t border-slate-200 dark:border-white/10 relative">
+        <div class="relative flex items-center">
+          <span class="absolute left-3 text-slate-400 pointer-events-none text-xs">🔍</span>
+          <input 
+            type="text" 
+            id="mobile-search-input" 
+            placeholder="Search departments, facilities, news, staff..." 
+            autocomplete="off"
+            class="w-full pl-8 pr-8 py-2 rounded-xl text-xs bg-slate-200/90 dark:bg-white/10 border border-slate-300/80 dark:border-white/20 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 shadow-inner"
+          />
+          <button id="mobile-search-clear" class="absolute right-3 text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs hidden cursor-pointer">✕</button>
+        </div>
+
+        <!-- Mobile Results Dropdown -->
+        <div 
+          id="mobile-search-dropdown" 
+          class="hidden mt-2 w-full max-h-[65vh] overflow-hidden rounded-2xl backdrop-blur-2xl bg-white/95 dark:bg-[#140205]/95 border border-slate-200 dark:border-amber-500/30 shadow-2xl z-50 flex flex-col"
+        >
+          <div class="px-4 py-2 border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[11px] bg-slate-100/60 dark:bg-white/[0.03]">
+            <span class="font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5" id="mobile-search-status-label">
+              <span class="animate-pulse">⚡</span>
+              <span>Universal Search</span>
+            </span>
+            <span class="text-slate-500 dark:text-slate-400 text-[10px]" id="mobile-search-meta">Type to query all tables</span>
+          </div>
+          <div class="overflow-y-auto max-h-[52vh] p-2 space-y-3 custom-scrollbar" id="mobile-search-results">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
       <!-- Clickable Navigation Tabs (iOS 27 Specular Glass Island) -->
-      <nav class="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl sm:rounded-full bg-black/45 border border-white/10 backdrop-blur-xl overflow-x-auto max-w-full scrollbar-none" id="main-nav-tabs" role="tablist" aria-label="Main Navigation">
-        <button class="nav-tab-btn active-tab px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-300" data-tab="overview" role="tab" aria-selected="true">
+      <nav class="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl sm:rounded-full bg-slate-200/80 dark:bg-black/45 border border-slate-300/60 dark:border-white/10 backdrop-blur-xl overflow-x-auto max-w-full scrollbar-none" id="main-nav-tabs" role="tablist" aria-label="Main Navigation">
+        <button class="nav-tab-btn active-tab px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-700 dark:text-slate-300" data-tab="overview" role="tab" aria-selected="true">
           <span>🏛️</span>
           <span>Overview and History</span>
         </button>
-        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" data-tab="departments" role="tab" aria-selected="false">
+        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="departments" role="tab" aria-selected="false">
           <span>⚙️</span>
           <span>Departments</span>
         </button>
-        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" data-tab="facilities" role="tab" aria-selected="false">
+        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="facilities" role="tab" aria-selected="false">
           <span>🧪</span>
           <span>Other Facilities</span>
         </button>
-        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" data-tab="news" role="tab" aria-selected="false">
+        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="news" role="tab" aria-selected="false">
           <span>📢</span>
           <span>News</span>
         </button>
-        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" data-tab="map" role="tab" aria-selected="false">
+        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="map" role="tab" aria-selected="false">
           <span>🗺️</span>
           <span>Faculty Map</span>
         </button>
       </nav>
 
-      <!-- Header Controls: Status, Refresh, Theme Toggle -->
+      <!-- Header Controls: Status, Global Search, Refresh, Theme Toggle -->
       <div class="hidden lg:flex items-center gap-2.5">
         <!-- Live Connection Status Pill -->
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-xl bg-white/10 border border-white/20 text-xs font-semibold text-amber-200 shadow-sm" id="sync-status" title="Connection status to Supabase">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" id="sync-dot"></span>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-xl bg-slate-200/80 dark:bg-white/10 border border-slate-300/70 dark:border-white/20 text-xs font-semibold text-slate-700 dark:text-amber-200 shadow-sm" id="sync-status" title="Connection status to Supabase">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#34d399]" id="sync-dot"></span>
           <span class="tracking-wide text-[11px]" id="sync-label">Connected</span>
         </div>
 
+        <!-- Global Search Bar (Directly Next to Refresh Button) -->
+        <div class="relative" id="global-search-container">
+          <div class="relative flex items-center">
+            <span class="absolute left-3 text-slate-400 dark:text-slate-400 pointer-events-none text-xs flex items-center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              id="global-search-input" 
+              placeholder="Search faculty, news, labs, staff..." 
+              autocomplete="off"
+              class="w-44 xl:w-60 focus:w-72 pl-8 pr-7 py-1.5 rounded-full text-xs bg-slate-200/80 dark:bg-white/10 border border-slate-300/70 dark:border-white/20 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-amber-400/80 focus:ring-2 focus:ring-amber-500/20 backdrop-blur-xl transition-all duration-300 shadow-inner"
+              aria-label="Universal Search across all Supabase tables"
+            />
+            <button 
+              id="global-search-clear" 
+              class="absolute right-2.5 text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs hidden cursor-pointer"
+              aria-label="Clear search"
+            >✕</button>
+            <span id="global-search-shortcut" class="absolute right-2 text-[10px] font-mono px-1 py-0.2 rounded bg-slate-300/60 dark:bg-white/10 text-slate-500 dark:text-slate-400 pointer-events-none hidden xl:inline-block">/</span>
+          </div>
+
+          <!-- Dropdown List of Matching Results while Typing -->
+          <div 
+            id="global-search-dropdown" 
+            class="hidden absolute right-0 mt-2 w-[340px] sm:w-[480px] max-h-[75vh] overflow-hidden rounded-2xl backdrop-blur-2xl bg-white/95 dark:bg-[#140205]/95 border border-slate-200 dark:border-amber-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.35)] z-50 flex flex-col"
+          >
+            <!-- Dropdown Header -->
+            <div class="px-4 py-2.5 border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[11px] bg-slate-100/60 dark:bg-white/[0.03]">
+              <span class="font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5" id="global-search-status-label">
+                <span class="animate-pulse">⚡</span>
+                <span>Universal Search • Supabase</span>
+              </span>
+              <span class="text-slate-500 dark:text-slate-400 text-[10px]" id="global-search-meta">Type to query all tables</span>
+            </div>
+
+            <!-- Scrollable Results Container -->
+            <div class="overflow-y-auto max-h-[58vh] p-2 space-y-3 custom-scrollbar" id="global-search-results">
+              <!-- Dynamically populated while typing -->
+            </div>
+
+            <!-- Dropdown Footer with Navigation Hints -->
+            <div class="px-4 py-2 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 bg-slate-100/40 dark:bg-black/40">
+              <span class="flex items-center gap-1">
+                <kbd class="px-1 py-0.5 rounded bg-slate-200 dark:bg-white/10 font-mono">↑↓</kbd> navigate
+              </span>
+              <span class="flex items-center gap-1">
+                <kbd class="px-1 py-0.5 rounded bg-slate-200 dark:bg-white/10 font-mono">↵</kbd> select
+              </span>
+              <span class="flex items-center gap-1">
+                <kbd class="px-1 py-0.5 rounded bg-slate-200 dark:bg-white/10 font-mono">esc</kbd> close
+              </span>
+            </div>
+          </div>
+        </div>
+
         <!-- Manual Refresh Button -->
-        <button class="w-9 h-9 rounded-full backdrop-blur-xl bg-white/10 hover:bg-white/20 border border-white/20 hover:border-amber-400/50 text-white hover:text-amber-300 flex items-center justify-center transition-all shadow-md active:scale-95" id="btn-refresh" aria-label="Refresh announcements" title="Refresh live feed">
+        <button class="w-9 h-9 rounded-full backdrop-blur-xl bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 border border-slate-300/70 dark:border-white/20 hover:border-amber-500/50 dark:hover:border-amber-400/50 text-slate-700 dark:text-white hover:text-amber-700 dark:hover:text-amber-300 flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer" id="btn-refresh" aria-label="Refresh announcements" title="Refresh live feed">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
           </svg>
         </button>
 
         <!-- Theme Toggle (Dark / Light) -->
-        <button class="w-9 h-9 rounded-full backdrop-blur-xl bg-white/10 hover:bg-white/20 border border-white/20 hover:border-amber-400/50 text-white hover:text-amber-300 flex items-center justify-center transition-all shadow-md active:scale-95" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+        <button class="w-9 h-9 rounded-full backdrop-blur-xl bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 border border-slate-300/70 dark:border-white/20 hover:border-amber-500/50 dark:hover:border-amber-400/50 text-slate-700 dark:text-white hover:text-amber-700 dark:hover:text-amber-300 flex items-center justify-center transition-all shadow-md active:scale-95 theme-toggle-btn cursor-pointer" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">
           <svg class="theme-icon sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
@@ -215,23 +315,23 @@
             <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl overflow-hidden p-1.5 bg-gradient-to-tr from-amber-500 via-[#800d24] to-amber-300 shadow-[0_0_30px_rgba(245,158,11,0.35)] ring-4 ring-amber-400/20 mb-4 group">
               <img src="https://eng.sjp.ac.lk/wp-content/uploads/2025/01/WhatsApp-Image-2023-11-21-at-15.31.23-2-e1704771521619.jpeg" alt="Dr. Nishan Dharmaweera - Dean FOE" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" />
             </div>
-            <h2 class="font-display font-bold text-lg text-white">Dr. Nishan Dharmaweera</h2>
-            <p class="text-xs font-semibold text-amber-300">Dean • Faculty of Engineering</p>
-            <p class="text-[11px] text-slate-300/80">University of Sri Jayewardenepura</p>
+            <h2 class="font-display font-bold text-lg text-slate-900 dark:text-white">Dr. Nishan Dharmaweera</h2>
+            <p class="text-xs font-semibold text-amber-700 dark:text-amber-300">Dean • Faculty of Engineering</p>
+            <p class="text-[11px] text-slate-600 dark:text-slate-300/80">University of Sri Jayewardenepura</p>
           </div>
 
           <!-- Dean's Message & Faculty Vision -->
           <div class="lg:col-span-8 space-y-4">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full backdrop-blur-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full backdrop-blur-md bg-amber-500/15 dark:bg-amber-500/20 border border-amber-500/30 dark:border-amber-400/40 text-amber-800 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
               <span>🎓</span>
               <span>Dean's Official Welcome</span>
             </div>
 
-            <h1 class="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Synergizing Disciplines to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500">Engineer Tomorrow</span>
+            <h1 class="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+              Synergizing Disciplines to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 dark:from-amber-200 dark:via-amber-400 dark:to-amber-500">Engineer Tomorrow</span>
             </h1>
 
-            <blockquote class="text-sm sm:text-base text-slate-200/90 leading-relaxed font-light italic border-l-2 border-amber-400 pl-4 py-1">
+            <blockquote class="text-sm sm:text-base text-slate-700 dark:text-slate-200/90 leading-relaxed font-light italic border-l-2 border-amber-500 pl-4 py-1">
               "The Faculty of Engineering of the University of Sri Jayewardenepura is the latest addition to the state-owned engineering faculties in Sri Lanka. Our faculty offers Bachelor of the Science of Engineering honours degrees across four disciplines. Our curricula adhere to recognized IESL standards. We empower forward-thinking innovators equipped with technical ingenuity, research curiosity, and industry preparedness."
             </blockquote>
 
@@ -241,7 +341,7 @@
                 <span>Explore 5 Departments</span>
                 <span>→</span>
               </button>
-              <button onclick="switchTab('map')" class="px-5 py-2.5 rounded-xl backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer">
+              <button onclick="switchTab('map')" class="px-5 py-2.5 rounded-xl backdrop-blur-md bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-300 dark:border-white/20 text-slate-800 dark:text-white font-semibold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer">
                 <span>📍 Mattegoda Campus Map</span>
               </button>
             </div>
@@ -249,22 +349,22 @@
         </div>
 
         <!-- 4 Key Metric Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pt-8 border-t border-white/10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pt-8 border-t border-slate-200 dark:border-white/10">
           <div class="ios27-glass rounded-2xl p-4 text-center">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-white">1,200+</span>
-            <span class="block text-xs font-semibold text-amber-200/80 uppercase tracking-wider mt-1">Undergraduates</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">1,200+</span>
+            <span class="block text-xs font-semibold text-slate-600 dark:text-amber-200/80 uppercase tracking-wider mt-1">Undergraduates</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 text-center">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-400">05</span>
-            <span class="block text-xs font-semibold text-amber-200/80 uppercase tracking-wider mt-1">Departments</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400">05</span>
+            <span class="block text-xs font-semibold text-slate-600 dark:text-amber-200/80 uppercase tracking-wider mt-1">Departments</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 text-center">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-300">24+</span>
-            <span class="block text-xs font-semibold text-amber-200/80 uppercase tracking-wider mt-1">Hi-Tech Labs</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-700 dark:text-amber-300">24+</span>
+            <span class="block text-xs font-semibold text-slate-600 dark:text-amber-200/80 uppercase tracking-wider mt-1">Hi-Tech Labs</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 text-center">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-emerald-400">100%</span>
-            <span class="block text-xs font-semibold text-amber-200/80 uppercase tracking-wider mt-1">IESL Conforming</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">100%</span>
+            <span class="block text-xs font-semibold text-slate-600 dark:text-amber-200/80 uppercase tracking-wider mt-1">IESL Conforming</span>
           </div>
         </div>
       </div>
@@ -274,41 +374,41 @@
         
         <!-- Timeline Column -->
         <div class="lg:col-span-7 ios27-glass rounded-3xl p-6 sm:p-8">
-          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-2">
             <span>📜</span>
             <span>Historical Genesis & Growth</span>
           </div>
-          <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mb-6">
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-6">
             A Journey of Innovation & Academic Excellence
           </h2>
 
-          <div class="relative pl-6 border-l-2 border-amber-400/40 space-y-6">
+          <div class="relative pl-6 border-l-2 border-amber-500/50 dark:border-amber-400/40 space-y-6">
             <!-- Timeline Item 1 -->
             <div class="relative">
-              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-400 ring-4 ring-amber-400/20"></span>
-              <span class="text-xs font-bold text-amber-300">January 2016</span>
-              <h3 class="font-bold text-white text-base">Inauguration of the Faculty</h3>
-              <p class="text-xs sm:text-sm text-slate-300/85 mt-1 leading-relaxed">
+              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 dark:bg-amber-400 ring-4 ring-amber-400/20"></span>
+              <span class="text-xs font-bold text-amber-700 dark:text-amber-300">January 2016</span>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Inauguration of the Faculty</h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 mt-1 leading-relaxed">
                 Formally established through Gazette Extraordinary, becoming the premier and most modern engineering faculty in Sri Lanka to address next-generation technological needs.
               </p>
             </div>
 
             <!-- Timeline Item 2 -->
             <div class="relative">
-              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-400 ring-4 ring-amber-400/20"></span>
-              <span class="text-xs font-bold text-amber-300">2018 - 2021</span>
-              <h3 class="font-bold text-white text-base">Mattegoda Permanent Complex Development</h3>
-              <p class="text-xs sm:text-sm text-slate-300/85 mt-1 leading-relaxed">
+              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 dark:bg-amber-400 ring-4 ring-amber-400/20"></span>
+              <span class="text-xs font-bold text-amber-700 dark:text-amber-300">2018 - 2021</span>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Mattegoda Permanent Complex Development</h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 mt-1 leading-relaxed">
                 Construction and commissioning of the state-of-the-art permanent engineering complex in Mattegoda, featuring high-bay structural halls, clean rooms, and computing clusters.
               </p>
             </div>
 
             <!-- Timeline Item 3 -->
             <div class="relative">
-              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-400 ring-4 ring-amber-400/20"></span>
-              <span class="text-xs font-bold text-amber-300">2022 - 2026</span>
-              <h3 class="font-bold text-white text-base">IESL Recognition & National Honors</h3>
-              <p class="text-xs sm:text-sm text-slate-300/85 mt-1 leading-relaxed">
+              <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 dark:bg-amber-400 ring-4 ring-amber-400/20"></span>
+              <span class="text-xs font-bold text-amber-700 dark:text-amber-300">2022 - 2026</span>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">IESL Recognition & National Honors</h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 mt-1 leading-relaxed">
                 Curricula aligned with IESL standards and SLQF Level 8. FOE scholars clinched Gold at the National AI Awards 2026, podium victories at MicroMaze 3.0 robotics, and NBQSA ICT trophies.
               </p>
             </div>
@@ -317,22 +417,22 @@
 
         <!-- Vision, Mission & Core Values Column -->
         <div class="lg:col-span-5 space-y-6">
-          <div class="ios27-glass rounded-3xl p-6 sm:p-7 border border-white/15">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 text-lg mb-3">
+          <div class="ios27-glass rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-white/15">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/15 dark:bg-amber-500/20 border border-amber-500/30 dark:border-amber-400/30 flex items-center justify-center text-amber-700 dark:text-amber-300 text-lg mb-3">
               👁️
             </div>
-            <h3 class="font-display font-bold text-lg text-white mb-2">Faculty Vision</h3>
-            <p class="text-xs sm:text-sm text-slate-300/90 leading-relaxed font-light">
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">Faculty Vision</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/90 leading-relaxed font-light">
               To be a centre of excellence in higher education and research in engineering, empowering innovators who serve society through technological ingenuity and ethical leadership.
             </p>
           </div>
 
-          <div class="ios27-glass rounded-3xl p-6 sm:p-7 border border-white/15">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 text-lg mb-3">
+          <div class="ios27-glass rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-white/15">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/15 dark:bg-amber-500/20 border border-amber-500/30 dark:border-amber-400/30 flex items-center justify-center text-amber-700 dark:text-amber-300 text-lg mb-3">
               🎯
             </div>
-            <h3 class="font-display font-bold text-lg text-white mb-2">Faculty Mission</h3>
-            <p class="text-xs sm:text-sm text-slate-300/90 leading-relaxed font-light">
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">Faculty Mission</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/90 leading-relaxed font-light">
               Produce engineering graduates with the knowledge and aspiration to become competent engineers in conventional and emerging spheres by offering a flexible curriculum meeting global standards.
             </p>
           </div>
@@ -341,35 +441,35 @@
 
       <!-- Quick Academic Portals -->
       <div class="ios27-glass rounded-3xl p-6 sm:p-8">
-        <h3 class="font-display text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <span>⚡</span>
           <span>Official Faculty Academic Portals</span>
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
           <a href="https://eng.sjp.ac.lk/cm/index.php" target="_blank" rel="noopener" class="ios27-glass rounded-2xl p-4 text-center hover:border-amber-400/50 hover:scale-105 transition-all group">
             <span class="text-2xl mb-1 block group-hover:scale-110 transition-transform">🎓</span>
-            <span class="font-bold text-xs text-white block">FOE LMS</span>
-            <span class="text-[10px] text-slate-400">Course Materials</span>
+            <span class="font-bold text-xs text-slate-900 dark:text-white block">FOE LMS</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Course Materials</span>
           </a>
           <a href="https://mis.eng.sjp.ac.lk/" target="_blank" rel="noopener" class="ios27-glass rounded-2xl p-4 text-center hover:border-amber-400/50 hover:scale-105 transition-all group">
             <span class="text-2xl mb-1 block group-hover:scale-110 transition-transform">📊</span>
-            <span class="font-bold text-xs text-white block">Student MIS</span>
-            <span class="text-[10px] text-slate-400">Exams & Results</span>
+            <span class="font-bold text-xs text-slate-900 dark:text-white block">Student MIS</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Exams & Results</span>
           </a>
           <a href="https://eng.sjp.ac.lk/library-foe/" target="_blank" rel="noopener" class="ios27-glass rounded-2xl p-4 text-center hover:border-amber-400/50 hover:scale-105 transition-all group">
             <span class="text-2xl mb-1 block group-hover:scale-110 transition-transform">📚</span>
-            <span class="font-bold text-xs text-white block">Central Library</span>
-            <span class="text-[10px] text-slate-400">IEEE & E-Books</span>
+            <span class="font-bold text-xs text-slate-900 dark:text-white block">Central Library</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">IEEE & E-Books</span>
           </a>
           <a href="https://eng.sjp.ac.lk/it-centre-foe/" target="_blank" rel="noopener" class="ios27-glass rounded-2xl p-4 text-center hover:border-amber-400/50 hover:scale-105 transition-all group">
             <span class="text-2xl mb-1 block group-hover:scale-110 transition-transform">💻</span>
-            <span class="font-bold text-xs text-white block">IT Centre</span>
-            <span class="text-[10px] text-slate-400">Gigabit Network</span>
+            <span class="font-bold text-xs text-slate-900 dark:text-white block">IT Centre</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Gigabit Network</span>
           </a>
           <a href="https://contre.lk/" target="_blank" rel="noopener" class="ios27-glass rounded-2xl p-4 text-center hover:border-amber-400/50 hover:scale-105 transition-all group col-span-2 md:col-span-1">
             <span class="text-2xl mb-1 block group-hover:scale-110 transition-transform">🌐</span>
-            <span class="font-bold text-xs text-white block">ConTRE 2026</span>
-            <span class="text-[10px] text-slate-400">Intl Conference</span>
+            <span class="font-bold text-xs text-slate-900 dark:text-white block">ConTRE 2026</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Intl Conference</span>
           </a>
         </div>
       </div>
@@ -379,20 +479,29 @@
          TAB 2: Departments
          ====================================================================== -->
     <section id="tab-departments" class="tab-pane hidden space-y-8" role="tabpanel" aria-label="Departments">
-      <div class="text-center max-w-3xl mx-auto">
-        <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider inline-block mb-3">
-          Academic Architecture
-        </span>
-        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-          Five Specialized Departments of Study
-        </h2>
-        <p class="text-sm sm:text-base text-slate-300/80 mt-3 font-normal">
-          Delivering four specialized honours degree paths under IESL recognition and a multidisciplinary engineering leadership foundation.
-        </p>
+      
+      <!-- List View: 5 Department Cards Grid -->
+      <div id="departments-list-view" class="space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-500/30 dark:border-amber-400/30 text-amber-800 dark:text-amber-300 text-xs font-bold uppercase tracking-wider inline-block mb-3">
+            Academic Architecture
+          </span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Five Specialized Departments of Study
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300/80 mt-3 font-normal">
+            Delivering four specialized honours degree paths under IESL recognition and a multidisciplinary engineering leadership foundation. Click any department card to explore in-depth details, state-of-the-art laboratories, and dedicated faculty staff.
+          </p>
+        </div>
+
+        <!-- Departments Cards Container (Rendered dynamically) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="departments-grid">
+          <!-- Injected via JavaScript -->
+        </div>
       </div>
 
-      <!-- Departments Cards Container (Rendered dynamically or via template) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="departments-grid">
+      <!-- Wide Detailed View Container (Rendered dynamically on card click) -->
+      <div id="department-detail-view" class="hidden space-y-10">
         <!-- Injected via JavaScript -->
       </div>
     </section>
@@ -402,35 +511,39 @@
          ====================================================================== -->
     <section id="tab-facilities" class="tab-pane hidden space-y-8" role="tabpanel" aria-label="Other Facilities">
       <div class="text-center max-w-3xl mx-auto">
-        <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider inline-block mb-3">
+        <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-500/30 dark:border-amber-400/30 text-amber-800 dark:text-amber-300 text-xs font-bold uppercase tracking-wider inline-block mb-3">
           Campus Infrastructure
         </span>
-        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           State-of-the-Art Facilities & Laboratories
         </h2>
-        <p class="text-sm sm:text-base text-slate-300/80 mt-3 font-normal">
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300/80 mt-3 font-normal">
           Explore specialized laboratories, computational hubs, central library, residential complexes, and student amenities.
         </p>
       </div>
 
       <!-- Facilities Category Filter Bar -->
       <div class="flex items-center justify-center gap-2 overflow-x-auto py-2 scrollbar-none" id="facilities-filter-bar">
-        <button class="fac-filter-btn active-fac px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/10 border border-white/20 text-white transition-all cursor-pointer" data-category="all">
-          All Facilities (10)
+        <button class="fac-filter-btn active-fac px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-amber-500 text-black border border-amber-400 shadow-md transition-all cursor-pointer" data-category="all">
+          All Facilities (12)
         </button>
-        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="labs">
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 transition-all cursor-pointer flex items-center gap-1.5" data-category="featured">
+          <span>⭐</span>
+          <span>Featured Assets</span>
+        </button>
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="labs">
           Specialized Labs
         </button>
-        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="digital">
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="digital">
           Digital & IT
         </button>
-        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="library">
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="library">
           Library
         </button>
-        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="welfare">
-          Student Welfare
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="welfare">
+          Student Welfare & Stage
         </button>
-        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="research">
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="research">
           Research Centers
         </button>
       </div>
@@ -450,36 +563,36 @@
       <div class="ios27-glass-maroon rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
         <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-[#f59e0b]/15 blur-3xl pointer-events-none"></div>
 
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-xl bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-5 shadow-sm">
-          <span class="text-amber-400">✨</span>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-xl bg-amber-500/15 border border-amber-500/30 dark:border-amber-400/30 text-amber-800 dark:text-amber-300 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-5 shadow-sm">
+          <span class="text-amber-500">✨</span>
           <span>Official Engineering Faculty Feed</span>
         </div>
 
-        <h2 class="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-500 mb-4 drop-shadow-[0_4px_16px_rgba(245,158,11,0.25)]">
+        <h2 class="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-amber-600 to-amber-500 dark:from-amber-100 dark:via-amber-300 dark:to-amber-500 mb-4 drop-shadow-[0_4px_16px_rgba(245,158,11,0.25)]">
           Academic Notices & News Bulletin
         </h2>
 
-        <p class="text-base sm:text-lg text-slate-200/90 max-w-2xl mx-auto mb-10 font-normal leading-relaxed">
+        <p class="text-base sm:text-lg text-slate-700 dark:text-slate-200/90 max-w-2xl mx-auto mb-10 font-normal leading-relaxed">
           Live examinations, student enrolments, convocation updates, and achievements directly synchronized with the official faculty portal.
         </p>
 
         <!-- Metric Glass Strip -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto" id="stats-strip">
           <div class="ios27-glass rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center hover:border-amber-400/40 transition-all">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-white" id="stat-total">0</span>
-            <span class="text-xs font-semibold text-amber-200/70 uppercase tracking-wider mt-1">Total Updates</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" id="stat-total">0</span>
+            <span class="text-xs font-semibold text-slate-600 dark:text-amber-200/70 uppercase tracking-wider mt-1">Total Updates</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center hover:border-amber-400/40 transition-all">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-400" id="stat-notices">0</span>
-            <span class="text-xs font-semibold text-amber-200/70 uppercase tracking-wider mt-1">Active Notices</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400" id="stat-notices">0</span>
+            <span class="text-xs font-semibold text-slate-600 dark:text-amber-200/70 uppercase tracking-wider mt-1">Active Notices</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center hover:border-amber-400/40 transition-all">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-300" id="stat-news">0</span>
-            <span class="text-xs font-semibold text-amber-200/70 uppercase tracking-wider mt-1">Faculty News</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-amber-700 dark:text-amber-300" id="stat-news">0</span>
+            <span class="text-xs font-semibold text-slate-600 dark:text-amber-200/70 uppercase tracking-wider mt-1">Faculty News</span>
           </div>
           <div class="ios27-glass rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center hover:border-amber-400/40 transition-all">
-            <span class="font-display text-2xl sm:text-3xl font-extrabold text-emerald-400" id="stat-announcements">0</span>
-            <span class="text-xs font-semibold text-amber-200/70 uppercase tracking-wider mt-1">Vacancies & Calls</span>
+            <span class="font-display text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400" id="stat-announcements">0</span>
+            <span class="text-xs font-semibold text-slate-600 dark:text-amber-200/70 uppercase tracking-wider mt-1">Vacancies & Calls</span>
           </div>
         </div>
       </div>
@@ -490,7 +603,7 @@
           
           <!-- Search Input Box -->
           <div class="relative flex-1 flex items-center">
-            <svg class="absolute left-3.5 text-white/50 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="absolute left-3.5 text-slate-400 dark:text-white/50 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <input 
@@ -499,49 +612,49 @@
               placeholder="Search notices, exams, batches, awards... (Press '/' to search)" 
               autocomplete="off"
               aria-label="Search announcements"
-              class="w-full h-11 pl-10 pr-9 rounded-xl backdrop-blur-md bg-black/25 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-amber-400/70 focus:ring-2 focus:ring-amber-400/20 text-sm transition-all"
+              class="w-full h-11 pl-10 pr-9 rounded-xl backdrop-blur-md bg-white/90 dark:bg-black/25 border border-slate-300/80 dark:border-white/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:outline-none focus:border-amber-500 dark:focus:border-amber-400/70 focus:ring-2 focus:ring-amber-400/20 text-sm transition-all"
             />
-            <button class="absolute right-3 text-white/50 hover:text-white text-xl leading-none" id="btn-clear-search" aria-label="Clear search query" hidden>
+            <button class="absolute right-3 text-slate-400 dark:text-white/50 hover:text-slate-700 dark:hover:text-white text-xl leading-none cursor-pointer" id="btn-clear-search" aria-label="Clear search query" hidden>
               &times;
             </button>
           </div>
 
           <!-- Category Filter Pills -->
           <div class="flex items-center gap-2 overflow-x-auto py-1 scrollbar-none" role="tablist" aria-label="Filter by category">
-            <button class="pill-btn ios27-pill active px-4 py-2 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-all" data-category="all" role="tab" aria-selected="true">
-              All Updates <span class="px-2 py-0.5 rounded-full bg-white/20 text-[11px] font-bold" id="count-all">0</span>
+            <button class="pill-btn ios27-pill active px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5" id="filter-all" data-category="all" role="tab" aria-selected="true">
+              All Updates <span class="px-2 py-0.5 rounded-full bg-black/10 dark:bg-white/20 text-[11px] font-bold" id="count-all">0</span>
             </button>
-            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-notice" data-category="notice" role="tab" aria-selected="false">
+            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-notice" data-category="notice" role="tab" aria-selected="false">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              Notices <span class="px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-white/10 text-[11px] font-bold" id="count-notice">0</span>
+            </button>
+            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-news" data-category="news" role="tab" aria-selected="false">
               <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-              Notices <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold" id="count-notice">0</span>
+              News <span class="px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-white/10 text-[11px] font-bold" id="count-news">0</span>
             </button>
-            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-news" data-category="news" role="tab" aria-selected="false">
-              <span class="w-2 h-2 rounded-full bg-amber-300"></span>
-              News <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold" id="count-news">0</span>
+            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-announcement" data-category="announcement" role="tab" aria-selected="false">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Vacancies <span class="px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-white/10 text-[11px] font-bold" id="count-announcement">0</span>
             </button>
-            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-announcement" data-category="announcement" role="tab" aria-selected="false">
-              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              Vacancies <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold" id="count-announcement">0</span>
-            </button>
-            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-bookmarks" data-category="bookmarks" role="tab" aria-selected="false" title="View saved items">
-              ⭐ Saved <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] font-bold" id="count-bookmarks">0</span>
+            <button class="pill-btn ios27-pill px-4 py-2 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5" id="filter-bookmarks" data-category="bookmarks" role="tab" aria-selected="false" title="View saved items">
+              ⭐ Saved <span class="px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-white/10 text-[11px] font-bold" id="count-bookmarks">0</span>
             </button>
           </div>
 
           <!-- Sorting Select -->
           <div class="flex items-center gap-2">
-            <label for="sort-select" class="text-xs font-semibold text-amber-200/80 whitespace-nowrap">Sort:</label>
-            <select id="sort-select" class="h-11 px-3.5 rounded-xl backdrop-blur-md bg-black/30 border border-white/20 text-white text-xs font-medium focus:outline-none focus:border-amber-400 cursor-pointer transition-all" aria-label="Sort announcements">
-              <option value="newest" class="bg-[#2a040b] text-white">Latest First</option>
-              <option value="oldest" class="bg-[#2a040b] text-white">Oldest First</option>
-              <option value="alphabetical" class="bg-[#2a040b] text-white">Title (A-Z)</option>
+            <label for="sort-select" class="text-xs font-semibold text-slate-700 dark:text-amber-200/80 whitespace-nowrap">Sort:</label>
+            <select id="sort-select" class="h-11 px-3.5 rounded-xl backdrop-blur-md bg-white/90 dark:bg-black/30 border border-slate-300/80 dark:border-white/20 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:border-amber-500 dark:focus:border-amber-400 cursor-pointer transition-all" aria-label="Sort announcements">
+              <option value="newest" class="bg-white text-slate-900 dark:bg-[#2a040b] dark:text-white">Latest First</option>
+              <option value="oldest" class="bg-white text-slate-900 dark:bg-[#2a040b] dark:text-white">Oldest First</option>
+              <option value="alphabetical" class="bg-white text-slate-900 dark:bg-[#2a040b] dark:text-white">Title (A-Z)</option>
             </select>
           </div>
         </div>
       </nav>
 
       <!-- Results Header -->
-      <div class="flex items-center justify-between text-sm font-medium text-amber-200/70" id="results-header">
+      <div class="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-amber-200/70" id="results-header">
         <span id="results-count">Showing 0 announcements</span>
         <div id="active-tags"></div>
       </div>
@@ -564,8 +677,8 @@
       <!-- Empty State View -->
       <div class="ios27-glass rounded-3xl p-12 text-center max-w-lg mx-auto my-12" id="empty-state" hidden>
         <div class="text-5xl mb-4">🔍</div>
-        <h3 class="font-display text-xl font-bold text-white mb-2">No announcements found</h3>
-        <p class="text-sm text-slate-300 mb-6">Try searching with a different keyword, batch number, or clearing your filter.</p>
+        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">No announcements found</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">Try searching with a different keyword, batch number, or clearing your filter.</p>
         <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-sm shadow-lg hover:scale-105 transition-all cursor-pointer" id="btn-reset-filters">
           Reset All Filters
         </button>
@@ -578,14 +691,14 @@
     <section id="tab-map" class="tab-pane hidden space-y-8" role="tabpanel" aria-label="Faculty Map">
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto space-y-3">
-        <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+        <span class="px-4 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
           <span>Spatial Campus Blueprint • Mattegoda Complex</span>
         </span>
-        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Interactive Campus Map & Spatial Navigator
         </h2>
-        <p class="text-xs sm:text-sm text-slate-300/85 leading-relaxed font-normal max-w-2xl mx-auto">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 leading-relaxed font-normal max-w-2xl mx-auto">
           No 120, Polgasowita Road, Mattegoda, Sri Lanka &bull; Explore all 16 building complexes, academic departments, specialized testing bays, and recreational pavilions. Hover or click any glowing beacon on the stylized vector layout to inspect facilities and floor plans.
         </p>
       </div>
@@ -597,33 +710,33 @@
           <button class="map-filter-btn active-map-filter px-4 py-1.5 rounded-full text-xs font-bold backdrop-blur-md bg-gradient-to-r from-amber-500 to-amber-600 text-black border border-amber-300 shadow-md transition-all cursor-pointer" data-category="all">
             All Locations (16)
           </button>
-          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="department">
+          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/5 dark:bg-white/5 border border-slate-300/60 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="department">
             Departments (4)
           </button>
-          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="administrative">
+          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/5 dark:bg-white/5 border border-slate-300/60 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="administrative">
             Admin & Auditorium (2)
           </button>
-          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="academic">
+          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/5 dark:bg-white/5 border border-slate-300/60 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="academic">
             Research & Library (2)
           </button>
-          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="dining">
+          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/5 dark:bg-white/5 border border-slate-300/60 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="dining">
             Dining & Common Room (4)
           </button>
-          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-white/5 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer" data-category="sports">
+          <button class="map-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/5 dark:bg-white/5 border border-slate-300/60 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="sports">
             Sports & Welfare (3)
           </button>
         </div>
 
         <!-- Quick Search Bar -->
         <div class="relative w-full md:w-72">
-          <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-slate-400 text-xs">🔍</span>
+          <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-slate-500 dark:text-slate-400 text-xs">🔍</span>
           <input 
             type="text" 
             id="map-search-input" 
             placeholder="Search building or lab..." 
-            class="w-full pl-9 pr-8 py-2 rounded-xl text-xs bg-white/5 border border-white/15 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400/80 focus:bg-white/10 transition-all"
+            class="w-full pl-9 pr-8 py-2 rounded-xl text-xs bg-white/70 dark:bg-white/5 border border-slate-300/70 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white dark:focus:bg-white/10 transition-all shadow-inner"
           >
-          <button id="map-clear-search" class="absolute inset-y-0 right-3 hidden items-center text-slate-400 hover:text-white text-xs cursor-pointer">✕</button>
+          <button id="map-clear-search" class="absolute inset-y-0 right-3 hidden items-center text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs cursor-pointer">✕</button>
         </div>
       </div>
 
@@ -631,23 +744,23 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         
         <!-- Map Visual Floorplan & Interactive Canvas Column -->
-        <div class="lg:col-span-7 xl:col-span-8 ios27-glass rounded-3xl p-5 sm:p-7 relative overflow-hidden border border-white/20 shadow-2xl">
+        <div class="lg:col-span-7 xl:col-span-8 ios27-glass rounded-3xl p-5 sm:p-7 relative overflow-hidden border border-slate-200/60 dark:border-white/20 shadow-2xl">
           
           <!-- Top HUD Control Bar -->
-          <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4 text-xs">
+          <div class="flex items-center justify-between border-b border-slate-200/60 dark:border-white/10 pb-3 mb-4 text-xs">
             <div class="flex items-center gap-2">
               <span class="flex h-2.5 w-2.5 relative">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
               </span>
-              <span class="font-bold text-amber-400 tracking-wider uppercase text-[11px]">MATTEGODA CAMPUS COMPLEX &bull; 45 ACRES</span>
+              <span class="font-bold text-amber-600 dark:text-amber-400 tracking-wider uppercase text-[11px]">MATTEGODA CAMPUS COMPLEX &bull; 45 ACRES</span>
             </div>
             
-            <div class="flex items-center gap-3 text-slate-400 text-[11px]">
+            <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[11px]">
               <span class="hidden sm:inline-flex items-center gap-1">
-                <span>🧭</span> <span class="font-mono text-slate-300">NORTH 004°</span>
+                <span>🧭</span> <span class="font-mono text-slate-700 dark:text-slate-300">NORTH 004°</span>
               </span>
-              <span class="font-mono text-amber-300/80 bg-black/40 px-2 py-0.5 rounded-md border border-white/10">
+              <span class="font-mono text-amber-700 dark:text-amber-300/80 bg-amber-100/60 dark:bg-black/40 px-2 py-0.5 rounded-md border border-amber-300/50 dark:border-white/10">
                 6.7968° N, 79.9723° E
               </span>
             </div>
@@ -878,27 +991,27 @@
             <!-- =============================================================
                  Floating Glassmorphism Tooltip (Appears on Beacon Hover)
                  ============================================================= -->
-            <div id="map-hover-tooltip" class="map-floating-tooltip hidden-tooltip ios27-glass rounded-2xl p-3 border border-amber-400/50 shadow-2xl backdrop-blur-2xl bg-black/85">
-              <div class="relative h-28 w-full rounded-xl overflow-hidden mb-2.5 border border-white/10">
+            <div id="map-hover-tooltip" class="map-floating-tooltip hidden-tooltip ios27-glass rounded-2xl p-3 border border-amber-500/40 dark:border-amber-400/50 shadow-2xl backdrop-blur-2xl bg-white/90 dark:bg-black/85">
+              <div class="relative h-28 w-full rounded-xl overflow-hidden mb-2.5 border border-slate-200 dark:border-white/10">
                 <img id="tooltip-img" src="" alt="Building" class="w-full h-full object-cover">
                 <span id="tooltip-category" class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider backdrop-blur-md bg-black/75 text-amber-300 border border-amber-400/40"></span>
                 <span id="tooltip-code" class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md text-[9px] font-mono font-bold bg-amber-500 text-black"></span>
               </div>
-              <h4 id="tooltip-title" class="font-display text-xs font-bold text-white line-clamp-1 mb-1"></h4>
-              <p id="tooltip-desc" class="text-[11px] text-slate-300/90 line-clamp-2 leading-relaxed mb-2 font-light"></p>
-              <div class="flex items-center justify-between text-[10px] text-amber-300 pt-1.5 border-t border-white/10 font-semibold">
+              <h4 id="tooltip-title" class="font-display text-xs font-bold text-slate-900 dark:text-white line-clamp-1 mb-1"></h4>
+              <p id="tooltip-desc" class="text-[11px] text-slate-600 dark:text-slate-300/90 line-clamp-2 leading-relaxed mb-2 font-light"></p>
+              <div class="flex items-center justify-between text-[10px] text-amber-600 dark:text-amber-300 pt-1.5 border-t border-slate-200 dark:border-white/10 font-semibold">
                 <span id="tooltip-floors"></span>
-                <span class="flex items-center gap-1 text-slate-300 font-normal">Click to inspect <span class="text-amber-400 font-bold">→</span></span>
+                <span class="flex items-center gap-1 text-slate-500 dark:text-slate-300 font-normal">Click to inspect <span class="text-amber-500 dark:text-amber-400 font-bold">→</span></span>
               </div>
             </div>
 
           </div>
 
           <!-- Bottom Hotspot Quick Selector Pills (Horizontal Scrollable Strip) -->
-          <div class="mt-4 pt-3 border-t border-white/10">
+          <div class="mt-4 pt-3 border-t border-slate-200/60 dark:border-white/10">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider">Quick Location Navigator</span>
-              <span class="text-[10px] text-slate-400">Click any location below to inspect</span>
+              <span class="text-[11px] font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider">Quick Location Navigator</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400">Click any location below to inspect</span>
             </div>
             <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar" id="map-quick-pills">
               <!-- Injected by app.js -->
@@ -907,10 +1020,10 @@
         </div>
 
         <!-- Zone Details Inspector (iOS 27 Specular Glass Side Panel) -->
-        <div class="lg:col-span-5 xl:col-span-4 ios27-glass rounded-3xl p-6 sm:p-7 space-y-5 border border-amber-400/35 shadow-2xl relative" id="map-zone-inspector">
+        <div class="lg:col-span-5 xl:col-span-4 ios27-glass rounded-3xl p-6 sm:p-7 space-y-5 border border-amber-500/30 dark:border-amber-400/35 shadow-2xl relative" id="map-zone-inspector">
           
           <!-- Image Banner with Gradient & Badges -->
-          <div class="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden border border-white/20 shadow-xl group">
+          <div class="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden border border-slate-200/60 dark:border-white/20 shadow-xl group">
             <img id="inspector-img" src="https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg" alt="Building Preview" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
             
@@ -932,17 +1045,17 @@
 
           <!-- Building Title & Narrative -->
           <div>
-            <h3 class="font-display text-xl sm:text-2xl font-black text-white leading-tight mb-2" id="inspector-name">
+            <h3 class="font-display text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight mb-2" id="inspector-name">
               Administration & Dean's Secretariat Block
             </h3>
-            <p class="text-xs sm:text-sm text-slate-300/90 leading-relaxed font-light" id="inspector-desc">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/90 leading-relaxed font-light" id="inspector-desc">
               Housing the Dean's Secretariat, Senior Assistant Registrar (SAR), Assistant Bursar, Student Affairs division, Examination Branch, and Faculty Boardroom.
             </p>
           </div>
 
           <!-- Floor-by-Floor Directory -->
-          <div class="space-y-2 pt-2 border-t border-white/10" id="inspector-floors-section">
-            <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <div class="space-y-2 pt-2 border-t border-slate-200/60 dark:border-white/10" id="inspector-floors-section">
+            <span class="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <span>🏢</span> <span>Multi-Level Floor Directory</span>
             </span>
             <div class="space-y-2 max-h-44 overflow-y-auto pr-1 custom-scrollbar" id="inspector-floors">
@@ -951,22 +1064,22 @@
           </div>
 
           <!-- Key Highlights & Labs -->
-          <div class="space-y-2 pt-2 border-t border-white/10">
-            <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <div class="space-y-2 pt-2 border-t border-slate-200/60 dark:border-white/10">
+            <span class="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <span>✨</span> <span>Key Facilities & Highlights</span>
             </span>
-            <ul class="space-y-1.5 text-xs text-slate-200" id="inspector-highlights">
+            <ul class="space-y-1.5 text-xs text-slate-700 dark:text-slate-200" id="inspector-highlights">
               <!-- Dynamically populated by app.js -->
             </ul>
           </div>
 
           <!-- Action Navigation Buttons -->
-          <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center gap-3">
+          <div class="pt-4 border-t border-slate-200/60 dark:border-white/10 flex flex-col sm:flex-row items-center gap-3">
             <a href="https://maps.google.com/?q=Faculty+of+Engineering+University+of+Sri+Jayewardenepura+Mattegoda" target="_blank" rel="noopener noreferrer" class="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-extrabold text-xs shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
               <span>Google Maps GPS Navigation</span>
               <span>↗</span>
             </a>
-            <button id="btn-inspector-locate-dept" class="w-full sm:w-auto py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/15 text-slate-200 font-semibold text-xs border border-white/15 transition-all flex items-center justify-center gap-1.5">
+            <button id="btn-inspector-locate-dept" class="w-full sm:w-auto py-2.5 px-4 rounded-xl bg-slate-900/5 hover:bg-slate-900/10 dark:bg-white/5 dark:hover:bg-white/15 text-slate-800 dark:text-slate-200 font-semibold text-xs border border-slate-300/60 dark:border-white/15 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
               <span>View Department</span>
               <span>→</span>
             </button>
@@ -982,35 +1095,35 @@
   <!-- ========================================================================
        Full Announcement Details Modal (iOS 27 Specular Glass Dialog)
        ======================================================================== -->
-  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-2xl" id="announcement-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-card w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-3xl backdrop-blur-3xl bg-[#160205]/95 border border-amber-400/30 shadow-2xl flex flex-col">
+  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-2xl" id="announcement-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-3xl backdrop-blur-3xl bg-white/95 dark:bg-[#160205]/95 border border-slate-200 dark:border-amber-400/30 shadow-2xl flex flex-col">
       
       <!-- Modal Header -->
-      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.04]">
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.04]">
         <div class="flex items-center gap-3">
-          <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/40" id="modal-category">Notice</span>
-          <span class="text-xs text-slate-300" id="modal-date">Date</span>
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 dark:border-amber-400/40" id="modal-category">Notice</span>
+          <span class="text-xs text-slate-500 dark:text-slate-300" id="modal-date">Date</span>
         </div>
-        <button class="text-slate-400 hover:text-white text-2xl leading-none p-1 transition-colors" id="modal-close" aria-label="Close dialog">&times;</button>
+        <button class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-2xl leading-none p-1 transition-colors cursor-pointer" id="modal-close" aria-label="Close dialog">&times;</button>
       </div>
 
       <!-- Modal Body -->
       <div class="p-6 overflow-y-auto flex-1">
         <!-- Banner Image -->
-        <div class="w-full max-h-72 overflow-hidden rounded-2xl mb-5 border border-white/15 shadow-md bg-black/50" id="modal-image-wrap" hidden>
+        <div class="w-full max-h-72 overflow-hidden rounded-2xl mb-5 border border-slate-200 dark:border-white/15 shadow-md bg-slate-100 dark:bg-black/50" id="modal-image-wrap" hidden>
           <img id="modal-image" src="" alt="Announcement banner" class="w-full h-full max-h-72 object-cover" />
         </div>
-        <h2 class="font-display text-xl sm:text-2xl font-bold text-white mb-4 leading-snug" id="modal-title">Announcement Title</h2>
-        <div class="text-sm sm:text-base text-slate-200/90 leading-relaxed whitespace-pre-wrap font-normal" id="modal-description">Detailed description will appear here...</div>
+        <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4 leading-snug" id="modal-title">Announcement Title</h2>
+        <div class="text-sm sm:text-base text-slate-700 dark:text-slate-200/90 leading-relaxed whitespace-pre-wrap font-normal" id="modal-description">Detailed description will appear here...</div>
       </div>
 
       <!-- Modal Footer -->
-      <div class="px-6 py-4 border-t border-white/10 flex flex-wrap items-center justify-end gap-3 bg-white/[0.04]">
-        <button class="px-4 py-2 rounded-xl backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center gap-2 transition-all" id="modal-bookmark-btn">
+      <div class="px-6 py-4 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-end gap-3 bg-slate-50/50 dark:bg-white/[0.04]">
+        <button class="px-4 py-2 rounded-xl backdrop-blur-md bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-300 dark:border-white/20 text-slate-800 dark:text-white text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer" id="modal-bookmark-btn">
           <span id="modal-bookmark-icon">⭐</span>
           <span id="modal-bookmark-text">Save</span>
         </button>
-        <button class="px-4 py-2 rounded-xl backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center gap-2 transition-all" id="modal-share-btn">
+        <button class="px-4 py-2 rounded-xl backdrop-blur-md bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-300 dark:border-white/20 text-slate-800 dark:text-white text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer" id="modal-share-btn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
             <polyline points="16 6 12 2 8 6"/>
@@ -1030,27 +1143,257 @@
     </div>
   </div>
 
+  <!-- ========================================================================
+       Staff & Faculty Member Details Modal (iOS 27 Specular Glass Dialog)
+       ======================================================================== -->
+  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-2xl hidden" id="staff-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card w-full max-w-lg overflow-hidden rounded-3xl backdrop-blur-3xl bg-white/95 dark:bg-[#160205]/95 border border-slate-200 dark:border-amber-400/30 shadow-2xl flex flex-col">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.04]">
+        <div class="flex items-center gap-2.5">
+          <span class="px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 dark:border-amber-400/40" id="staff-modal-type">Academic Staff</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400">Faculty Leadership & Scholars</span>
+        </div>
+        <button class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-2xl leading-none p-1 transition-colors cursor-pointer" id="staff-modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-4">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <div class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-xl flex-shrink-0 bg-slate-900 relative">
+            <img id="staff-modal-img" src="" alt="Staff Photo" class="w-full h-full object-cover">
+            <div id="staff-modal-avatar-fallback" class="hidden w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-amber-600 dark:text-amber-300">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center bg-white dark:bg-white/10 border border-amber-500/30 shadow-sm">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <span id="staff-modal-initials" class="text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30">FOE</span>
+            </div>
+          </div>
+          <div class="text-center sm:text-left space-y-1">
+            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white leading-snug" id="staff-modal-name">Staff Name</h3>
+            <p class="text-xs font-semibold text-amber-700 dark:text-amber-300" id="staff-modal-designation">Designation</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400" id="staff-modal-dept">Faculty of Engineering • University of Sri Jayewardenepura</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-100/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 dark:text-slate-400">Campus Base:</span>
+            <span class="font-medium text-slate-900 dark:text-white">Mattegoda Permanent Complex</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 dark:text-slate-400">University Affiliation:</span>
+            <span class="font-medium text-slate-900 dark:text-white">USJ Faculty of Engineering</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 dark:text-slate-400">Official Portal:</span>
+            <a href="https://eng.sjp.ac.lk" target="_blank" rel="noopener noreferrer" class="text-amber-600 dark:text-amber-400 hover:underline font-semibold flex items-center gap-1">
+              <span>eng.sjp.ac.lk</span> <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 border-t border-slate-200 dark:border-white/10 flex items-center justify-end gap-3 bg-slate-50/50 dark:bg-white/[0.04]">
+        <button id="staff-modal-action-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-xs shadow-md hover:scale-105 transition-all cursor-pointer flex items-center gap-1.5">
+          <span>View Relevant Section</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Department Details Modal (iOS 27 Specular Glass Dialog)
+       ======================================================================== -->
+  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-2xl hidden" id="dept-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-3xl backdrop-blur-3xl bg-white/95 dark:bg-[#160205]/95 border border-slate-200 dark:border-amber-400/30 shadow-2xl flex flex-col">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.04]">
+        <div class="flex items-center gap-2.5">
+          <span class="px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 dark:border-amber-400/40" id="dept-modal-code">CE</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400" id="dept-modal-degree">B.Sc. Eng (Hons) • IESL Accredited</span>
+        </div>
+        <button class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-2xl leading-none p-1 transition-colors cursor-pointer" id="dept-modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 overflow-y-auto space-y-4">
+        <div class="w-full max-h-56 overflow-hidden rounded-2xl border border-slate-200 dark:border-white/15 shadow-md bg-slate-900">
+          <img id="dept-modal-img" src="" alt="Department building" class="w-full h-full object-cover">
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-slate-900 dark:text-white" id="dept-modal-name">Department Name</h2>
+          <p class="text-xs font-semibold text-amber-700 dark:text-amber-300 mt-0.5" id="dept-modal-tagline">Department Tagline</p>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200/90 leading-relaxed font-normal" id="dept-modal-overview">Overview text...</p>
+        
+        <div class="p-4 rounded-2xl bg-slate-100/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 space-y-2" id="dept-modal-labs-wrap">
+          <span class="text-[11px] font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider block">Key Laboratories & Specialized Bay:</span>
+          <ul class="space-y-1" id="dept-modal-labs"></ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-3.5 border-t border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-white/[0.04]">
+        <a href="https://eng.sjp.ac.lk" target="_blank" rel="noopener noreferrer" id="dept-modal-link" class="text-amber-600 dark:text-amber-400 hover:underline text-xs font-semibold flex items-center gap-1">
+          <span>Official Department Page</span>
+          <span>↗</span>
+        </a>
+        <button id="dept-modal-jump-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-xs shadow-md hover:scale-105 transition-all cursor-pointer flex items-center gap-1.5">
+          <span>Scroll to Section</span>
+          <span>↓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Facility Details Modal (iOS 27 Specular Glass Dialog)
+       ======================================================================== -->
+  <!-- ========================================================================
+       Facility Details Modal (Wide Detailed View with Extra Content & Photos)
+       ======================================================================== -->
+  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-2xl hidden" id="facility-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card w-full max-w-4xl max-h-[92vh] overflow-hidden rounded-3xl backdrop-blur-3xl bg-white/95 dark:bg-[#160205]/95 border border-slate-200 dark:border-amber-400/30 shadow-2xl flex flex-col">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.04]">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-800 dark:text-sky-300 border border-sky-500/30 dark:border-sky-400/40" id="facility-modal-badge">FACILITY</span>
+          <span class="text-xs font-semibold text-slate-600 dark:text-slate-300" id="facility-modal-dept">Faculty of Engineering</span>
+        </div>
+        <button class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-2xl leading-none p-1 transition-colors cursor-pointer" id="facility-modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 overflow-y-auto space-y-6">
+        <!-- Main Hero Photo Showcase -->
+        <div class="relative w-full h-64 sm:h-80 overflow-hidden rounded-2xl border border-slate-200 dark:border-white/15 shadow-xl bg-slate-900 group">
+          <img id="facility-modal-img" src="" alt="Facility" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-4 left-4 right-4 text-white flex items-end justify-between gap-4">
+            <div>
+              <span class="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-amber-300" id="facility-modal-banner-tag">
+                Specialized Campus Bay
+              </span>
+              <p class="text-xs sm:text-sm font-bold text-slate-200 mt-1" id="facility-modal-banner-sub">Mattegoda Permanent Engineering Complex</p>
+            </div>
+            <span class="text-[11px] text-slate-300 bg-black/60 px-3 py-1 rounded-xl backdrop-blur-md border border-white/10 hidden sm:inline-block">
+              High-Resolution Showcase
+            </span>
+          </div>
+        </div>
+
+        <!-- Extra Photos Gallery Strip (Multi-Photo Showcase) -->
+        <div class="space-y-2.5" id="facility-modal-gallery-wrap">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+              <span>📸</span>
+              <span>Extra Facility Photos & Laboratory Perspectives</span>
+            </span>
+            <span class="text-slate-400 text-[11px]" id="facility-modal-gallery-count">3 Photos</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="facility-modal-gallery">
+            <!-- Dynamically populated thumbnails with click-to-preview -->
+          </div>
+        </div>
+
+        <!-- Title & Location/Hours Strip -->
+        <div class="space-y-2 pt-2 border-t border-slate-200/70 dark:border-white/10">
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight" id="facility-modal-title">
+            Facility Title
+          </h2>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300 font-medium">
+            <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-1.5" id="facility-modal-location">
+              <span>📍</span> <span>Mattegoda Complex</span>
+            </span>
+            <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-1.5" id="facility-modal-hours">
+              <span>🕒</span> <span>Operating Hours</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Full Detailed Content Description -->
+        <div class="space-y-2">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+            About This Facility & Academic Mandate:
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200/90 leading-relaxed font-normal whitespace-pre-line" id="facility-modal-desc">
+            Facility description...
+          </p>
+        </div>
+
+        <!-- Technical Specifications Table/Grid -->
+        <div class="space-y-2.5" id="facility-modal-specs-wrap">
+          <span class="text-[11px] font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider block">
+            ⚡ Technical Specifications & Equipment Parameters:
+          </span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="facility-modal-specs">
+            <!-- Populated via openFacilityModal -->
+          </div>
+        </div>
+
+        <!-- Key Highlights & Capabilities Checklist -->
+        <div class="p-5 rounded-2xl bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3" id="facility-modal-features-wrap">
+          <span class="text-xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider block">
+            ✓ Key Highlights, Testing Bays & Student Capabilities:
+          </span>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 dark:text-slate-300" id="facility-modal-features">
+            <!-- Populated via openFacilityModal -->
+          </ul>
+        </div>
+
+        <!-- Leadership & Contact Information -->
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-slate-800 dark:text-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3" id="facility-modal-contact-wrap">
+          <div>
+            <span class="font-bold text-amber-800 dark:text-amber-300 block">Facility Supervision & In-Charge:</span>
+            <p id="facility-modal-incharge" class="font-medium mt-0.5">Faculty Coordinator</p>
+          </div>
+          <div>
+            <span class="font-bold text-amber-800 dark:text-amber-300 block">Official Inquiry:</span>
+            <a id="facility-modal-email" href="mailto:foe@sjp.ac.lk" class="text-amber-600 dark:text-amber-400 hover:underline font-mono">foe@sjp.ac.lk</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-4 border-t border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-white/[0.04]">
+        <button id="facility-modal-map-btn" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 transition-all cursor-pointer">
+          <span>Locate on Campus Blueprint Map</span>
+          <span>🗺️</span>
+        </button>
+        <button id="facility-modal-action-close" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-xs shadow-md hover:scale-105 transition-all cursor-pointer flex items-center gap-1.5">
+          <span>Back to All Facilities</span>
+          <span>✓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none" id="toast-container" aria-live="assertive"></div>
 
   <!-- ========================================================================
        Footer (SJP Maroon & Gold iOS 27 Glass)
        ======================================================================== -->
-  <footer class="border-t border-white/10 backdrop-blur-xl bg-black/40 py-8 text-xs text-slate-400">
+  <footer class="border-t border-slate-200/80 dark:border-white/10 backdrop-blur-xl bg-white/60 dark:bg-black/40 py-8 text-xs text-slate-600 dark:text-slate-400">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
-        <p class="font-bold text-white mb-0.5">© 2026 Faculty of Engineering • University of Sri Jayewardenepura</p>
-        <p class="text-amber-200/60">Official academic announcements, notices & engineering news portal.</p>
+        <p class="font-bold text-slate-900 dark:text-white mb-0.5">© 2026 Faculty of Engineering • University of Sri Jayewardenepura</p>
+        <p class="text-amber-800 dark:text-amber-200/60">Official academic announcements, notices & engineering news portal.</p>
       </div>
       <div class="flex items-center gap-5 flex-wrap">
-        <button id="btn-show-welcome" class="hover:text-amber-300 transition-colors flex items-center gap-1.5 cursor-pointer">
-          <span class="text-amber-400">✨</span> Welcome Intro
+        <button id="btn-show-welcome" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors flex items-center gap-1.5 cursor-pointer">
+          <span class="text-amber-500 dark:text-amber-400">✨</span> Welcome Intro
         </button>
-        <a href="https://eng.sjp.ac.lk" target="_blank" rel="noopener" class="hover:text-amber-300 transition-colors">Official Portal</a>
-        <a href="https://eng.sjp.ac.lk/notices/" target="_blank" rel="noopener" class="hover:text-amber-300 transition-colors">All Notices</a>
-        <a href="https://eng.sjp.ac.lk/cm/index.php" target="_blank" rel="noopener" class="hover:text-amber-300 transition-colors">LMS</a>
-        <a href="https://mis.eng.sjp.ac.lk/" target="_blank" rel="noopener" class="hover:text-amber-300 transition-colors">MIS</a>
-        <a href="https://eng.sjp.ac.lk/library-foe/" target="_blank" rel="noopener" class="hover:text-amber-300 transition-colors">Library</a>
+        <a href="https://eng.sjp.ac.lk" target="_blank" rel="noopener" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors">Official Portal</a>
+        <a href="https://eng.sjp.ac.lk/notices/" target="_blank" rel="noopener" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors">All Notices</a>
+        <a href="https://eng.sjp.ac.lk/cm/index.php" target="_blank" rel="noopener" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors">LMS</a>
+        <a href="https://mis.eng.sjp.ac.lk/" target="_blank" rel="noopener" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors">MIS</a>
+        <a href="https://eng.sjp.ac.lk/library-foe/" target="_blank" rel="noopener" class="hover:text-amber-600 dark:hover:text-amber-300 transition-colors">Library</a>
       </div>
     </div>
   </footer>

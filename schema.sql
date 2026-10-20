@@ -59,3 +59,30 @@ CREATE POLICY "Allow anon update" ON public.sjp_eng_data
 
 -- (Alternatively, you can provide your SUPABASE_SERVICE_ROLE_KEY in .env,
 -- which bypasses RLS automatically for backend scrapers)
+
+-- -----------------------------------------------------------------------------
+-- 6. Optional: Automated Daily Cron inside Supabase (pg_cron + Edge Function)
+-- -----------------------------------------------------------------------------
+-- If you deploy the 'sync-portal-data' Supabase Edge Function and want Supabase 
+-- to trigger it automatically every day at 02:00 UTC (07:30 AM SLST):
+--
+-- Enable extensions (in Supabase Dashboard -> Database -> Extensions):
+-- CREATE EXTENSION IF NOT EXISTS pg_cron;
+-- CREATE EXTENSION IF NOT EXISTS pg_net;
+--
+-- Schedule the daily job:
+-- SELECT cron.schedule(
+--   'daily-sjp-portal-sync',
+--   '0 2 * * *', -- Daily at 02:00 UTC
+--   $$
+--   SELECT net.http_post(
+--     url := 'https://zzirxpncvhqxhcjgbuek.supabase.co/functions/v1/sync-portal-data',
+--     headers := jsonb_build_object(
+--       'Content-Type', 'application/json',
+--       'Authorization', 'Bearer <YOUR_SUPABASE_SERVICE_ROLE_KEY>'
+--     ),
+--     body := '{}'::jsonb
+--   ) AS request_id;
+--   $$
+-- );
+
