@@ -296,7 +296,7 @@ async function scrapeFromWordpressApi() {
             if (t.includes('computer') || t.includes('ict') || t.includes('ai') || t.includes('software')) {
               imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611-1.jpg'; // Computer Engineering Lab
             } else if (t.includes('electronic') || t.includes('electrical') || t.includes('robot') || t.includes('power')) {
-              imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342-1.jpg'; // Robotics & Automation Lab
+              imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/01/deptee.jpg'; // Electrical & Electronic Engineering Lab
             } else if (t.includes('civil') || t.includes('mechanical')) {
               imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Mechanical-Engineering-Building.jpg'; // Mechanical & Civil Building
             } else {

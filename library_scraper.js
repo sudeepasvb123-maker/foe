@@ -10,8 +10,48 @@ dotenv.config();
 // Configuration
 const FOE_LIBRARY_URL = 'https://eng.sjp.ac.lk/library-foe/';
 const MAIN_LIB_URL = 'https://lib.sjp.ac.lk/';
-const OPAC_BASE_URL = 'http://opac.lib.sjp.ac.lk';
+const OPAC_BASE_URL = 'https://opac.lib.sjp.ac.lk';
 const TABLE_NAME = process.env.SUPABASE_LIBRARY_TABLE || 'library_books';
+
+/**
+ * Ensures any link is an absolute HTTPS URL (starting with https://)
+ * instead of a relative path or unencrypted HTTP
+ * @param {string} url
+ * @param {string} defaultBase
+ * @returns {string}
+ */
+function ensureAbsoluteHttpsUrl(url, defaultBase = 'https://opac.lib.sjp.ac.lk') {
+  if (!url || typeof url !== 'string') {
+    return 'https://lib.sjp.ac.lk/';
+  }
+
+  let cleaned = url.trim();
+
+  // If protocol-relative: //opac.lib.sjp.ac.lk/foo
+  if (cleaned.startsWith('//')) {
+    cleaned = 'https:' + cleaned;
+  }
+  // If absolute path: /cgi-bin/koha/opac-search.pl?...
+  else if (cleaned.startsWith('/')) {
+    cleaned = `${defaultBase}${cleaned}`;
+  }
+  // If relative path without slash: cgi-bin/...
+  else if (!cleaned.startsWith('http://') && !cleaned.startsWith('https://')) {
+    cleaned = `${defaultBase}/${cleaned}`;
+  }
+
+  // Force upgrade http to https
+  if (cleaned.startsWith('http://')) {
+    cleaned = cleaned.replace(/^http:\/\//i, 'https://');
+  }
+
+  // Ensure it starts with https://
+  if (!cleaned.startsWith('https://')) {
+    cleaned = 'https://' + cleaned.replace(/^https?:\/\//i, '');
+  }
+
+  return cleaned;
+}
 
 const SUPABASE_URL = (
   process.env.SUPABASE_URL ||
@@ -156,7 +196,7 @@ async function searchOpacKoha(query) {
       const relHref = titleLink.attr('href');
 
       if (rawTitle && relHref) {
-        let fullLink = relHref.startsWith('http') ? relHref : `${OPAC_BASE_URL}${relHref.startsWith('/') ? '' : '/'}${relHref}`;
+        let fullLink = ensureAbsoluteHttpsUrl(relHref, OPAC_BASE_URL);
         const authorText = cleanText($el.find('.author, [class*="author"]').text()).replace(/^by\s*/i, '');
         const availText = cleanText($el.find('.availability, [class*="availability"]').text()).toLowerCase();
 
@@ -199,7 +239,7 @@ function getCuratedEngineeringCatalog() {
       author: "Muni Budhu",
       category: "Civil Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Soil+Mechanics+and+Foundations+Budhu",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Soil+Mechanics+and+Foundations+Budhu",
       cover_image_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80"
     },
     {
@@ -207,7 +247,7 @@ function getCuratedEngineeringCatalog() {
       author: "Jack C. McCormac & Russell H. Brown",
       category: "Civil Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Design+of+Reinforced+Concrete+McCormac",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Design+of+Reinforced+Concrete+McCormac",
       cover_image_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80"
     },
     {
@@ -215,7 +255,7 @@ function getCuratedEngineeringCatalog() {
       author: "R. C. Hibbeler",
       category: "Civil Engineering",
       availability_status: "On Loan",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Structural+Analysis+Hibbeler",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Structural+Analysis+Hibbeler",
       cover_image_url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80"
     },
     {
@@ -223,7 +263,7 @@ function getCuratedEngineeringCatalog() {
       author: "Braja M. Das & Khaled Sobhan",
       category: "Civil Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Principles+of+Geotechnical+Engineering+Das",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Principles+of+Geotechnical+Engineering+Das",
       cover_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80"
     },
     {
@@ -231,7 +271,7 @@ function getCuratedEngineeringCatalog() {
       author: "Larry W. Mays",
       category: "Civil Engineering",
       availability_status: "Reference Only",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Water+Resources+Engineering+Mays",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Water+Resources+Engineering+Mays",
       cover_image_url: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=600&q=80"
     },
 
@@ -241,7 +281,7 @@ function getCuratedEngineeringCatalog() {
       author: "Richard G. Budynas & J. Keith Nisbett",
       category: "Mechanical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Shigley+Mechanical+Engineering+Design",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Shigley+Mechanical+Engineering+Design",
       cover_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80"
     },
     {
@@ -249,7 +289,7 @@ function getCuratedEngineeringCatalog() {
       author: "Yunus A. Çengel & Michael A. Boles",
       category: "Mechanical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Thermodynamics+Cengel+Boles",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Thermodynamics+Cengel+Boles",
       cover_image_url: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=600&q=80"
     },
     {
@@ -257,7 +297,7 @@ function getCuratedEngineeringCatalog() {
       author: "Yunus A. Çengel & John M. Cimbala",
       category: "Mechanical Engineering",
       availability_status: "Reference Only",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Fluid+Mechanics+Cengel+Cimbala",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Fluid+Mechanics+Cengel+Cimbala",
       cover_image_url: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&q=80"
     },
     {
@@ -265,7 +305,7 @@ function getCuratedEngineeringCatalog() {
       author: "Theodore L. Bergman & Frank P. Incropera",
       category: "Mechanical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Heat+and+Mass+Transfer+Incropera",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Heat+and+Mass+Transfer+Incropera",
       cover_image_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80"
     },
     {
@@ -273,7 +313,7 @@ function getCuratedEngineeringCatalog() {
       author: "Ferdinand P. Beer & E. Russell Johnston Jr.",
       category: "Mechanical Engineering",
       availability_status: "On Loan",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Vector+Mechanics+Beer+Johnston",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Vector+Mechanics+Beer+Johnston",
       cover_image_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80"
     },
 
@@ -283,7 +323,7 @@ function getCuratedEngineeringCatalog() {
       author: "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein",
       category: "Computer Science",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Introduction+to+Algorithms+Cormen",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Introduction+to+Algorithms+Cormen",
       cover_image_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80"
     },
     {
@@ -291,7 +331,7 @@ function getCuratedEngineeringCatalog() {
       author: "James F. Kurose & Keith W. Ross",
       category: "Computer Science",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Computer+Networking+Kurose+Ross",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Computer+Networking+Kurose+Ross",
       cover_image_url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=80"
     },
     {
@@ -299,7 +339,7 @@ function getCuratedEngineeringCatalog() {
       author: "Abraham Silberschatz, Peter B. Galvin, Greg Gagne",
       category: "Computer Science",
       availability_status: "On Loan",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Operating+System+Concepts+Silberschatz",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Operating+System+Concepts+Silberschatz",
       cover_image_url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80"
     },
     {
@@ -307,7 +347,7 @@ function getCuratedEngineeringCatalog() {
       author: "Abraham Silberschatz, Henry F. Korth, S. Sudarshan",
       category: "Computer Science",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Database+System+Concepts+Silberschatz",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Database+System+Concepts+Silberschatz",
       cover_image_url: "https://images.unsplash.com/photo-1532012164546-f432f2e3777f?w=600&q=80"
     },
     {
@@ -315,7 +355,7 @@ function getCuratedEngineeringCatalog() {
       author: "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
       category: "Computer Science",
       availability_status: "Reference Only",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Design+Patterns+Gamma+Helm",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Design+Patterns+Gamma+Helm",
       cover_image_url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80"
     },
 
@@ -325,7 +365,7 @@ function getCuratedEngineeringCatalog() {
       author: "William H. Hayt, Jack E. Kemmerly, Steven M. Durbin",
       category: "Electrical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Engineering+Circuit+Analysis+Hayt",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Engineering+Circuit+Analysis+Hayt",
       cover_image_url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80"
     },
     {
@@ -333,7 +373,7 @@ function getCuratedEngineeringCatalog() {
       author: "Adel S. Sedra & Kenneth C. Smith",
       category: "Electrical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Microelectronic+Circuits+Sedra+Smith",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Microelectronic+Circuits+Sedra+Smith",
       cover_image_url: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=600&q=80"
     },
     {
@@ -341,7 +381,7 @@ function getCuratedEngineeringCatalog() {
       author: "Alan V. Oppenheim, Alan S. Willsky, S. Hamid Nawab",
       category: "Electrical Engineering",
       availability_status: "On Loan",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Signals+and+Systems+Oppenheim",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Signals+and+Systems+Oppenheim",
       cover_image_url: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80"
     },
     {
@@ -349,7 +389,7 @@ function getCuratedEngineeringCatalog() {
       author: "Stephen J. Chapman",
       category: "Electrical Engineering",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Electric+Machinery+Fundamentals+Chapman",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Electric+Machinery+Fundamentals+Chapman",
       cover_image_url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80"
     },
     {
@@ -357,7 +397,7 @@ function getCuratedEngineeringCatalog() {
       author: "J. Duncan Glover, Thomas J. Overbye, Mulukutla S. Sarma",
       category: "Electrical Engineering",
       availability_status: "Reference Only",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Power+System+Analysis+Glover",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Power+System+Analysis+Glover",
       cover_image_url: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=600&q=80"
     },
 
@@ -367,7 +407,7 @@ function getCuratedEngineeringCatalog() {
       author: "Erwin Kreyszig",
       category: "Mathematics",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Advanced+Engineering+Mathematics+Kreyszig",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Advanced+Engineering+Mathematics+Kreyszig",
       cover_image_url: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80"
     },
     {
@@ -375,7 +415,7 @@ function getCuratedEngineeringCatalog() {
       author: "Ronald E. Walpole, Raymond H. Myers, Sharon L. Myers, Keying Ye",
       category: "Mathematics",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Probability+Statistics+Walpole+Myers",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Probability+Statistics+Walpole+Myers",
       cover_image_url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80"
     },
     {
@@ -383,7 +423,7 @@ function getCuratedEngineeringCatalog() {
       author: "J. L. Meriam & L. G. Kraige",
       category: "Mathematics",
       availability_status: "On Loan",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Engineering+Mechanics+Dynamics+Meriam",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Engineering+Mechanics+Dynamics+Meriam",
       cover_image_url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80"
     },
     {
@@ -391,7 +431,7 @@ function getCuratedEngineeringCatalog() {
       author: "Norman S. Nise",
       category: "Mathematics",
       availability_status: "Available",
-      official_link: "http://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Control+Systems+Engineering+Nise",
+      official_link: "https://opac.lib.sjp.ac.lk/cgi-bin/koha/opac-search.pl?q=Control+Systems+Engineering+Nise",
       cover_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80"
     }
   ];
@@ -416,12 +456,13 @@ function mergeAndDeduplicate(baseList, liveOpacList) {
   // 2. If live OPAC returned fresh records, update or enrich
   liveOpacList.forEach(opacBook => {
     const key = normalizeKey(opacBook.title);
+    const safeLink = ensureAbsoluteHttpsUrl(opacBook.official_link, OPAC_BASE_URL);
     if (mergedMap.has(key)) {
       const existing = mergedMap.get(key);
       // Update with live OPAC link or availability if newer
       existing.availability_status = opacBook.availability_status || existing.availability_status;
-      if (opacBook.official_link && !opacBook.official_link.includes('opac-search.pl')) {
-        existing.official_link = opacBook.official_link;
+      if (safeLink && !safeLink.includes('opac-search.pl')) {
+        existing.official_link = safeLink;
       }
       mergedMap.set(key, existing);
     } else {
@@ -431,7 +472,7 @@ function mergeAndDeduplicate(baseList, liveOpacList) {
         author: opacBook.author || 'University of Sri Jayewardenepura Library',
         category: 'Engineering Reference',
         availability_status: opacBook.availability_status || 'Available',
-        official_link: opacBook.official_link || `${OPAC_BASE_URL}/cgi-bin/koha/opac-search.pl?q=${encodeURIComponent(opacBook.title)}`,
+        official_link: safeLink || `${OPAC_BASE_URL}/cgi-bin/koha/opac-search.pl?q=${encodeURIComponent(opacBook.title)}`,
         cover_image_url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80'
       });
     }
@@ -442,6 +483,7 @@ function mergeAndDeduplicate(baseList, liveOpacList) {
 
 /**
  * Synchronizes book records to Supabase 'library_books' table without duplicating.
+ * Ensures all saved URLs are absolute HTTPS links.
  * @param {Array<object>} books
  * @param {object} supabase
  * @param {string} tableName
@@ -455,6 +497,23 @@ async function syncToSupabase(books, supabase, tableName) {
 
   if (fetchErr) {
     throw new Error(`Failed to read from Supabase table '${tableName}': ${fetchErr.message}`);
+  }
+
+  // Pre-pass: Automatically sanitize any existing records in Supabase that have relative paths or http://
+  if (existingData && existingData.length > 0) {
+    for (const row of existingData) {
+      if (row.official_link && (!row.official_link.startsWith('https://') || row.official_link.startsWith('/'))) {
+        const fixedUrl = ensureAbsoluteHttpsUrl(row.official_link, OPAC_BASE_URL);
+        const { error: fixErr } = await supabase
+          .from(tableName)
+          .update({ official_link: fixedUrl, last_updated: new Date().toISOString() })
+          .eq('id', row.id);
+        if (!fixErr) {
+          row.official_link = fixedUrl;
+          console.log(`[Supabase Fix] Upgraded book #${row.id} link to absolute HTTPS: ${fixedUrl}`);
+        }
+      }
+    }
   }
 
   const existingTitleMap = new Map();
@@ -475,12 +534,14 @@ async function syncToSupabase(books, supabase, tableName) {
     const key = normalizeKey(book.title);
     const existingId = existingTitleMap.get(key);
 
+    const safeOfficialLink = ensureAbsoluteHttpsUrl(book.official_link, OPAC_BASE_URL);
+
     const payload = {
       title: book.title,
       author: book.author,
       category: book.category,
       availability_status: book.availability_status,
-      official_link: book.official_link,
+      official_link: safeOfficialLink,
       cover_image_url: book.cover_image_url,
       last_updated: new Date().toISOString()
     };

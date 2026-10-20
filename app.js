@@ -13,10 +13,13 @@ const state = {
   items: [],
   facilities: [],
   libraryBooks: [],
+  liveOpacResults: null,
+  isLiveOpacSearching: false,
   libraryFilter: {
     category: 'all',
     status: 'all',
-    search: ''
+    search: '',
+    index: 'catalog'
   },
   selectedBook: null,
   activeCategory: 'all',
@@ -79,7 +82,6 @@ export const supabase = (typeof createClient === 'function')
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : (window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null);
 
-
 /**
  * Normalizes item properties to ensure consistent display
  */
@@ -116,7 +118,7 @@ function normalizeItem(raw) {
       if (t.includes('computer') || t.includes('ict') || t.includes('ai') || t.includes('software')) {
         imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611-1.jpg'; // Computer Engineering Lab
       } else if (t.includes('electronic') || t.includes('electrical') || t.includes('robot') || t.includes('power')) {
-        imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342-1.jpg'; // Robotics Lab
+        imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/01/deptee.jpg'; // Electrical & Electronic Engineering Lab
       } else if (t.includes('civil') || t.includes('mechanical')) {
         imageUrl = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Mechanical-Engineering-Building.jpg'; // Mechanical Building
       } else {
@@ -834,6 +836,7 @@ export function switchTab(tabId) {
   // 3. Tab-specific dynamic initializers
   if (tabId === 'departments') {
     renderDepartments();
+    fetchDepartmentsFromSupabase();
     const detailView = document.getElementById('department-detail-view');
     const listView = document.getElementById('departments-list-view');
     if (!window.location.hash.startsWith('#departments/')) {
@@ -905,9 +908,9 @@ const DEPARTMENT_GALLERIES = {
   ],
   electrical: [
     {
-      title: "Electrical & Electronic Engineering Testing Chamber",
-      desc: "High-voltage and microelectronics experimental labs",
-      url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250309_1219023342.jpg"
+      title: "Electrical & Electronic Engineering Laboratory",
+      desc: "State-of-the-art laboratory for circuit design, testing benches & microelectronics instrumentation",
+      url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/01/deptee.jpg"
     },
     {
       title: "Smart Power Grid & Renewable Energy Hub",
@@ -1050,6 +1053,66 @@ function renderDepartments() {
 
   container.appendChild(fragment);
 }
+
+/**
+ * Dynamically fetches departments from Supabase 'departments' table
+ * and synchronizes live metadata and image URLs across FOE_DATA and the DOM.
+ */
+export async function fetchDepartmentsFromSupabase() {
+  try {
+    if (!supabase) return;
+
+    const { data, error } = await supabase
+      .from('departments')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error || !data || data.length === 0) return;
+
+    const norm = (s) => (s ? s.toLowerCase().replace(/[^a-z0-9]/g, '') : '');
+
+    for (const row of data) {
+      const rowKey = norm(row.name);
+      const dept = (FOE_DATA.departments || []).find(d => {
+        const dName = norm(d.name);
+        const dId = norm(d.id);
+        return dName === rowKey || dId === rowKey || dName.includes(rowKey) || rowKey.includes(dName);
+      });
+
+      if (dept && row.image_url) {
+        dept.image = row.image_url;
+      }
+
+      // Also sync to matching Faculty Map zone
+      if (FOE_DATA.mapZones) {
+        const zone = FOE_DATA.mapZones.find(z => {
+          const zName = norm(z.name || '');
+          const zType = norm(z.type || '');
+          const zId = norm(z.id || '');
+          return zName.includes(rowKey) || rowKey.includes(zType) || zId.includes(rowKey);
+        });
+        if (zone && row.image_url) {
+          zone.image = row.image_url;
+          if (rowKey.includes('electrical') || rowKey.includes('ee')) {
+            zone.showImageOnMap = true;
+          }
+        }
+      }
+    }
+
+    // Update any department card images already rendered in the DOM
+    (FOE_DATA.departments || []).forEach(d => {
+      const cardImg = document.querySelector(`#dept-card-${d.id} img`);
+      if (cardImg && d.image) {
+        cardImg.src = d.image;
+      }
+    });
+
+  } catch (err) {
+    console.warn('Error fetching departments from Supabase:', err);
+  }
+}
+
 
 /**
  * Transition to Wide Detailed Department View
@@ -1370,7 +1433,7 @@ function renderDepartmentDetailDOM(dept) {
         </div>
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300">
           <span>⚡</span>
-          <span>Live Supabase 'department_staff'</span>
+          <span>Verified Department Directory</span>
         </div>
       </div>
 
@@ -1496,7 +1559,7 @@ async function fetchAndRenderDepartmentStaff(slug, dept) {
   if (academic.length === 0) {
     academicGrid.innerHTML = `
       <div class="col-span-full p-8 text-center text-slate-500 dark:text-slate-400 ios27-card rounded-2xl">
-        <p class="text-xs font-semibold">No academic staff records returned from Supabase.</p>
+        <p class="text-xs font-semibold">No academic staff records currently listed for this department.</p>
       </div>
     `;
   } else {
@@ -1507,7 +1570,7 @@ async function fetchAndRenderDepartmentStaff(slug, dept) {
   if (nonAcademic.length === 0) {
     nonAcademicGrid.innerHTML = `
       <div class="col-span-full p-8 text-center text-slate-500 dark:text-slate-400 ios27-card rounded-2xl">
-        <p class="text-xs font-semibold">No non-academic staff records returned from Supabase.</p>
+        <p class="text-xs font-semibold">No non-academic staff records currently listed for this department.</p>
       </div>
     `;
   } else {
@@ -1853,6 +1916,28 @@ export async function fetchFacilitiesFromSupabase() {
     }
 
     state.facilities = Array.from(mergedMap.values());
+
+    // Synchronize GYM, GYM-CAFE & Electrical Department map images with exact Supabase images
+    if (FOE_DATA && FOE_DATA.mapZones) {
+      const gymFac = state.facilities.find(f => f.id === 'fac-gym' || (f.title && f.title.toLowerCase().includes('gymnasium')));
+      const gymCafeFac = state.facilities.find(f => f.id === 'fac-gym-canteen' || (f.title && f.title.toLowerCase().includes('gym canteen')));
+      const zoneGym = FOE_DATA.mapZones.find(z => z.id === 'zone-gym' || z.code === 'GYM');
+      if (zoneGym && gymFac && (gymFac.image || gymFac.image_url)) {
+        zoneGym.image = gymFac.image || gymFac.image_url;
+        zoneGym.showImageOnMap = true;
+      }
+      const zoneGymCafe = FOE_DATA.mapZones.find(z => z.id === 'zone-gym-canteen' || z.code === 'GYM-CAFE');
+      if (zoneGymCafe && gymCafeFac && (gymCafeFac.image || gymCafeFac.image_url)) {
+        zoneGymCafe.image = gymCafeFac.image || gymCafeFac.image_url;
+        zoneGymCafe.showImageOnMap = true;
+      }
+      const zoneEE = FOE_DATA.mapZones.find(z => z.id === 'zone-electrical' || z.code === 'EE');
+      if (zoneEE) {
+        zoneEE.image = 'https://eng.sjp.ac.lk/wp-content/uploads/2025/01/deptee.jpg';
+        zoneEE.showImageOnMap = true;
+      }
+    }
+
     return state.facilities;
   } catch (err) {
     console.warn('Error fetching facilities from Supabase:', err);
@@ -2223,7 +2308,9 @@ function initInteractiveMap() {
   const clearSearchBtn = document.getElementById('map-clear-search');
 
   // Tooltip DOM Elements
+  const tooltipImgBox = document.getElementById('tooltip-img-box');
   const tooltipImg = document.getElementById('tooltip-img');
+  const tooltipIcon = document.getElementById('tooltip-icon');
   const tooltipCat = document.getElementById('tooltip-category');
   const tooltipCode = document.getElementById('tooltip-code');
   const tooltipTitle = document.getElementById('tooltip-title');
@@ -2231,7 +2318,9 @@ function initInteractiveMap() {
   const tooltipFloors = document.getElementById('tooltip-floors');
 
   // Inspector DOM Elements
+  const elImgBox = document.getElementById('inspector-img-box');
   const elImg = document.getElementById('inspector-img');
+  const elIconBadge = document.getElementById('inspector-icon-badge');
   const elCode = document.getElementById('inspector-code');
   const elTag = document.getElementById('inspector-tag');
   const elHours = document.getElementById('inspector-hours');
@@ -2242,22 +2331,276 @@ function initInteractiveMap() {
   const elBtnDept = document.getElementById('btn-inspector-locate-dept');
 
   /**
+   * Synchronize GYM & GYM-CAFE image URLs with exact records from Other Facilities (Supabase)
+   */
+  const syncGymMapImages = () => {
+    const facs = (state.facilities && state.facilities.length > 0) ? state.facilities : (FOE_DATA.facilities || []);
+    const gymFac = facs.find(f => f.id === 'fac-gym' || (f.title && f.title.toLowerCase().includes('gymnasium')));
+    const gymCafeFac = facs.find(f => f.id === 'fac-gym-canteen' || (f.title && f.title.toLowerCase().includes('gym canteen')));
+
+    const zoneGym = mapZones.find(z => z.id === 'zone-gym' || z.code === 'GYM');
+    if (zoneGym) {
+      if (gymFac && (gymFac.image || gymFac.image_url)) {
+        zoneGym.image = gymFac.image || gymFac.image_url;
+      } else {
+        zoneGym.image = 'https://lh3.googleusercontent.com/d/1hF9PiVfa6hy_pgaZlqhtxU9Wov1g2iX5';
+      }
+      zoneGym.showImageOnMap = true;
+    }
+
+    const zoneGymCafe = mapZones.find(z => z.id === 'zone-gym-canteen' || z.code === 'GYM-CAFE');
+    if (zoneGymCafe) {
+      if (gymCafeFac && (gymCafeFac.image || gymCafeFac.image_url)) {
+        zoneGymCafe.image = gymCafeFac.image || gymCafeFac.image_url;
+      } else {
+        zoneGymCafe.image = 'https://zzirxpncvhqxhcjgbuek.supabase.co/storage/v1/object/public/facilities/gym_canteen.jpg';
+      }
+      zoneGymCafe.showImageOnMap = true;
+    }
+
+    const zoneEE = mapZones.find(z => z.id === 'zone-electrical' || z.code === 'EE');
+    if (zoneEE) {
+      const eeDept = (FOE_DATA.departments || []).find(d => d.id === 'electrical');
+      zoneEE.image = (eeDept && eeDept.image) || 'https://eng.sjp.ac.lk/wp-content/uploads/2025/01/deptee.jpg';
+      zoneEE.showImageOnMap = true;
+    }
+  };
+
+  syncGymMapImages();
+
+  /**
+   * Helper to return clean, modern, ultra-crisp SVG icons for map zones
+   */
+  const getZoneSvg = (zone, size = 24) => {
+    if (!zone) return '';
+    const type = (zone.type || '').toLowerCase();
+    const id = (zone.id || '').toLowerCase();
+    const category = (zone.category || '').toLowerCase();
+
+    // 1. Laboratories & Advanced Research (Erlenmeyer lab flask with bubbling molecules)
+    if (type === 'research' || id.includes('research') || id.includes('rcfe')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M10 2v5.5L4.4 17.5A2.8 2.8 0 0 0 6.8 22h10.4a2.8 2.8 0 0 0 2.4-4.5L14 7.5V2" />
+        <path d="M8.5 2h7" />
+        <path d="M7 16h10" />
+        <circle cx="10" cy="18.5" r="1" fill="currentColor" />
+        <circle cx="14" cy="18" r="1.5" fill="currentColor" />
+        <path d="M11 12h2" />
+        <path d="M10 9.5h4" />
+      </svg>`;
+    }
+
+    // 2. Central Engineering Library (Open academic tome with bookmark)
+    if (type === 'library' || id.includes('library')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        <path d="M6 8h2" />
+        <path d="M6 12h2" />
+        <path d="M16 8h2" />
+        <path d="M16 12h2" />
+      </svg>`;
+    }
+
+    // 3. Civil Engineering (Tower Crane & Structural Heavy Testing Bay)
+    if (type === 'civil' || id.includes('civil')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M4 21V4l16-2v4H8" />
+        <path d="M4 11h16" />
+        <path d="M4 16h12" />
+        <path d="M8 4l8 7" />
+        <path d="M8 11l8 5" />
+        <path d="M2 21h8" />
+        <circle cx="18" cy="9" r="2" />
+        <path d="M18 11v6" />
+        <polygon points="16 17 20 17 18 20" fill="currentColor" />
+      </svg>`;
+    }
+
+    // 4. Mechanical Engineering (Precision Dual Interlocking Gears)
+    if (type === 'mechanical' || id.includes('mech')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <circle cx="9" cy="9" r="3" />
+        <path d="M9 2v2M9 14v2M2 9h2M14 9h2M4.05 4.05l1.41 1.41M12.54 12.54l1.41 1.41M4.05 13.95l1.41-1.41M12.54 5.46l1.41-1.41" />
+        <circle cx="17.5" cy="17.5" r="2" />
+        <path d="M17.5 12.5v1.5M17.5 21v1.5M12.5 17.5h1.5M21 17.5h1.5M14 14l1 1M20 20l1 1M14 21l1-1M20 15l1-1" />
+      </svg>`;
+    }
+
+    // 5. Computer Engineering (Silicon Microchip CPU Processor)
+    if (type === 'computer' || id.includes('computer')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <rect x="4" y="4" width="16" height="16" rx="2" />
+        <rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="currentColor" fill-opacity="0.25" />
+        <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" />
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+      </svg>`;
+    }
+
+    // 6. Electrical & Electronic Engineering (High-Voltage Lightning Energy Shield)
+    if (type === 'electrical' || id.includes('electrical')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="12" cy="12" r="9.5" stroke-dasharray="3 3" opacity="0.6" />
+      </svg>`;
+    }
+
+    // 7. Interdisciplinary Studies (Multi-disciplinary Connected Nodes)
+    if (type === 'interdisciplinary' || id.includes('dis') || id.includes('is')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <circle cx="12" cy="5" r="2.5" fill="currentColor" fill-opacity="0.25" />
+        <circle cx="5" cy="18" r="2.5" fill="currentColor" fill-opacity="0.25" />
+        <circle cx="19" cy="18" r="2.5" fill="currentColor" fill-opacity="0.25" />
+        <circle cx="12" cy="13" r="1.5" fill="currentColor" />
+        <path d="M12 7.5v4M10.7 13.8L6.8 16.5M13.3 13.8l3.9 2.7M6.8 16.5h10.4" />
+      </svg>`;
+    }
+
+    // 8. Administration & Dean's Secretariat (Colonnaded Classical Portico)
+    if (type === 'admin' || category === 'administrative' || id.includes('admin')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <polygon points="12 2 2 7 22 7" fill="currentColor" fill-opacity="0.2" />
+        <path d="M4 7v11M8 7v11M12 7v11M16 7v11M20 7v11" />
+        <path d="M2 18h20" />
+        <path d="M1 21h22" />
+        <circle cx="12" cy="5" r="0.8" fill="currentColor" />
+      </svg>`;
+    }
+
+    // 9. Auditorium (Grand Tiered Lecture Amphitheatre)
+    if (type === 'auditorium' || id.includes('aud')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+        <path d="M7 20c0-2.8 2.2-5 5-5s5 2.2 5 5" />
+        <path d="M10 20c0-1.1.9-2 2-2s2 .9 2 2" />
+        <rect x="9.5" y="4" width="5" height="4" rx="1" fill="currentColor" fill-opacity="0.25" />
+        <path d="M12 8v2" />
+        <path d="M3 3l3 3M21 3l-3 3" />
+      </svg>`;
+    }
+
+    // 10. Student Common Room (SCR Club Lounge & Armchair)
+    if (type === 'scr' || id.includes('scr')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M7 19v2M17 19v2" />
+        <path d="M4 11a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+        <path d="M4 13h16" />
+        <path d="M2 12a2 2 0 0 1 2-2h1v5H3a1 1 0 0 1-1-1z" fill="currentColor" fill-opacity="0.2" />
+        <path d="M22 12a2 2 0 0 0-2-2h-1v5h2a1 1 0 0 0 1-1z" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="12" cy="5" r="1.5" />
+      </svg>`;
+    }
+
+    // 11. Open-Air Outdoor Theatre
+    if (type === 'theatre' || id.includes('theatre')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M2 19c1.5-6 8-9 10-9s8.5 3 10 9" />
+        <path d="M5 20c1.2-3.8 5-6 7-6s5.8 2.2 7 6" />
+        <path d="M8 21c1-1.8 2.5-3 4-3s3 1.2 4 3" />
+        <polygon points="12 2 15 7 9 7" fill="currentColor" fill-opacity="0.3" />
+        <circle cx="12" cy="7" r="1" />
+      </svg>`;
+    }
+
+    // 12. Main Student Canteen (Dining Cloche & Cutlery)
+    if (type === 'canteen' || id.includes('canteen')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M3 18h18" />
+        <path d="M4 18a8 8 0 0 1 16 0" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="12" cy="8" r="1.5" />
+        <path d="M12 9.5V10" />
+        <path d="M8 5c0 1.5 1 2 1 3" />
+        <path d="M12 4c0 1.5 1 2 1 3" />
+        <path d="M16 5c0 1.5 1 2 1 3" />
+        <path d="M2 21h20" />
+      </svg>`;
+    }
+
+    // 13. Food Court & Pavilion (Cafe Canopy & Dining)
+    if (type === 'food-court' || id.includes('foodcourt')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M3 4h18l-2 5H5L3 4z" fill="currentColor" fill-opacity="0.2" />
+        <path d="M5 9v11h14V9" />
+        <path d="M9 14h6" />
+        <path d="M12 12v4" />
+        <circle cx="12" cy="14" r="2.5" />
+      </svg>`;
+    }
+
+    // 14. Health & Medical Centre (Medical Cross & ECG Pulse)
+    if (type === 'medical' || id.includes('medical') || category === 'welfare') {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <rect x="3" y="4" width="18" height="16" rx="3" />
+        <path d="M12 7v10" stroke-width="2.4" />
+        <path d="M7 12h10" stroke-width="2.4" />
+        <circle cx="12" cy="12" r="1" fill="#fff" />
+      </svg>`;
+    }
+
+    // 15. Gymnasium & Fitness Centre (Athletic Heavy Dumbbell)
+    if (type === 'gym' || id.includes('gym') || category === 'sports') {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M6 5v14M18 5v14" stroke-width="2.5" />
+        <path d="M3 8v8M21 8v8" stroke-width="2" />
+        <path d="M6 12h12" stroke-width="2.5" />
+        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+      </svg>`;
+    }
+
+    // 16. Gym Canteen & Sports Refreshments (Sports Shaker Bottle)
+    if (type === 'gym-canteen' || id.includes('gym-cafe')) {
+      return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <path d="M6 7h12l-1.5 13a2 2 0 0 1-2 1.8H9.5a2 2 0 0 1-2-1.8L6 7z" fill="currentColor" fill-opacity="0.2" />
+        <path d="M5 4h14a1 1 0 0 1 1 1v2H4V5a1 1 0 0 1 1-1z" />
+        <path d="M10 2h4v2h-4z" />
+        <line x1="12" y1="11" x2="12" y2="16" />
+        <line x1="9.5" y1="13.5" x2="14.5" y2="13.5" />
+      </svg>`;
+    }
+
+    // Generic Faculty Department / Academic Building Fallback
+    return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+      <path d="M3 21h18" />
+      <path d="M5 21V7l7-4 7 4v14" fill="currentColor" fill-opacity="0.15" />
+      <path d="M9 10h1M14 10h1M9 14h1M14 14h1M11 21v-3a1 1 0 0 1 1-1h0a1 1 0 0 1 1 1v3" />
+    </svg>`;
+  };
+
+  /**
    * Display floating glassmorphism tooltip on beacon or building hover
    */
   const showTooltip = (zone) => {
     if (!hoverTooltip || !zone) return;
 
-    if (tooltipImg) {
-      tooltipImg.src = zone.image;
-      tooltipImg.onerror = () => { tooltipImg.src = 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg'; };
+    // Show verified photo specifically for GYM, GYM-CAFE, and Electrical Engineering Block
+    if (tooltipImgBox && tooltipImg) {
+      const shouldShowPhoto = zone.id === 'zone-gym' || zone.id === 'zone-gym-canteen' || zone.id === 'zone-electrical' || zone.showImageOnMap;
+      if (shouldShowPhoto && zone.image) {
+        tooltipImg.src = zone.image;
+        tooltipImg.onerror = () => {
+          if (zone.id === 'zone-gym-canteen') tooltipImg.src = 'gym_canteen.jpg';
+        };
+        tooltipImgBox.classList.remove('hidden');
+      } else {
+        tooltipImgBox.classList.add('hidden');
+        tooltipImg.src = '';
+      }
+    }
+
+    if (tooltipIcon) {
+      tooltipIcon.innerHTML = getZoneSvg(zone, 20);
+      tooltipIcon.style.color = zone.accent || '#f59e0b';
     }
     if (tooltipCat) tooltipCat.textContent = zone.tag || zone.category;
-    if (tooltipCode) tooltipCode.textContent = zone.code;
+    if (tooltipCode) {
+      tooltipCode.textContent = zone.code;
+      tooltipCode.style.backgroundColor = zone.accent || '#f59e0b';
+    }
     if (tooltipTitle) tooltipTitle.textContent = zone.shortName || zone.name;
     if (tooltipDesc) tooltipDesc.textContent = zone.desc;
     if (tooltipFloors) {
       const count = zone.floors ? zone.floors.length : 1;
-      tooltipFloors.textContent = `${count} Level${count > 1 ? 's' : ''} Directory`;
+      tooltipFloors.innerHTML = `<span>🏢</span> <span>${count} Level${count > 1 ? 's' : ''} Directory</span>`;
     }
 
     // Position tooltip relative to beacon percentage coordinates
@@ -2300,10 +2643,26 @@ function initInteractiveMap() {
     const zone = mapZones.find(z => z.id === zoneId) || mapZones[0];
     if (!zone) return;
 
-    // 1. Update Inspector Banner & Badges
-    if (elImg) {
-      elImg.src = zone.image;
-      elImg.onerror = () => { elImg.src = 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg'; };
+    // Show verified photo specifically for GYM, GYM-CAFE, and Electrical Engineering Block
+    if (elImgBox && elImg) {
+      const shouldShowPhoto = zone.id === 'zone-gym' || zone.id === 'zone-gym-canteen' || zone.id === 'zone-electrical' || zone.showImageOnMap;
+      if (shouldShowPhoto && zone.image) {
+        elImg.src = zone.image;
+        elImg.alt = zone.name;
+        elImg.onerror = () => {
+          if (zone.id === 'zone-gym-canteen') elImg.src = 'gym_canteen.jpg';
+        };
+        elImgBox.classList.remove('hidden');
+      } else {
+        elImgBox.classList.add('hidden');
+        elImg.src = '';
+      }
+    }
+
+    // 1. Update Inspector Badge & Icon
+    if (elIconBadge) {
+      elIconBadge.innerHTML = getZoneSvg(zone, 28);
+      elIconBadge.style.color = zone.accent || '#f59e0b';
     }
     if (elCode) {
       elCode.textContent = zone.code;
@@ -2311,7 +2670,13 @@ function initInteractiveMap() {
     }
     if (elTag) elTag.textContent = zone.tag || zone.category;
     if (elHours) {
-      elHours.innerHTML = `<span>🕒</span> <span>${zone.hours || 'Mon - Fri: 8:00 AM - 5:00 PM'}</span>`;
+      elHours.innerHTML = `
+        <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>${zone.hours || 'Mon - Fri: 8:00 AM - 5:00 PM'}</span>
+      `;
     }
     if (elName) elName.textContent = zone.name;
     if (elDesc) elDesc.textContent = zone.desc;
@@ -2323,18 +2688,18 @@ function initInteractiveMap() {
         ? zone.floors 
         : [{ level: "Main Level", desc: zone.desc }];
 
-      floors.forEach(f => {
+      floors.forEach((f, idx) => {
         const floorItem = document.createElement('div');
-        floorItem.className = 'p-2.5 rounded-xl bg-slate-100/90 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-amber-400/40 transition-all';
+        floorItem.className = 'group p-3 rounded-xl bg-slate-100/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10 hover:border-amber-400/50 hover:bg-amber-500/5 transition-all shadow-sm';
         floorItem.innerHTML = `
-          <div class="flex items-center justify-between text-[11px] font-bold text-amber-700 dark:text-amber-300 mb-0.5">
-            <span class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-              <span>${f.level}</span>
+          <div class="flex items-center justify-between text-[11px] font-bold text-amber-700 dark:text-amber-300 mb-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500 shadow-sm group-hover:scale-125 transition-transform"></span>
+              <span class="font-display tracking-wide">${escapeHtml(f.level)}</span>
             </span>
-            <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400">FACULTY ZONE</span>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded-md bg-amber-500/10 dark:bg-white/5 text-amber-800 dark:text-amber-300 border border-amber-500/20 dark:border-white/10 uppercase">FLOOR 0${idx + 1}</span>
           </div>
-          <p class="text-[11px] text-slate-600 dark:text-slate-300/90 font-light leading-relaxed">${f.desc}</p>
+          <p class="text-[11px] text-slate-600 dark:text-slate-300/90 font-light leading-relaxed pl-4 border-l-2 border-amber-500/30 group-hover:border-amber-400 transition-colors">${escapeHtml(f.desc)}</p>
         `;
         elFloors.appendChild(floorItem);
       });
@@ -2343,7 +2708,12 @@ function initInteractiveMap() {
     // 3. Highlights & Key Facilities
     if (elHighlights && zone.highlights) {
       elHighlights.innerHTML = zone.highlights
-        .map(h => `<li class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200"><span class="text-amber-500 font-bold">✦</span><span>${h}</span></li>`)
+        .map(h => `
+          <li class="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200 p-1.5 rounded-lg hover:bg-white/5 transition-colors">
+            <span class="w-4 h-4 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center text-[10px] font-bold shrink-0">✦</span>
+            <span class="font-medium">${escapeHtml(h)}</span>
+          </li>
+        `)
         .join('');
     }
 
@@ -2444,8 +2814,8 @@ function initInteractiveMap() {
       btn.setAttribute('data-category', zone.category);
 
       btn.innerHTML = `
-        <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${zone.accent || '#f59e0b'};"></span>
-        <span>${zone.shortName || zone.name}</span>
+        <span class="shrink-0 flex items-center justify-center text-amber-500">${getZoneSvg(zone, 12)}</span>
+        <span>${escapeHtml(zone.shortName || zone.name)}</span>
       `;
 
       btn.addEventListener('mouseenter', () => showTooltip(zone));
@@ -2656,7 +3026,7 @@ function initTabNavigation() {
       return;
     }
 
-    if (['overview', 'facilities', 'news', 'map'].includes(rawHash)) {
+    if (['overview', 'facilities', 'library', 'news', 'map'].includes(rawHash)) {
       switchTab(rawHash);
       return;
     }
@@ -2807,8 +3177,8 @@ export async function universalSearch(rawQuery) {
   const loadingHtml = `
     <div class="p-8 text-center text-slate-500 dark:text-slate-400 space-y-2">
       <div class="inline-block w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Querying Supabase database...</p>
-      <p class="text-[11px] text-slate-500 dark:text-slate-400">Searching departments, facilities, news, staff tables</p>
+      <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Searching faculty portal records...</p>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400">Searching departments, facilities, news, staff, and library catalogue</p>
     </div>
   `;
 
@@ -2979,7 +3349,7 @@ function renderSearchResults(query, { depts, facilities, news, staff, books = []
       <div class="p-8 text-center text-slate-500 dark:text-slate-400 space-y-2">
         <div class="text-3xl">🔍</div>
         <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">No matching records found</p>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400">Queried departments, facilities, news, and staff in Supabase for "${escapeHtml(query)}"</p>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400">Searched departments, facilities, library catalogue, news, and staff for "${escapeHtml(query)}"</p>
       </div>
     `;
     if (desktopResults) desktopResults.innerHTML = emptyHtml;
@@ -3746,6 +4116,7 @@ export async function fetchLibraryBooks() {
   try {
     if (!supabase) {
       state.libraryBooks = FOE_DATA.library_books || [];
+      renderLibraryBooks();
       return state.libraryBooks;
     }
     const { data, error } = await supabase
@@ -3758,11 +4129,197 @@ export async function fetchLibraryBooks() {
     } else {
       state.libraryBooks = data;
     }
+    renderLibraryBooks();
     return state.libraryBooks;
   } catch (err) {
     console.warn('Error fetching library books from Supabase:', err);
     state.libraryBooks = FOE_DATA.library_books || [];
+    renderLibraryBooks();
     return state.libraryBooks;
+  }
+}
+
+// Helper function to highlight matching search query in book title or author
+function highlightLibrarySearchMatch(text, query) {
+  if (!text) return '';
+  const escaped = escapeHtml(text);
+  if (!query || !query.trim()) return escaped;
+
+  const rawTerms = query.trim().split(/\s+/).filter(Boolean);
+  if (rawTerms.length === 0) return escaped;
+
+  const pattern = rawTerms.map(t => escapeRegExp(escapeHtml(t))).join('|');
+  try {
+    const regex = new RegExp(`(${pattern})`, 'gi');
+    return escaped.replace(regex, '<mark class="bg-amber-400/35 text-amber-950 dark:text-amber-200 font-extrabold rounded px-0.5">$1</mark>');
+  } catch (e) {
+    return escaped;
+  }
+}
+
+// Koha OPAC Index Mappings & Metadata
+export const OPAC_INDEX_NAMES = {
+  catalog: 'Library catalog',
+  title: 'Title',
+  author: 'Author',
+  subject: 'Subject',
+  isbn: 'ISBN',
+  issn: 'ISSN',
+  series: 'Series',
+  callnumber: 'Call number'
+};
+
+export const OPAC_PLACEHOLDERS = {
+  catalog: 'Search faculty library catalogue (title, author, subject)...',
+  title: 'Search by book title (e.g. Thermodynamics, Concrete Structures)...',
+  author: 'Search by author name (e.g. Budhu, Hibbeler, Boylestad, Kreyszig)...',
+  subject: 'Search by subject or discipline (e.g. Civil, Mechanical, Algorithms)...',
+  isbn: 'Search by ISBN number (e.g. 978-0470556849)...',
+  issn: 'Search by journal or serial ISSN number...',
+  series: 'Search by academic monograph or curriculum series...',
+  callnumber: 'Search by library call number or shelf mark...'
+};
+
+export const KOHA_OPAC_IDX_MAP = {
+  catalog: 'kw',
+  title: 'ti',
+  author: 'au',
+  subject: 'su',
+  isbn: 'nb',
+  issn: 'ns',
+  series: 'se',
+  callnumber: 'callnum'
+};
+
+let activeOpacAbortController = null;
+let opacSearchDebounceTimer = null;
+export const liveOpacBooksCache = new Map();
+
+/**
+ * Sends invisible backend proxy request to scrape library search results
+ * @param {string} query Search keyword
+ * @param {string} index Search field index (catalog, title, author, etc.)
+ */
+export async function fetchLiveOpacBooks(query, index = 'catalog') {
+  const cleanQuery = (query || '').trim();
+  const loadingState = document.getElementById('library-loading-state');
+  const booksGrid = document.getElementById('library-books-grid');
+  const emptyState = document.getElementById('library-empty-state');
+  const loadingText = document.getElementById('library-loading-query-text');
+  const submitBtn = document.getElementById('library-search-submit-btn');
+  const btnIcon = document.getElementById('library-search-btn-icon');
+  const btnText = document.getElementById('library-search-btn-text');
+  const countEl = document.getElementById('library-books-count');
+
+  if (!cleanQuery) {
+    state.liveOpacResults = null;
+    state.isLiveOpacSearching = false;
+    if (loadingState) loadingState.classList.add('hidden');
+    if (booksGrid) booksGrid.classList.remove('hidden');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      if (btnIcon) btnIcon.textContent = '🔍';
+      if (btnText) btnText.textContent = 'Search';
+    }
+    renderLibraryBooks();
+    return;
+  }
+
+  // Cancel prior in-flight request if user is typing fast
+  if (activeOpacAbortController) {
+    activeOpacAbortController.abort();
+    activeOpacAbortController = null;
+  }
+
+  activeOpacAbortController = new AbortController();
+  const signal = activeOpacAbortController.signal;
+
+  state.isLiveOpacSearching = true;
+
+  // Show smooth iOS 27 glassmorphism loading animation
+  const fieldName = OPAC_INDEX_NAMES[index] || 'Library catalog';
+  if (loadingState) {
+    loadingState.classList.remove('hidden');
+    if (loadingText) {
+      loadingText.textContent = `Searching for "${cleanQuery}" in ${fieldName}...`;
+    }
+  }
+  if (booksGrid) booksGrid.classList.add('hidden');
+  if (emptyState) emptyState.classList.add('hidden');
+
+  // Smooth search button loading animation
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    if (btnIcon) {
+      btnIcon.innerHTML = `
+        <svg class="animate-spin w-4 h-4 text-slate-950 inline" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      `;
+    }
+    if (btnText) btnText.textContent = 'Searching...';
+  }
+
+  if (countEl) {
+    countEl.innerHTML = `
+      <span class="inline-flex items-center gap-1.5 text-amber-700 dark:text-amber-300">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+        <span>Searching Academic Stacks...</span>
+      </span>
+    `;
+  }
+
+  try {
+    let response = null;
+    const proxyUrl = `/api/opac-search?q=${encodeURIComponent(cleanQuery)}&idx=${encodeURIComponent(index)}&limit=30`;
+
+    try {
+      response = await fetch(proxyUrl, { signal });
+    } catch (proxyErr) {
+      if (proxyErr.name === 'AbortError') return;
+      // Fallback to Supabase Edge Function if /api/opac-search is not directly accessible
+      const edgeUrl = `${SUPABASE_URL}/functions/v1/opac-search?q=${encodeURIComponent(cleanQuery)}&idx=${encodeURIComponent(index)}&limit=30`;
+      response = await fetch(edgeUrl, {
+        signal,
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+    }
+
+    if (signal.aborted) return;
+
+    if (response && response.ok) {
+      const data = await response.json();
+      if (data && data.success && Array.isArray(data.books)) {
+        data.books.forEach(b => {
+          if (b.id) liveOpacBooksCache.set(String(b.id), b);
+          if (b.title) liveOpacBooksCache.set((b.title || '').trim().toLowerCase(), b);
+        });
+        state.liveOpacResults = data.books;
+      }
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.warn('[Library Search] Local catalogue fallback notice:', err.message);
+    }
+  } finally {
+    state.isLiveOpacSearching = false;
+
+    // Restore search button state
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      if (btnIcon) btnIcon.textContent = '🔍';
+      if (btnText) btnText.textContent = 'Search';
+    }
+
+    // Hide loading animation and reveal the book cards grid
+    if (loadingState) loadingState.classList.add('hidden');
+    if (booksGrid) booksGrid.classList.remove('hidden');
+
+    renderLibraryBooks();
   }
 }
 
@@ -3772,14 +4329,20 @@ export function renderLibraryBooks() {
   const emptyState = document.getElementById('library-empty-state');
   if (!container) return;
 
-  const allBooks = state.libraryBooks && state.libraryBooks.length > 0
-    ? state.libraryBooks
-    : (FOE_DATA.library_books || []);
+  const isLive = state.liveOpacResults && state.liveOpacResults.length > 0;
+  const allBooks = isLive
+    ? state.liveOpacResults
+    : (state.libraryBooks && state.libraryBooks.length > 0
+      ? state.libraryBooks
+      : (FOE_DATA.library_books || []));
 
   const catFilter = state.libraryFilter.category || 'all';
   const statusFilter = state.libraryFilter.status || 'all';
-  const searchFilter = (state.libraryFilter.search || '').trim().toLowerCase();
+  const opacIndex = state.libraryFilter.index || 'catalog';
+  const rawSearch = (state.libraryFilter.search || '').trim();
+  const searchFilter = rawSearch.toLowerCase();
 
+  // Structured search filtering based on the selected left-aligned dropdown option
   const filtered = allBooks.filter(book => {
     if (catFilter !== 'all' && book.category !== catFilter) {
       return false;
@@ -3788,23 +4351,102 @@ export function renderLibraryBooks() {
       return false;
     }
     if (searchFilter) {
-      const matchTitle = (book.title || '').toLowerCase().includes(searchFilter);
-      const matchAuthor = (book.author || '').toLowerCase().includes(searchFilter);
-      const matchCat = (book.category || '').toLowerCase().includes(searchFilter);
-      if (!matchTitle && !matchAuthor && !matchCat) {
-        return false;
+      const title = (book.title || '').toLowerCase();
+      const author = (book.author || '').toLowerCase();
+      const category = (book.category || '').toLowerCase();
+      const isbn = ((book.isbn || '') + ' ' + (book.official_link || '')).toLowerCase();
+      const issn = (book.issn || '').toLowerCase();
+      const series = (book.series || '').toLowerCase();
+      const callnum = (book.call_number || '').toLowerCase();
+
+      if (opacIndex === 'title') {
+        if (!title.includes(searchFilter)) {
+          if (searchFilter.includes(' ')) {
+            const terms = searchFilter.split(/\s+/).filter(Boolean);
+            if (!terms.every(term => title.includes(term))) return false;
+          } else {
+            return false;
+          }
+        }
+      } else if (opacIndex === 'author') {
+        if (!author.includes(searchFilter)) {
+          if (searchFilter.includes(' ')) {
+            const terms = searchFilter.split(/\s+/).filter(Boolean);
+            if (!terms.every(term => author.includes(term))) return false;
+          } else {
+            return false;
+          }
+        }
+      } else if (opacIndex === 'subject') {
+        if (!category.includes(searchFilter) && !title.includes(searchFilter)) return false;
+      } else if (opacIndex === 'isbn') {
+        const cleanIsbnFilter = searchFilter.replace(/[^0-9x]/gi, '');
+        const cleanBookIsbn = isbn.replace(/[^0-9x]/gi, '');
+        const matchExact = isbn.includes(searchFilter);
+        const matchClean = cleanIsbnFilter.length >= 3 && cleanBookIsbn.includes(cleanIsbnFilter);
+        if (!matchExact && !matchClean && !title.includes(searchFilter)) return false;
+      } else if (opacIndex === 'issn') {
+        if (!issn.includes(searchFilter)) return false;
+      } else if (opacIndex === 'series') {
+        if (!series.includes(searchFilter) && !title.includes(searchFilter)) return false;
+      } else if (opacIndex === 'callnumber') {
+        if (!callnum.includes(searchFilter) && !category.includes(searchFilter)) return false;
+      } else {
+        // Default: 'catalog' (Library catalog - comprehensive search across fields)
+        const matchTitle = title.includes(searchFilter);
+        const matchAuthor = author.includes(searchFilter);
+        const matchCat = category.includes(searchFilter);
+        const matchIsbn = isbn.includes(searchFilter);
+
+        if (!matchTitle && !matchAuthor && !matchCat && !matchIsbn) {
+          if (searchFilter.includes(' ')) {
+            const terms = searchFilter.split(/\s+/).filter(Boolean);
+            const allInTitle = terms.every(term => title.includes(term));
+            const allInAuthor = terms.every(term => author.includes(term));
+            if (!allInTitle && !allInAuthor) return false;
+          } else {
+            return false;
+          }
+        }
       }
     }
     return true;
   });
 
+  // Update live book count badge in real time
   if (countEl) {
-    countEl.textContent = `${filtered.length} Book${filtered.length === 1 ? '' : 's'} Listed`;
+    if (state.isLiveOpacSearching) {
+      countEl.innerHTML = `
+        <span class="inline-flex items-center gap-1.5 text-amber-700 dark:text-amber-300">
+          <svg class="animate-spin w-3 h-3 text-amber-500" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Searching Stacks...</span>
+        </span>
+      `;
+    } else if (searchFilter) {
+      countEl.textContent = `${filtered.length} Book${filtered.length === 1 ? '' : 's'} Found`;
+    } else {
+      countEl.textContent = `${filtered.length} Book${filtered.length === 1 ? '' : 's'} Listed`;
+    }
   }
 
+  // Handle empty state if no books match query
   if (filtered.length === 0) {
     container.innerHTML = '';
-    if (emptyState) emptyState.classList.remove('hidden');
+    if (emptyState) {
+      emptyState.classList.remove('hidden');
+      const emptyMsg = emptyState.querySelector('p');
+      if (emptyMsg && rawSearch) {
+        const fieldName = OPAC_INDEX_NAMES[opacIndex] || 'Library catalog';
+        emptyMsg.textContent = state.isLiveOpacSearching
+          ? `Searching catalogue for "${escapeHtml(rawSearch)}"...`
+          : `No books found matching "${escapeHtml(rawSearch)}" in ${fieldName}.`;
+      } else if (emptyMsg) {
+        emptyMsg.textContent = 'Try clearing search terms or selecting a different discipline filter.';
+      }
+    }
     return;
   }
 
@@ -3816,7 +4458,9 @@ export function renderLibraryBooks() {
   filtered.forEach(book => {
     const card = document.createElement('article');
     card.id = `library-book-card-${book.id}`;
-    card.className = 'ios27-card group relative flex flex-col justify-between overflow-hidden rounded-2xl backdrop-blur-xl border border-slate-200 dark:border-white/10 hover:border-amber-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 bg-white/70 dark:bg-white/[0.03] cursor-pointer';
+    card.className = 'library-book-card ios27-card group relative flex flex-col justify-between overflow-hidden rounded-2xl backdrop-blur-xl border border-slate-200 dark:border-white/10 hover:border-amber-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 bg-white/70 dark:bg-white/[0.03] cursor-pointer';
+    card.setAttribute('data-book-id', book.id);
+    card.setAttribute('data-book-title', book.title || '');
 
     const isAvailable = (book.availability_status || '').toLowerCase() === 'available';
     const isOnLoan = (book.availability_status || '').toLowerCase() === 'on loan';
@@ -3837,8 +4481,14 @@ export function renderLibraryBooks() {
 
     const coverUrl = book.cover_image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80';
 
+    // Highlight search match in Title and Author depending on active Koha OPAC index
+    const shouldHighlightTitle = searchFilter && (opacIndex === 'catalog' || opacIndex === 'title');
+    const shouldHighlightAuthor = searchFilter && (opacIndex === 'catalog' || opacIndex === 'author');
+    const displayTitle = shouldHighlightTitle ? highlightLibrarySearchMatch(book.title, rawSearch) : escapeHtml(book.title);
+    const displayAuthor = shouldHighlightAuthor ? highlightLibrarySearchMatch(book.author, rawSearch) : escapeHtml(book.author || 'Faculty Member');
+
     card.innerHTML = `
-      <div class="relative w-full aspect-[3/4] overflow-hidden bg-slate-900">
+      <div class="relative w-full aspect-[3/4] overflow-hidden bg-slate-900 pointer-events-none">
         <img 
           src="${coverUrl}" 
           alt="${escapeHtml(book.title)}" 
@@ -3865,13 +4515,13 @@ export function renderLibraryBooks() {
       </div>
 
       <div class="p-4 flex flex-col flex-1 justify-between gap-3">
-        <div class="space-y-1.5">
+        <div class="space-y-1.5 pointer-events-none">
           <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
-            ${escapeHtml(book.title)}
+            ${displayTitle}
           </h4>
           <p class="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1 font-medium truncate">
             <span>✍️</span>
-            <span class="truncate">${escapeHtml(book.author || 'Faculty Member')}</span>
+            <span class="truncate">${displayAuthor}</span>
           </p>
         </div>
 
@@ -3880,26 +4530,14 @@ export function renderLibraryBooks() {
             type="button" 
             class="library-view-details-btn w-full py-2 px-3 rounded-xl font-bold text-xs bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-md hover:shadow-amber-500/25 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
             data-book-id="${book.id}"
+            data-book-title="${escapeHtml(book.title)}"
           >
-            <span>View Details</span>
-            <span>↗</span>
+            <span class="pointer-events-none">View Details</span>
+            <span class="pointer-events-none">↗</span>
           </button>
         </div>
       </div>
     `;
-
-    const viewBtn = card.querySelector('.library-view-details-btn');
-    if (viewBtn) {
-      viewBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openBookDetailModal(book);
-      });
-    }
-
-    card.addEventListener('click', () => {
-      openBookDetailModal(book);
-    });
 
     fragment.appendChild(card);
   });
@@ -3914,11 +4552,51 @@ export async function fetchAndRenderLibraryBooks() {
   renderLibraryBooks();
 }
 
+let isBookModalClosing = false;
+let bookModalCloseTimer = null;
+
+// Helper to look up a book record by ID or Title
+function findBookRecord(bookId, bookTitle) {
+  if (bookId && liveOpacBooksCache.has(String(bookId))) {
+    return liveOpacBooksCache.get(String(bookId));
+  }
+  if (bookTitle) {
+    const cleanTitle = bookTitle.trim().toLowerCase();
+    if (liveOpacBooksCache.has(cleanTitle)) {
+      return liveOpacBooksCache.get(cleanTitle);
+    }
+  }
+
+  const allBooks = (state.liveOpacResults && state.liveOpacResults.length > 0)
+    ? state.liveOpacResults
+    : ((state.libraryBooks && state.libraryBooks.length > 0)
+      ? state.libraryBooks
+      : (FOE_DATA.library_books || []));
+
+  if (bookId) {
+    const byId = allBooks.find(b => String(b.id) === String(bookId));
+    if (byId) return byId;
+  }
+  if (bookTitle) {
+    const cleanTitle = bookTitle.trim().toLowerCase();
+    const byTitle = allBooks.find(b => (b.title || '').trim().toLowerCase() === cleanTitle);
+    if (byTitle) return byTitle;
+  }
+  return null;
+}
+
 export function openBookDetailModal(book) {
   const modal = document.getElementById('book-detail-modal');
   if (!modal || !book) return;
 
   state.selectedBook = book;
+
+  // Clear any pending close timer
+  if (bookModalCloseTimer) {
+    clearTimeout(bookModalCloseTimer);
+    bookModalCloseTimer = null;
+  }
+  isBookModalClosing = false;
 
   const catEl = document.getElementById('book-modal-category');
   const badgeEl = document.getElementById('book-modal-availability-badge');
@@ -3932,12 +4610,18 @@ export function openBookDetailModal(book) {
   const statusHeader = document.getElementById('book-modal-status-header');
   const statusDesc = document.getElementById('book-modal-status-desc');
   const officialLink = document.getElementById('book-modal-official-link');
+  const officialLinkLabel = document.getElementById('book-modal-official-link-label');
   const urlDisplay = document.getElementById('book-modal-url-display');
 
   if (catEl) catEl.textContent = book.category || 'General Engineering';
   if (titleEl) titleEl.textContent = book.title || 'Book Title';
   if (authorEl) authorEl.textContent = book.author || 'Engineering Faculty Author';
-  if (callNoEl) callNoEl.textContent = `USJ-ENG-LIB-${String(book.id || 1).padStart(4, '0')}`;
+  if (callNoEl) callNoEl.textContent = 'Faculty Academic Stacks';
+
+  const collectionEl = document.getElementById('book-modal-collection');
+  if (collectionEl) {
+    collectionEl.textContent = `${book.category || 'Curriculum'} Reference Stacks`;
+  }
 
   const isAvailable = (book.availability_status || '').toLowerCase() === 'available';
   const isOnLoan = (book.availability_status || '').toLowerCase() === 'on loan';
@@ -3971,59 +4655,224 @@ export function openBookDetailModal(book) {
     coverEl.onerror = () => { coverEl.src = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80'; };
   }
 
-  // Official Link from Database
-  if (officialLink) {
-    const rawLink = book.official_link || 'https://eng.sjp.ac.lk/library-foe/';
-    officialLink.href = rawLink;
-    officialLink.setAttribute('target', '_blank');
-    officialLink.setAttribute('rel', 'noopener noreferrer');
-  }
-  if (urlDisplay) {
-    urlDisplay.textContent = book.official_link || 'https://eng.sjp.ac.lk/library-foe/';
+  // Official Link from Database - Ensure absolute HTTPS URL and direct redirection to official SJP library site
+  let targetUrl = (book.official_link || '').trim();
+  if (!targetUrl) {
+    targetUrl = 'https://lib.sjp.ac.lk/';
+  } else {
+    if (targetUrl.startsWith('//')) {
+      targetUrl = 'https:' + targetUrl;
+    } else if (targetUrl.startsWith('/')) {
+      targetUrl = `https://opac.lib.sjp.ac.lk${targetUrl}`;
+    } else if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+      targetUrl = `https://opac.lib.sjp.ac.lk/${targetUrl}`;
+    }
+    if (targetUrl.startsWith('http://')) {
+      targetUrl = targetUrl.replace(/^http:\/\//i, 'https://');
+    }
   }
 
+  if (officialLink) {
+    officialLink.setAttribute('href', targetUrl);
+    officialLink.setAttribute('target', '_blank');
+    officialLink.setAttribute('rel', 'noopener noreferrer');
+    officialLink.href = targetUrl;
+    officialLink.target = '_blank';
+    officialLink.rel = 'noopener noreferrer';
+
+    // Direct redirection in a new tab via window.open
+    officialLink.onclick = (e) => {
+      e.stopPropagation();
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+      e.preventDefault();
+    };
+  }
+
+  if (officialLinkLabel) {
+    if (targetUrl.includes('opac.lib.sjp.ac.lk') || targetUrl.includes('lib.sjp.ac.lk')) {
+      officialLinkLabel.textContent = 'Access Official Library Record';
+    } else if (targetUrl.includes('dr.lib.sjp.ac.lk')) {
+      officialLinkLabel.textContent = 'Access University Scholar Bank';
+    } else {
+      officialLinkLabel.textContent = 'Access Academic Reference Resource';
+    }
+  }
+
+  if (urlDisplay) {
+    urlDisplay.textContent = targetUrl;
+  }
+
+  // Smooth entrance: unhide, force browser paint, and add .open class for transition
   modal.classList.remove('hidden');
+  void modal.offsetWidth; // Force reflow
+  modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 }
 
 export function closeBookDetailModal() {
   const modal = document.getElementById('book-detail-modal');
-  if (modal) {
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden', 'true');
-  }
+  if (!modal || isBookModalClosing) return;
+
+  isBookModalClosing = true;
+
+  // Trigger smooth CSS opacity fade-out & scale-down transition
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
-  state.selectedBook = null;
+
+  // Wait 320ms for smooth transition to complete before setting display:none
+  bookModalCloseTimer = setTimeout(() => {
+    if (isBookModalClosing) {
+      modal.classList.add('hidden');
+      isBookModalClosing = false;
+      state.selectedBook = null;
+    }
+  }, 320);
 }
 
 export function initLibrarySection() {
   const searchInput = document.getElementById('library-search-input');
   const searchClear = document.getElementById('library-search-clear');
+  const opacIndexSelect = document.getElementById('library-opac-index-select');
+  const searchForm = document.getElementById('library-opac-search-form');
+  const externalOpacBtn = document.getElementById('library-opac-external-btn');
   const categorySelect = document.getElementById('library-category-select');
   const statusSelect = document.getElementById('library-status-select');
   const resetBtn = document.getElementById('library-reset-filters-btn');
   const modal = document.getElementById('book-detail-modal');
   const closeBtn = document.getElementById('book-modal-close');
   const actionCloseBtn = document.getElementById('book-modal-action-close');
+  const booksGrid = document.getElementById('library-books-grid');
 
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      state.libraryFilter.search = e.target.value;
-      if (searchClear) searchClear.classList.toggle('hidden', !e.target.value);
+  const submitBtn = document.getElementById('library-search-submit-btn');
+
+  // 1. Search Index Dropdown Change Listener
+  if (opacIndexSelect) {
+    opacIndexSelect.addEventListener('change', (e) => {
+      const selectedIndex = e.target.value;
+      state.libraryFilter.index = selectedIndex;
+      if (searchInput) {
+        searchInput.placeholder = OPAC_PLACEHOLDERS[selectedIndex] || OPAC_PLACEHOLDERS.catalog;
+        searchInput.focus();
+        const currentQuery = searchInput.value.trim();
+        if (currentQuery) {
+          fetchLiveOpacBooks(currentQuery, selectedIndex);
+        }
+      }
       renderLibraryBooks();
     });
   }
 
+  // 2. Search Form & Submit Button Actions
+  const handleSearchTrigger = () => {
+    if (searchInput) {
+      const query = searchInput.value.trim();
+      state.libraryFilter.search = query;
+      renderLibraryBooks();
+      if (query) {
+        fetchLiveOpacBooks(query, state.libraryFilter.index);
+      } else {
+        state.liveOpacResults = null;
+        renderLibraryBooks();
+      }
+    }
+  };
+
+  if (searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleSearchTrigger();
+    });
+  }
+
+  if (submitBtn) {
+    submitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleSearchTrigger();
+    });
+  }
+
+  // 4. Quick Search Tag Pills
+  const tagBtns = document.querySelectorAll('.library-tag-btn');
+  tagBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const query = btn.getAttribute('data-query') || btn.textContent.trim();
+      const targetField = btn.getAttribute('data-field') || 'catalog';
+
+      if (opacIndexSelect) {
+        opacIndexSelect.value = targetField;
+      }
+      state.libraryFilter.index = targetField;
+
+      if (searchInput) {
+        searchInput.value = query;
+        searchInput.placeholder = OPAC_PLACEHOLDERS[targetField] || OPAC_PLACEHOLDERS.catalog;
+        searchInput.focus();
+      }
+      state.libraryFilter.search = query;
+      if (searchClear) searchClear.classList.remove('hidden');
+      renderLibraryBooks();
+
+      // Trigger invisible backend proxy query for live Koha records
+      fetchLiveOpacBooks(query, targetField);
+    });
+  });
+
+  // 5. Search Input Listeners - Real-Time Dynamic Local Filtering + Debounced Live Proxy Search
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const val = e.target.value;
+      state.libraryFilter.search = val;
+      if (searchClear) searchClear.classList.toggle('hidden', !val.trim());
+      renderLibraryBooks();
+
+      // Debounce live OPAC query to backend proxy
+      if (opacSearchDebounceTimer) {
+        clearTimeout(opacSearchDebounceTimer);
+      }
+      const trimmed = val.trim();
+      if (trimmed.length >= 3) {
+        opacSearchDebounceTimer = setTimeout(() => {
+          fetchLiveOpacBooks(trimmed, state.libraryFilter.index);
+        }, 500);
+      } else if (!trimmed) {
+        state.liveOpacResults = null;
+        renderLibraryBooks();
+      }
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && searchInput.value) {
+        if (opacSearchDebounceTimer) clearTimeout(opacSearchDebounceTimer);
+        if (activeOpacAbortController) activeOpacAbortController.abort();
+        searchInput.value = '';
+        state.libraryFilter.search = '';
+        state.liveOpacResults = null;
+        if (searchClear) searchClear.classList.add('hidden');
+        renderLibraryBooks();
+      }
+    });
+  }
+
+  // 6. Clear Search Button
   if (searchClear) {
     searchClear.addEventListener('click', () => {
-      if (searchInput) searchInput.value = '';
+      if (opacSearchDebounceTimer) clearTimeout(opacSearchDebounceTimer);
+      if (activeOpacAbortController) activeOpacAbortController.abort();
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+      }
       state.libraryFilter.search = '';
+      state.liveOpacResults = null;
       searchClear.classList.add('hidden');
       renderLibraryBooks();
     });
   }
 
+  // 7. Discipline & Status Filters
   if (categorySelect) {
     categorySelect.addEventListener('change', (e) => {
       state.libraryFilter.category = e.target.value;
@@ -4038,22 +4887,93 @@ export function initLibrarySection() {
     });
   }
 
+  // 8. Reset All Filters
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      if (searchInput) searchInput.value = '';
+      if (opacSearchDebounceTimer) clearTimeout(opacSearchDebounceTimer);
+      if (activeOpacAbortController) activeOpacAbortController.abort();
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.placeholder = OPAC_PLACEHOLDERS.catalog;
+        searchInput.focus();
+      }
       if (searchClear) searchClear.classList.add('hidden');
+      if (opacIndexSelect) opacIndexSelect.value = 'catalog';
       if (categorySelect) categorySelect.value = 'all';
       if (statusSelect) statusSelect.value = 'all';
-      state.libraryFilter = { category: 'all', status: 'all', search: '' };
+      state.liveOpacResults = null;
+      state.isLiveOpacSearching = false;
+      state.libraryFilter = { category: 'all', status: 'all', search: '', index: 'catalog' };
       renderLibraryBooks();
     });
   }
 
-  if (closeBtn) closeBtn.addEventListener('click', closeBookDetailModal);
-  if (actionCloseBtn) actionCloseBtn.addEventListener('click', closeBookDetailModal);
+  // 1. EVENT DELEGATION on the Books Grid
+  // Catches clicks on '.library-view-details-btn' or on the book cards themselves
+  if (booksGrid && !booksGrid._delegationBound) {
+    booksGrid._delegationBound = true;
+    booksGrid.addEventListener('click', (e) => {
+      const viewBtn = e.target.closest('.library-view-details-btn');
+      const card = e.target.closest('.library-book-card');
+
+      if (!viewBtn && !card) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const target = viewBtn || card;
+      const bookId = target.getAttribute('data-book-id');
+      const bookTitle = target.getAttribute('data-book-title');
+
+      const book = findBookRecord(bookId, bookTitle);
+      if (book) {
+        openBookDetailModal(book);
+      }
+    });
+  }
+
+  // 2. Fallback Event Delegation on Document
+  // Guarantees that dynamically fetched Supabase books always respond to 'View Details'
+  if (!document._libraryBookDelegationBound) {
+    document._libraryBookDelegationBound = true;
+    document.addEventListener('click', (e) => {
+      const viewBtn = e.target.closest('.library-view-details-btn');
+      if (viewBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const bookId = viewBtn.getAttribute('data-book-id');
+        const bookTitle = viewBtn.getAttribute('data-book-title');
+        const book = findBookRecord(bookId, bookTitle);
+        if (book) {
+          openBookDetailModal(book);
+        }
+      }
+    });
+  }
+
+  // 3. Modal Close Handlers (Top '✕', Footer 'Close', Backdrop click)
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeBookDetailModal();
+    });
+  }
+
+  if (actionCloseBtn) {
+    actionCloseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeBookDetailModal();
+    });
+  }
+
   if (modal) {
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeBookDetailModal();
+      if (e.target === modal || e.target.closest('#book-modal-close, #book-modal-action-close')) {
+        e.preventDefault();
+        closeBookDetailModal();
+      }
     });
   }
 }
@@ -4276,6 +5196,7 @@ initTabNavigation();
 initLibrarySection();
 initGlobalSearch();
 fetchAndDisplayAnnouncements();
+fetchDepartmentsFromSupabase();
 fetchFacilitiesFromSupabase();
 fetchLibraryBooks();
 
