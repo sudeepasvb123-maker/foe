@@ -198,6 +198,10 @@
           <span>🧪</span>
           <span>Other Facilities</span>
         </button>
+        <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="library" role="tab" aria-selected="false">
+          <span>📚</span>
+          <span>Faculty Library</span>
+        </button>
         <button class="nav-tab-btn px-3.5 py-1.5 rounded-lg sm:rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10" data-tab="news" role="tab" aria-selected="false">
           <span>📢</span>
           <span>News</span>
@@ -524,8 +528,8 @@
 
       <!-- Facilities Category Filter Bar -->
       <div class="flex items-center justify-center gap-2 overflow-x-auto py-2 scrollbar-none" id="facilities-filter-bar">
-        <button class="fac-filter-btn active-fac px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-amber-500 text-black border border-amber-400 shadow-md transition-all cursor-pointer" data-category="all">
-          All Facilities (12)
+        <button class="fac-filter-btn active-fac px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-amber-500 text-black border border-amber-400 shadow-md transition-all cursor-pointer" data-category="all" id="btn-fac-all">
+          <span>All Facilities</span> <span id="fac-filter-count-all" class="ml-1 opacity-90 font-mono font-bold">(18)</span>
         </button>
         <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 transition-all cursor-pointer flex items-center gap-1.5" data-category="featured">
           <span>⭐</span>
@@ -543,6 +547,9 @@
         <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="welfare">
           Student Welfare & Stage
         </button>
+        <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="dining">
+          🍽️ Dining & Canteens
+        </button>
         <button class="fac-filter-btn px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-md bg-white/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-category="research">
           Research Centers
         </button>
@@ -551,6 +558,103 @@
       <!-- Facilities Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilities-grid">
         <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB: Faculty Library & Knowledge Resource Center
+         ====================================================================== -->
+    <section id="tab-library" class="tab-pane hidden space-y-8" role="tabpanel" aria-label="Faculty Library">
+      <!-- Library Hero Banner (iOS 27 Glassmorphism Maroon & Gold) -->
+      <div class="ios27-glass-maroon rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl border border-amber-500/30">
+        <div class="absolute -top-24 -right-12 w-80 h-80 rounded-full bg-amber-500/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -left-12 w-80 h-80 rounded-full bg-[#800d24]/40 blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-4xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full backdrop-blur-md bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <span>📚</span>
+            <span>Faculty Central Library & E-Scholar Hub</span>
+          </div>
+
+          <h2 class="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+            Academic Reference Stacks & Digital Engineering Catalogue
+          </h2>
+
+          <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200/90 leading-relaxed mt-3 max-w-2xl font-normal">
+            Welcome to the Faculty of Engineering Central Library at the Mattegoda permanent complex. Explore accredited curriculum textbooks, peer-reviewed engineering monographs, IEEE standards, and research volumes.
+          </p>
+
+          <!-- Library Highlights / Stats Badges -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-4 border-t border-slate-200/80 dark:border-white/10 text-xs">
+            <div class="p-3 rounded-2xl bg-white/60 dark:bg-white/[0.05] border border-slate-200/80 dark:border-white/10">
+              <span class="text-amber-500 font-bold block text-sm sm:text-base font-mono">15,000+</span>
+              <span class="text-[11px] text-slate-600 dark:text-slate-300">Physical Print Volumes</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-white/60 dark:bg-white/[0.05] border border-slate-200/80 dark:border-white/10">
+              <span class="text-sky-500 font-bold block text-sm sm:text-base font-mono">24/7 E-Access</span>
+              <span class="text-[11px] text-slate-600 dark:text-slate-300">IEEE, ScienceDirect & Wiley</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-white/60 dark:bg-white/[0.05] border border-slate-200/80 dark:border-white/10">
+              <span class="text-emerald-500 font-bold block text-sm sm:text-base font-mono">RFID Smart</span>
+              <span class="text-[11px] text-slate-600 dark:text-slate-300">Self-Issue & Return Kiosk</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-white/60 dark:bg-white/[0.05] border border-slate-200/80 dark:border-white/10">
+              <span class="text-purple-400 font-bold block text-sm sm:text-base font-mono">Level 1 & 2</span>
+              <span class="text-[11px] text-slate-600 dark:text-slate-300">Silent Scholar Lounges</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Row: Search Bar, Category Filter, and Status Filter -->
+      <div class="ios27-glass rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 border border-slate-200 dark:border-white/10 shadow-lg">
+        <!-- Live Search within Library -->
+        <div class="relative flex-1 min-w-[240px]">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none">🔍</span>
+          <input 
+            type="text" 
+            id="library-search-input" 
+            placeholder="Search books by title, author, or discipline..." 
+            class="w-full pl-9 pr-8 py-2.5 rounded-xl text-xs bg-slate-100/90 dark:bg-white/5 border border-slate-300/80 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 backdrop-blur-md transition-all shadow-inner"
+          />
+          <button id="library-search-clear" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs hidden cursor-pointer">✕</button>
+        </div>
+
+        <!-- Category Dropdown / Pills and Availability Status -->
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="library-category-select" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-200 border border-slate-300/80 dark:border-white/15 focus:outline-none focus:border-amber-500 cursor-pointer">
+            <option value="all">All Disciplines</option>
+            <option value="Civil Engineering">Civil Engineering</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Computer Science">Computer Science & Software</option>
+            <option value="Electrical Engineering">Electrical & Electronic</option>
+            <option value="Mathematics">Mathematics & Basic Sciences</option>
+          </select>
+
+          <select id="library-status-select" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-200 border border-slate-300/80 dark:border-white/15 focus:outline-none focus:border-amber-500 cursor-pointer">
+            <option value="all">All Statuses</option>
+            <option value="Available">Available Now</option>
+            <option value="On Loan">On Loan</option>
+            <option value="Reference Only">Reference Only</option>
+          </select>
+
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium ml-1 whitespace-nowrap" id="library-books-count">
+            Loading books...
+          </span>
+        </div>
+      </div>
+
+      <!-- Library Books Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5" id="library-books-grid">
+        <!-- Injected via JavaScript from Supabase 'library_books' -->
+      </div>
+
+      <!-- Empty state container -->
+      <div id="library-empty-state" class="hidden text-center py-16 px-4 rounded-3xl ios27-glass border border-slate-200 dark:border-white/10 space-y-3">
+        <span class="text-4xl">📖</span>
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">No books found matching your criteria</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Try clearing search terms or selecting a different discipline filter.</p>
+        <button id="library-reset-filters-btn" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 shadow-md transition-all cursor-pointer">Reset Filters</button>
       </div>
     </section>
 
@@ -1370,6 +1474,114 @@
           <span>✓</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Library Book Details In-Page Glassmorphism Modal (Popup)
+       ======================================================================== -->
+  <div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 dark:bg-black/85 backdrop-blur-2xl hidden" id="book-detail-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-3xl backdrop-blur-3xl bg-white/95 dark:bg-[#140205]/95 border border-slate-200 dark:border-amber-400/40 shadow-2xl flex flex-col relative">
+      
+      <!-- Top Ambient Glow -->
+      <div class="absolute -top-16 -right-16 w-60 h-60 rounded-full bg-amber-500/20 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-16 -left-16 w-60 h-60 rounded-full bg-[#800d24]/30 blur-3xl pointer-events-none"></div>
+
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.04] relative z-10">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30" id="book-modal-category">
+            CATEGORY
+          </span>
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-sm flex items-center gap-1.5" id="book-modal-availability-badge">
+            <span class="w-2 h-2 rounded-full bg-white" id="book-modal-dot"></span>
+            <span id="book-modal-availability-text">AVAILABLE</span>
+          </span>
+        </div>
+        <button id="book-modal-close" class="w-8 h-8 rounded-full bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs transition-all cursor-pointer" aria-label="Close Book Details">
+          ✕
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 overflow-y-auto space-y-6 relative z-10 custom-scrollbar flex-1">
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <!-- Book Cover with 3D Realistic Shadow -->
+          <div class="w-full sm:w-48 flex-shrink-0 mx-auto sm:mx-0">
+            <div class="aspect-[3/4] w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-300 dark:border-white/15 shadow-2xl relative group">
+              <img id="book-modal-cover" src="" alt="Book Cover" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+            </div>
+            <p class="text-[10px] text-center text-slate-500 dark:text-slate-400 mt-2 font-mono" id="book-modal-callno">USJ-ENG-LIB-2026</p>
+          </div>
+
+          <!-- Metadata & Description -->
+          <div class="flex-1 space-y-3.5 min-w-0">
+            <h3 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-tight" id="book-modal-title">
+              Book Title
+            </h3>
+            
+            <p class="text-xs sm:text-sm font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+              <span>✍️</span>
+              <span id="book-modal-author">Author Name</span>
+            </p>
+
+            <!-- Availability Status Alert Card -->
+            <div class="p-3.5 rounded-2xl border transition-all text-xs" id="book-modal-status-box">
+              <div class="flex items-center gap-2 font-bold mb-1" id="book-modal-status-header">
+                <span>Status Info</span>
+              </div>
+              <p class="text-[11px] leading-relaxed" id="book-modal-status-desc">
+                Details regarding loan terms and shelf locations.
+              </p>
+            </div>
+
+            <!-- Key Specs / Information Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+              <div class="p-2.5 rounded-xl bg-slate-100/90 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                <span class="text-[10px] uppercase font-mono text-slate-500 dark:text-slate-400 block">Campus Location</span>
+                <span class="font-semibold text-slate-800 dark:text-slate-200" id="book-modal-location">Mattegoda Library Level 1</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-100/90 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                <span class="text-[10px] uppercase font-mono text-slate-500 dark:text-slate-400 block">Catalog Source</span>
+                <span class="font-semibold text-slate-800 dark:text-slate-200">Supabase Live DB</span>
+              </div>
+            </div>
+
+            <!-- Official Link Section (Fetched from database) -->
+            <div class="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
+              <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                Official Database Link & Catalogue Resource:
+              </span>
+              <a 
+                id="book-modal-official-link" 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+              >
+                <span>🔗</span>
+                <span id="book-modal-official-link-label">Access Official Catalogue / Publisher Resource</span>
+                <span>↗</span>
+              </a>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 text-center font-mono truncate" id="book-modal-url-display">
+                https://...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-3.5 border-t border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-white/[0.04] relative z-10">
+        <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+          Faculty Central Library • Mattegoda Complex
+        </span>
+        <button id="book-modal-action-close" class="px-4 py-2 rounded-xl bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold text-xs transition-all cursor-pointer">
+          Close
+        </button>
+      </div>
+
     </div>
   </div>
 

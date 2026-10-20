@@ -204,12 +204,12 @@ const FOE_DATA = {
       badge: "⭐ FEATURED • NATIONAL TESTING CENTER",
       featuredTag: "🔥 National Center for Fire Safety Engineering",
       accentGlow: "fire",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg",
+      image: "33fire.jpg",
       gallery: [
         {
-          url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg",
-          title: "CFSE Main Testing Facility",
-          desc: "Dedicated heavy structures fire-resistance testing bay conforming to ISO 834 & ASTM standards"
+          url: "33fire.jpg",
+          title: "Center for Fire Safety Engineering (CFSE)",
+          desc: "Iconic exterior of the specialized Fire Safety Engineering building and high-temperature testing tower at Mattegoda"
         },
         {
           url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611.jpg",
@@ -254,12 +254,12 @@ const FOE_DATA = {
       badge: "⭐ FEATURED • 650-SEAT AUDITORIUM",
       featuredTag: "🎭 650-Seat Acoustic Theater & Grand Convention Hall",
       accentGlow: "auditorium",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
+      image: "11audi.jpg",
       gallery: [
         {
-          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
-          title: "Main Grand Auditorium & Proscenium Stage",
-          desc: "Full view of the 650-seat tiered theater, proscenium arch, and motorized stage lighting grid"
+          url: "11audi.jpg",
+          title: "Main Grand Auditorium Interior & Seating",
+          desc: "Iconic panoramic view of the 650-seat acoustic tiered auditorium, proscenium arch, and proscenium stage"
         },
         {
           url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-2.jpeg",
@@ -544,6 +544,250 @@ const FOE_DATA = {
       ],
       inCharge: "Director, RCFE",
       contactEmail: "rcfe@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-theatre",
+      title: "Outdoor Theatre",
+      category: "welfare",
+      categoryName: "Cultural & Performing Arts",
+      dept: "Student Welfare & Arts Circle",
+      badge: "Open-Air Amphitheatre",
+      image: "22outaudi.jpg",
+      gallery: [
+        {
+          url: "22outaudi.jpg",
+          title: "Outdoor Auditorium & Amphitheatre at Sunset",
+          desc: "Iconic circular stage, tiered stone stepped seating, and reflecting water basin overlooking the golden evening horizon"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg",
+          title: "Concourse Approach & Promenade",
+          desc: "Central campus walkway leading directly to the amphitheatre bowl"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg",
+          title: "Surrounding Academic Complex",
+          desc: "Scenic backdrop of faculty departmental towers and green campus courtyard"
+        }
+      ],
+      shortDesc: "A spacious open-air venue with tiered green lawn seating for student gatherings, cultural music events, and outdoor performances.",
+      fullDesc: "The Outdoor Theatre serves as the cultural heart and social nexus for the Faculty of Engineering. Providing a vibrant open-air setting for musical fests, drama rehearsals, acoustic showcases, club assemblies, and graduation gatherings under the open sky. Engineered with natural bowl acoustics and surrounding landscaped vegetation, it accommodates large student audiences in an eco-friendly campus atmosphere.",
+      location: "Mattegoda Open-Air Cultural Lawn",
+      hours: "Daily: Open Campus Hours (Evening events scheduled via SAR)",
+      features: [
+        "Tiered grass amphitheatre terraces accommodating 400+ seated spectators",
+        "Elevated stage platform with dedicated electrical audio distribution terminals",
+        "Natural acoustic reflection bowl complemented by surrounding green tree canopy",
+        "Preferred outdoor venue for faculty talent concerts, open-mic sessions & society meetings"
+      ],
+      specs: [
+        { label: "Venue Type", value: "Open-Air Natural Lawn Amphitheatre" },
+        { label: "Seating Capacity", value: "400+ Outdoor Spectators" },
+        { label: "Event Host", value: "Student Union & Arts Circle" },
+        { label: "Power Infrastructure", value: "Staging Power Distribution Hookups" }
+      ],
+      inCharge: "Senior Assistant Registrar (SAR) & Student Affairs",
+      contactEmail: "sar@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-gym",
+      title: "Gymnasium",
+      category: "welfare",
+      categoryName: "Sports & Physical Fitness",
+      dept: "Department of Physical Education & Sports",
+      badge: "Modern Fitness Center",
+      image: "https://lh3.googleusercontent.com/d/1hF9PiVfa6hy_pgaZlqhtxU9Wov1g2iX5",
+      gallery: [
+        {
+          url: "https://lh3.googleusercontent.com/d/1hF9PiVfa6hy_pgaZlqhtxU9Wov1g2iX5",
+          title: "Weight Training & Dumbbell Section",
+          desc: "Commercial free weights, Olympic barbell stations, and multi-gym workout benches"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527478083.jpg",
+          title: "Sports Complex Pavilion Exterior",
+          desc: "Comprehensive athletic building housing fitness rooms and court facilities"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/10/PXL_20260925_1527089422.jpg",
+          title: "Cardio & Fitness Conditioning Sector",
+          desc: "Treadmills, stationary spin bikes, and cardiovascular workout units"
+        }
+      ],
+      shortDesc: "Fully equipped modern fitness center featuring free weights, multi-gym stations, and cardio machines for students and staff.",
+      fullDesc: "Equipped with modern commercial weights, Olympic lifting platforms, dumbbell racks, and cardio machines to empower the university community in maintaining athletic health. Under the guidance of certified physical fitness trainers from the Department of Physical Education, undergraduates and faculty members enjoy structured strength routines, endurance training, and athletic preparation for inter-university tournaments.",
+      location: "Sports & Recreation Pavilion, Ground Floor",
+      hours: "Daily: 6:00 AM - 8:30 PM (Dedicated slots for men, women & staff)",
+      features: [
+        "Heavy-duty Olympic power racks, flat and incline benches, and barbell suites",
+        "Complete cardio zone featuring electronic treadmills, cross trainers, and spin bikes",
+        "Clean, hygienic changing rooms with personal lockers and shower cubicles",
+        "Qualified physical education trainers offering personal workout and fitness advice"
+      ],
+      specs: [
+        { label: "Equipment Suite", value: "Commercial Free Weights & Multi-Gym" },
+        { label: "Cardio Section", value: "Treadmills, Ellipticals & Spin Bikes" },
+        { label: "Instructor Support", value: "Certified Sports Council Trainers" },
+        { label: "Access Eligibility", value: "All FOE Undergraduates & Faculty Staff" }
+      ],
+      inCharge: "Director of Physical Education & Sports Council",
+      contactEmail: "gym@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-gym-canteen",
+      title: "Gym Canteen",
+      category: "dining",
+      categoryName: "Sports Nutrition & Refreshments",
+      dept: "Student Welfare & Recreation",
+      badge: "Fitness Nutrition Bar",
+      image: "gym_canteen.jpg",
+      gallery: [
+        {
+          url: "gym_canteen.jpg",
+          title: "Sports Nutrition Counter & Seating",
+          desc: "Convenient snack and juice bar adjoining the gym pavilion"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fr76qifr76qifr76.png",
+          title: "Dining Terrace",
+          desc: "Shaded tables and quick seating for post-workout recovery"
+        }
+      ],
+      shortDesc: "A convenient refreshment spot located right next to the gym offering healthy snacks, energy drinks, and fresh juices.",
+      fullDesc: "Strategically located adjoining the gym pavilion, the Gym Canteen offers athletes and students quick, wholesome post-workout nutrition. Serving freshly squeezed seasonal fruit juices, protein-rich snacks, chilled electrolyte drinks, milk beverages, and healthy breakfast items formulated to rehydrate and replenish energy after intensive physical workouts.",
+      location: "Adjoining Gymnasium Pavilion, Mattegoda",
+      hours: "Daily: 6:30 AM - 8:00 PM",
+      features: [
+        "Fresh citrus juices, watermelon smoothies, and cold electrolyte thirst-quenchers",
+        "Nutritious protein snacks, energy bars, and boiled grain varieties (kadala, mung)",
+        "Quick service counter designed for athletes on their way to lectures or practice",
+        "Outdoor shaded umbrella seating overlooking the sports field"
+      ],
+      specs: [
+        { label: "Service Style", value: "Quick-Serve Healthy Refreshments" },
+        { label: "Specialty", value: "Fresh Fruit Juices & Energy Nutrition" },
+        { label: "Hygiene Standard", value: "PHI Certified University Food Safety" },
+        { label: "Payment Options", value: "Cash & Student Digital Payments" }
+      ],
+      inCharge: "Welfare Officer & Canteen Management Committee",
+      contactEmail: "welfare@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-canteen",
+      title: "Main Canteen",
+      category: "dining",
+      categoryName: "Campus Dining & Cafeteria",
+      dept: "Student Welfare Division",
+      badge: "Primary Dining Complex",
+      image: "main_canteen.jpg",
+      gallery: [
+        {
+          url: "main_canteen.jpg",
+          title: "Main Dining Hall & Serving Line",
+          desc: "Spacious cafeteria seating over 300 students for daily subsidized meals"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fjg1tafjg1tafjg1.png",
+          title: "Meal Counter & Fresh Beverage Station",
+          desc: "Hygienic stainless-steel serving bay and tea counter"
+        }
+      ],
+      shortDesc: "The primary dining area offering a wide variety of meals, breakfast, lunch, and tea at student-friendly subsidized prices.",
+      fullDesc: "The Main Canteen is the central dining hall of the Mattegoda campus, serving hundreds of engineering students, academic lecturers, and non-academic staff members every day. Featuring a diverse culinary spread from traditional Sri Lankan rice and curry to morning hoppers, rottis, and evening short-eats. Strict public health inspector (PHI) food safety standards ensure clean, nutritious, and affordable meals throughout the academic semester.",
+      location: "Student Services Complex, Ground Level",
+      hours: "Daily: 6:30 AM - 7:30 PM",
+      features: [
+        "Subsidized hot rice and curry for lunch and dinner with fish, chicken, and vegetarian options",
+        "Fresh breakfast selections including hoppers, string hoppers, pol rotti, and tea",
+        "Massive, well-ventilated dining hall with high ceilings accommodating 300+ guests",
+        "Filtered, UV-sterilized potable drinking water dispensing units available for all"
+      ],
+      specs: [
+        { label: "Dining Capacity", value: "300+ Seated Students Simultaneously" },
+        { label: "Meal Subsidy", value: "University Subsidized Student Pricing" },
+        { label: "Service Times", value: "Breakfast, Lunch, Evening Tea & Dinner" },
+        { label: "Cleanliness", value: "Daily Sterilization & Safe Potable Water" }
+      ],
+      inCharge: "Canteen Management Committee & Senior Student Counselor",
+      contactEmail: "canteen@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-foodcourt",
+      title: "Food Court",
+      category: "dining",
+      categoryName: "Multi-Cuisine Dining Pavilion",
+      dept: "Student Welfare Division",
+      badge: "Multi-Vendor Pavilion",
+      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fjg1tafjg1tafjg1.png",
+      gallery: [
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fjg1tafjg1tafjg1.png",
+          title: "Multi-Vendor Food Pavilion",
+          desc: "Modern counters offering diverse culinary choices, bakery items, and beverages"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fr76qifr76qifr76.png",
+          title: "Outdoor Shaded Dining Patio",
+          desc: "Al fresco patio with umbrella tables for casual dining and student group work"
+        }
+      ],
+      shortDesc: "A diverse culinary space featuring multiple food vendors, bakery items, espresso coffee, and shaded patio seating.",
+      fullDesc: "The Faculty Food Court provides an energetic alternative dining experience with multiple independent culinary stalls. Undergraduates can choose from artisan bakery pastries, fresh juices, espresso drinks, sandwiches, and fast meals. Surrounded by a shaded garden terrace equipped with Wi-Fi, it offers a relaxed spot for study groups and casual campus meetups between lectures.",
+      location: "Mattegoda Academic Walkway Promenade",
+      hours: "Daily: 7:30 AM - 8:30 PM",
+      features: [
+        "Multi-vendor food kiosks featuring snacks, bakery delights, and custom sandwiches",
+        "Dedicated beverage stall with milkshakes, ice tea, espresso, and seasonal fruit juices",
+        "Shaded garden patio seating with electrical charging points and university Wi-Fi",
+        "Extended evening operating hours catering to students working late in project labs"
+      ],
+      specs: [
+        { label: "Stall Variety", value: "Bakery, Juices, Short Eats & Fast Meals" },
+        { label: "Ambiance", value: "Outdoor Shaded Garden Patio & Indoor Stalls" },
+        { label: "Wi-Fi Coverage", value: "Full Campus Intranet Wi-Fi Available" },
+        { label: "Accessibility", value: "Central Walkway Access from all Departments" }
+      ],
+      inCharge: "Commercial Services Coordinator, USJ",
+      contactEmail: "foodcourt@eng.sjp.ac.lk"
+    },
+    {
+      id: "fac-kids-play",
+      title: "Kids Play Area",
+      category: "welfare",
+      categoryName: "Staff Family & Child Welfare",
+      dept: "Faculty Staff Welfare Society",
+      badge: "Family Safe Zone",
+      image: "kids_play_area.jpg",
+      gallery: [
+        {
+          url: "kids_play_area.jpg",
+          title: "Child-Friendly Recreation Area",
+          desc: "Safe outdoor playground equipped with modern play equipment and safety turf"
+        },
+        {
+          url: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fr76qifr76qifr76.png",
+          title: "Adjoining Staff Quarters & Lawn",
+          desc: "Protected, shaded grassy courtyard surrounding the daycare facility"
+        }
+      ],
+      shortDesc: "A safe, fun, and secure outdoor play environment with modern playground equipment for children of faculty staff.",
+      fullDesc: "Designed to support academic and non-academic staff with young families, the Kids Play Area features modern, child-safe playground equipment, cushioned impact-absorbing turf, swings, slides, and educational sensory play features. Situated within a secure, fenced perimeter adjacent to staff quarters and day-care facilities, ensuring peace of mind for university employees.",
+      location: "Staff Residential & Welfare Wing, Mattegoda",
+      hours: "Mon - Fri: 8:00 AM - 5:30 PM (Weekends for staff residents)",
+      features: [
+        "Impact-absorbing rubber safety flooring and non-toxic playground apparatus",
+        "Interactive climbing frames, spiral slides, baby swings, and sand play area",
+        "Fenced, secure perimeter with child-proof safety gate and surveillance",
+        "Shaded benches and stroller pathways for parents and caregivers"
+      ],
+      specs: [
+        { label: "Safety Standard", value: "Impact-Absorbing Rubberized Flooring" },
+        { label: "Age Group", value: "Children aged 2 to 10 years" },
+        { label: "Security", value: "Fenced Perimeter & Guard Supervision" },
+        { label: "Beneficiary", value: "Academic & Non-Academic Staff Families" }
+      ],
+      inCharge: "President, Faculty Staff Welfare Society",
+      contactEmail: "staff.welfare@eng.sjp.ac.lk"
     }
   ],
 
@@ -642,7 +886,7 @@ const FOE_DATA = {
       category: "academic",
       icon: "bi-display-fill",
       accent: "#ec4899",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Auditorium-1.jpeg",
+      image: "11audi.jpg",
       hours: "Event Specific / 8:00 AM - 7:00 PM",
       desc: "500+ seat acoustic auditorium equipped for international symposiums, research conferences, guest lectures, and faculty cultural ceremonies.",
       tag: "Conferences & Ceremonies",
@@ -835,7 +1079,7 @@ const FOE_DATA = {
       category: "recreation",
       icon: "bi-music-note-beamed",
       accent: "#8b5cf6",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/Image_u9f30vu9f30vu9f3.png",
+      image: "22outaudi.jpg",
       hours: "Open Campus Access",
       desc: "Tiered green lawn amphitheatre for faculty cultural performances, acoustic music fests, drama showcases, and student club assemblies.",
       tag: "Cultural & Performing Arts",
@@ -855,7 +1099,7 @@ const FOE_DATA = {
       category: "dining",
       icon: "bi-cup-hot-fill",
       accent: "#f59e0b",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fr76qifr76qifr76.png",
+      image: "main_canteen.jpg",
       hours: "Daily: 6:30 AM - 7:30 PM",
       desc: "Spacious subsidized main cafeteria serving hygienic daily meals, breakfast, lunch, fresh short-eats, tea, and beverages for all undergraduates.",
       tag: "Student Dining",
@@ -935,7 +1179,7 @@ const FOE_DATA = {
       category: "dining",
       icon: "bi-cup-straw",
       accent: "#06b6d4",
-      image: "https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FB_IMG_1760579986985.jpg-Sanuri-Himalka.jpeg",
+      image: "gym_canteen.jpg",
       hours: "Daily: 6:30 AM - 8:00 PM",
       desc: "Dedicated sports cafeteria adjoining the gym pavilion offering protein bars, energy shakes, freshly blended citrus juices, and post-workout snacks.",
       tag: "Sports Dining",
@@ -943,6 +1187,143 @@ const FOE_DATA = {
       floors: [
         { level: "Ground Level", desc: "Sports Nutrition Counter, Protein Smoothies & Energy Snacks Bar" }
       ]
+    }
+  ],
+  library_books: [
+    {
+      id: 1,
+      title: "Soil Mechanics and Foundations",
+      author: "Muni Budhu",
+      category: "Civil Engineering",
+      availability_status: "Available",
+      official_link: "https://www.wiley.com/en-us/Soil+Mechanics+and+Foundations%2C+3rd+Edition-p-9780470556849",
+      cover_image_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80"
+    },
+    {
+      id: 2,
+      title: "Design of Reinforced Concrete Structures",
+      author: "Jack C. McCormac & Russell H. Brown",
+      category: "Civil Engineering",
+      availability_status: "Available",
+      official_link: "https://www.wiley.com/en-us/Design+of+Reinforced+Concrete%2C+10th+Edition-p-9781118879108",
+      cover_image_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80"
+    },
+    {
+      id: 3,
+      title: "Structural Analysis (SI Edition)",
+      author: "R. C. Hibbeler",
+      category: "Civil Engineering",
+      availability_status: "On Loan",
+      official_link: "https://www.pearson.com/en-us/subject-catalog/p/structural-analysis/P200000003299",
+      cover_image_url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80"
+    },
+    {
+      id: 4,
+      title: "Shigley's Mechanical Engineering Design",
+      author: "Richard G. Budynas & J. Keith Nisbett",
+      category: "Mechanical Engineering",
+      availability_status: "Available",
+      official_link: "https://www.mheducation.com/highered/product/shigley-s-mechanical-engineering-design-budynas-nisbett/M9780073398204.html",
+      cover_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80"
+    },
+    {
+      id: 5,
+      title: "Thermodynamics: An Engineering Approach",
+      author: "Yunus A. Çengel & Michael A. Boles",
+      category: "Mechanical Engineering",
+      availability_status: "Available",
+      official_link: "https://www.mheducation.com/highered/product/thermodynamics-engineering-approach-cengel-boles/M9781259822674.html",
+      cover_image_url: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=600&q=80"
+    },
+    {
+      id: 6,
+      title: "Fluid Mechanics: Fundamentals and Applications",
+      author: "Yunus A. Çengel & John M. Cimbala",
+      category: "Mechanical Engineering",
+      availability_status: "Reference Only",
+      official_link: "https://www.mheducation.com/highered/product/fluid-mechanics-fundamentals-applications-cengel-cimbala/M9781259696534.html",
+      cover_image_url: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&q=80"
+    },
+    {
+      id: 7,
+      title: "Introduction to Algorithms (4th Edition)",
+      author: "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein",
+      category: "Computer Science",
+      availability_status: "Available",
+      official_link: "https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/",
+      cover_image_url: "https://images.unsplash.com/photo-1532012164546-f432f2e3777f?w=600&q=80"
+    },
+    {
+      id: 8,
+      title: "Computer Networking: A Top-Down Approach",
+      author: "James F. Kurose & Keith W. Ross",
+      category: "Computer Science",
+      availability_status: "Available",
+      official_link: "https://www.pearson.com/en-us/subject-catalog/p/computer-networking-a-top-down-approach/P200000003335",
+      cover_image_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80"
+    },
+    {
+      id: 9,
+      title: "Clean Architecture: A Craftsman's Guide",
+      author: "Robert C. Martin",
+      category: "Computer Science",
+      availability_status: "Available",
+      official_link: "https://www.pearson.com/en-us/subject-catalog/p/clean-architecture-a-craftsmans-guide-to-software-structure-and-design/P200000009650",
+      cover_image_url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=80"
+    },
+    {
+      id: 10,
+      title: "Microelectronic Circuits (8th Edition)",
+      author: "Adel S. Sedra, Kenneth C. Smith, Tony Chan Carusone, Vincent Gaudet",
+      category: "Electrical Engineering",
+      availability_status: "Available",
+      official_link: "https://global.oup.com/ushe/product/microelectronic-circuits-9780190853464",
+      cover_image_url: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=600&q=80"
+    },
+    {
+      id: 11,
+      title: "Electric Machinery Fundamentals",
+      author: "Stephen J. Chapman",
+      category: "Electrical Engineering",
+      availability_status: "On Loan",
+      official_link: "https://www.mheducation.com/highered/product/electric-machinery-fundamentals-chapman/M9780073529547.html",
+      cover_image_url: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80"
+    },
+    {
+      id: 12,
+      title: "Modern Control Engineering (5th Edition)",
+      author: "Katsuhiko Ogata",
+      category: "Electrical Engineering",
+      availability_status: "Available",
+      official_link: "https://www.pearson.com/en-us/subject-catalog/p/modern-control-engineering/P200000003310",
+      cover_image_url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"
+    },
+    {
+      id: 13,
+      title: "Advanced Engineering Mathematics",
+      author: "Erwin Kreyszig",
+      category: "Mathematics",
+      availability_status: "Available",
+      official_link: "https://www.wiley.com/en-us/Advanced+Engineering+Mathematics%2C+10th+Edition-p-9780470458365",
+      cover_image_url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80"
+    },
+    {
+      id: 14,
+      title: "Probability & Statistics for Engineers & Scientists",
+      author: "Ronald E. Walpole, Raymond H. Myers, Sharon L. Myers, Keying Ye",
+      category: "Mathematics",
+      availability_status: "Available",
+      official_link: "https://www.pearson.com/en-us/subject-catalog/p/probability-statistics-for-engineers-scientists/P200000003328",
+      cover_image_url: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80"
+    },
+    {
+      id: 15,
+      title: "Principles of Fire Behavior & Safety Engineering",
+      author: "James G. Quintiere",
+      category: "Civil Engineering",
+      availability_status: "Available",
+      official_link: "https://www.crcpress.com/Principles-of-Fire-Behavior/Quintiere/p/book/9781498735629",
+      cover_image_url: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&q=80"
     }
   ]
 };

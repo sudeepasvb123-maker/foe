@@ -11,6 +11,14 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const state = {
   activeTab: 'overview',
   items: [],
+  facilities: [],
+  libraryBooks: [],
+  libraryFilter: {
+    category: 'all',
+    status: 'all',
+    search: ''
+  },
+  selectedBook: null,
   activeCategory: 'all',
   searchQuery: '',
   sortBy: 'newest',
@@ -793,7 +801,7 @@ window.toggleTheme = toggleTheme;
  * @param {string} tabId ('overview', 'departments', 'facilities', 'news', 'map')
  */
 export function switchTab(tabId) {
-  const validTabs = ['overview', 'departments', 'facilities', 'news', 'map'];
+  const validTabs = ['overview', 'departments', 'facilities', 'library', 'news', 'map'];
   if (!validTabs.includes(tabId)) {
     tabId = 'overview';
   }
@@ -834,6 +842,8 @@ export function switchTab(tabId) {
     }
   } else if (tabId === 'facilities') {
     renderFacilities();
+  } else if (tabId === 'library') {
+    fetchAndRenderLibraryBooks();
   } else if (tabId === 'news') {
     if (state.items.length === 0 && !state.isLoading) {
       fetchAndDisplayAnnouncements();
@@ -1671,21 +1681,216 @@ if (typeof window !== 'undefined') {
 }
 
 /**
+ * Resolves facility image URLs, automatically converting Google Drive sharing links
+ * into high-res direct image links and providing contextual faculty fallbacks.
+ * Enforces iconic images for Auditorium (11audi.jpg), Outdoor Theatre (22outaudi.jpg),
+ * and Center for Fire Safety Engineering (33fire.jpg).
+ */
+export function resolveFacilityImageUrl(url, title = '') {
+  const t = (title || '').toLowerCase();
+  const u = (url || '').toLowerCase();
+
+  // 1. Center for Fire Safety Engineering iconic image
+  if (t.includes('fire safety') || t.includes('cfse') || u.includes('33fire')) {
+    return '33fire.jpg';
+  }
+  // 2. Outdoor Theatre / Open-Air Auditorium iconic image
+  if (t.includes('outdoor') || t.includes('amphitheatre') || t.includes('open-air') || (t.includes('theatre') && !t.includes('lecture')) || u.includes('22outaudi')) {
+    return '22outaudi.jpg';
+  }
+  // 3. Main Auditorium iconic image
+  if (t.includes('auditorium') || u.includes('11audi')) {
+    return '11audi.jpg';
+  }
+  // 4. Gym Canteen iconic AI image
+  if (t.includes('gym canteen') || u.includes('gym_canteen')) {
+    return 'gym_canteen.jpg';
+  }
+  // 5. Main Canteen iconic AI image
+  if (t.includes('main canteen') || (t.includes('canteen') && !t.includes('gym')) || u.includes('main_canteen')) {
+    return 'main_canteen.jpg';
+  }
+  // 6. Kids Play Area iconic AI image
+  if (t.includes('kids') || t.includes('play') || u.includes('kids_play_area')) {
+    return 'kids_play_area.jpg';
+  }
+
+  if (url === '11audi.jpg' || url === '22outaudi.jpg' || url === '33fire.jpg' || url === 'main_canteen.jpg' || url === 'gym_canteen.jpg' || url === 'kids_play_area.jpg') {
+    return url;
+  }
+
+  // Allow direct Supabase storage public URLs
+  if (url && url.includes('supabase.co/storage/v1/object/public/facilities/')) {
+    return url;
+  }
+
+  if (!url || url === 'REPLACE_WITH_IMAGE_URL') {
+    return getContextualFacilityImage(title);
+  }
+  // Convert Google Drive share link (e.g., https://drive.google.com/file/d/ID/view) to direct embeddable image
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (driveMatch) {
+    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  }
+  // If it's a non-image URL like a Facebook share page, use contextual verified image
+  if (url.includes('facebook.com') || url.includes('/share/')) {
+    return getContextualFacilityImage(title);
+  }
+  return url;
+}
+
+/**
+ * Returns authentic faculty photograph for a given facility title
+ */
+export function getContextualFacilityImage(title = '') {
+  const t = (title || '').toLowerCase();
+  if (t.includes('fire safety') || t.includes('cfse')) {
+    return '33fire.jpg';
+  }
+  if (t.includes('outdoor') || t.includes('amphitheatre') || t.includes('open-air') || (t.includes('theatre') && !t.includes('lecture'))) {
+    return '22outaudi.jpg';
+  }
+  if (t.includes('auditorium')) {
+    return '11audi.jpg';
+  }
+  if (t.includes('gym canteen')) {
+    return 'gym_canteen.jpg';
+  }
+  if (t.includes('gym') || t.includes('fitness')) {
+    return 'https://lh3.googleusercontent.com/d/1hF9PiVfa6hy_pgaZlqhtxU9Wov1g2iX5';
+  }
+  if (t.includes('main canteen') || t.includes('canteen')) {
+    return 'main_canteen.jpg';
+  }
+  if (t.includes('food court')) {
+    return 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/Image_fjg1tafjg1tafjg1.png';
+  }
+  if (t.includes('kids') || t.includes('play')) {
+    return 'kids_play_area.jpg';
+  }
+  if (t.includes('library')) {
+    return 'https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-1-1.jpg';
+  }
+  if (t.includes('itc') || t.includes('information tech')) {
+    return 'https://eng.sjp.ac.lk/wp-content/uploads/2026/09/IT-Center.jpg';
+  }
+  return 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg';
+}
+
+/**
+ * Dynamically fetches all facilities from the Supabase 'facilities' table
+ * and merges them with rich local metadata (specs, galleries, features).
+ */
+export async function fetchFacilitiesFromSupabase() {
+  try {
+    const localList = FOE_DATA.facilities || [];
+    if (!supabase) {
+      state.facilities = localList;
+      return localList;
+    }
+
+    const { data, error } = await supabase
+      .from('facilities')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      state.facilities = localList;
+      return localList;
+    }
+
+    const normKey = (str) => (str ? str.toLowerCase().replace(/[^a-z0-9]/g, '') : '');
+    const mergedMap = new Map();
+
+    // 1. Populate with local definitions so every facility has rich default specs & features
+    for (const loc of localList) {
+      mergedMap.set(normKey(loc.title), { ...loc });
+    }
+
+    // 2. Overlay live Supabase records
+    for (const row of data) {
+      const key = normKey(row.title);
+      const existing = mergedMap.get(key) || {};
+      const img = resolveFacilityImageUrl(row.image_url || existing.image, row.title);
+
+      const resolved = {
+        ...existing,
+        id: existing.id || `fac-${row.id}`,
+        supabaseId: row.id,
+        title: row.title || existing.title,
+        shortDesc: row.description || existing.shortDesc || existing.description || '',
+        description: row.description || existing.shortDesc || '',
+        fullDesc: row.detailed_content || existing.fullDesc || row.description || '',
+        detailed_content: row.detailed_content || existing.fullDesc || row.description || '',
+        image: img,
+        image_url: img,
+        isFeatured: row.is_highlighted || existing.isFeatured || false,
+        category: existing.category || (row.title && (row.title.toLowerCase().includes('canteen') || row.title.toLowerCase().includes('food')) ? 'dining' : 'welfare'),
+        categoryName: existing.categoryName || (row.title && (row.title.toLowerCase().includes('canteen') || row.title.toLowerCase().includes('food')) ? 'Campus Dining & Cafeteria' : 'Student Welfare & Recreation'),
+        dept: existing.dept || 'Faculty of Engineering',
+        badge: existing.badge || 'Faculty Facility',
+        location: existing.location || 'Mattegoda Complex',
+        hours: existing.hours || 'Mon - Fri: 8:00 AM - 5:00 PM',
+        features: existing.features || [
+          'Modern infrastructure and student-friendly amenities',
+          'Supervised by certified faculty administration',
+          'Open for undergraduates, academic researchers and staff'
+        ],
+        specs: existing.specs || [
+          { label: 'Campus Location', value: existing.location || 'Mattegoda Complex' },
+          { label: 'Administration', value: existing.dept || 'Faculty of Engineering' },
+          { label: 'Facility Access', value: 'All Faculty Members & Students' }
+        ],
+        gallery: (existing.gallery && existing.gallery.length > 0)
+          ? existing.gallery.map(g => ({ ...g, url: resolveFacilityImageUrl(g.url, g.title || row.title) }))
+          : [
+              { url: img, title: row.title, desc: 'Primary Perspective' },
+              { url: 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg', title: 'Mattegoda Complex View', desc: 'Exterior and architectural perspective' }
+            ]
+      };
+
+      mergedMap.set(key, resolved);
+    }
+
+    state.facilities = Array.from(mergedMap.values());
+    return state.facilities;
+  } catch (err) {
+    console.warn('Error fetching facilities from Supabase:', err);
+    state.facilities = FOE_DATA.facilities || [];
+    return state.facilities;
+  }
+}
+
+/**
  * Render Facilities & Specialized Labs
  */
 let currentFacFilter = 'all';
 
-function renderFacilities(category = currentFacFilter) {
+export async function renderFacilities(category = currentFacFilter) {
   const container = document.getElementById('facilities-grid');
   if (!container) return;
 
   currentFacFilter = category;
   container.innerHTML = '';
 
-  const allFacs = FOE_DATA.facilities || [];
+  // Ensure facilities are fetched from Supabase
+  if (!state.facilities || state.facilities.length === 0) {
+    await fetchFacilitiesFromSupabase();
+  }
+
+  const allFacs = (state.facilities && state.facilities.length > 0) ? state.facilities : (FOE_DATA.facilities || []);
+
+  // Update total count indicator in category pill
+  const countEl = document.getElementById('fac-filter-count-all');
+  if (countEl) countEl.textContent = `(${allFacs.length})`;
+
   let filtered = allFacs;
   if (category === 'featured') {
     filtered = allFacs.filter(f => f.isFeatured || f.id === 'fac-cfse' || f.id === 'fac-auditorium' || (f.title && (f.title.toLowerCase().includes('fire safety') || f.title.toLowerCase().includes('auditorium'))));
+  } else if (category === 'dining') {
+    filtered = allFacs.filter(f => f.category === 'dining' || (f.title && (f.title.toLowerCase().includes('canteen') || f.title.toLowerCase().includes('food'))));
+  } else if (category === 'welfare') {
+    filtered = allFacs.filter(f => f.category === 'welfare');
   } else if (category !== 'all') {
     filtered = allFacs.filter(f => f.category === category);
   }
@@ -1903,47 +2108,54 @@ function renderFacilities(category = currentFacFilter) {
         </div>
       `;
     } else {
+      const cardImg = resolveFacilityImageUrl(fac.image || fac.image_url, fac.title);
+      const locStr = (fac.location || 'Mattegoda Complex').split(',')[0];
+      const hoursStr = (fac.hours || 'Mon - Fri: 8:00 AM - 5:00 PM').split('|')[0];
+      const featList = (fac.features && fac.features.length) ? fac.features.slice(0, 3) : ['Modern facilities', 'Supervised campus area'];
+      const photoCnt = (fac.gallery && fac.gallery.length) || 2;
+      const shortD = fac.shortDesc || fac.description || '';
+
       card.className = 'ios27-card group relative flex flex-col justify-between overflow-hidden rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-black/25 border border-slate-200/90 dark:border-white/20 hover:border-amber-400/50 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer col-span-1';
 
       card.innerHTML = `
         <div class="relative w-full h-52 overflow-hidden rounded-t-3xl bg-slate-900">
           <img 
-            src="${fac.image}" 
-            alt="${fac.title}" 
+            src="${cardImg}" 
+            alt="${escapeHtml(fac.title)}" 
             class="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out" 
             loading="lazy" 
             onerror="this.onerror=null; this.src='https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg';"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
           <span class="absolute top-3.5 left-3.5 z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase backdrop-blur-xl bg-[#5c0919] text-amber-300 border border-amber-400/40 shadow-lg">
-            ${fac.badge || fac.categoryName}
+            ${escapeHtml(fac.badge || fac.categoryName || 'Campus Facility')}
           </span>
           <span class="absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-black/60 text-white border border-white/20">
-            📸 ${(fac.gallery || []).length || 3} Photos
+            📸 ${photoCnt} Photos
           </span>
         </div>
 
         <div class="p-6 flex flex-col flex-1 justify-between gap-4 backdrop-blur-xl bg-slate-50/50 dark:bg-white/[0.04]">
           <div class="space-y-2.5">
             <div class="flex items-center justify-between text-xs text-amber-700 dark:text-amber-300 font-semibold">
-              <span>${fac.dept}</span>
-              <span class="text-slate-500 dark:text-slate-400 font-normal">${fac.location.split(',')[0]}</span>
+              <span>${escapeHtml(fac.dept || 'Faculty of Engineering')}</span>
+              <span class="text-slate-500 dark:text-slate-400 font-normal">${escapeHtml(locStr)}</span>
             </div>
             <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors leading-snug">
-              ${fac.title}
+              ${escapeHtml(fac.title)}
             </h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 leading-relaxed font-normal">${fac.shortDesc}</p>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300/85 leading-relaxed font-normal">${escapeHtml(shortD)}</p>
 
             <div class="pt-3 border-t border-slate-200 dark:border-white/10 space-y-1">
               <span class="text-[11px] font-bold text-amber-700 dark:text-amber-200/90 uppercase tracking-wider block">Key Highlights:</span>
               <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-1">
-                ${(fac.features || []).slice(0, 3).map(feat => `<li class="flex items-center gap-1.5"><span class="text-amber-500 font-bold">✓</span><span>${feat}</span></li>`).join('')}
+                ${featList.map(feat => `<li class="flex items-center gap-1.5"><span class="text-amber-500 font-bold">✓</span><span>${escapeHtml(feat)}</span></li>`).join('')}
               </ul>
             </div>
           </div>
 
           <div class="pt-3 border-t border-slate-200 dark:border-white/10 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span>🕒 ${fac.hours.split('|')[0]}</span>
+            <span>🕒 ${escapeHtml(hoursStr)}</span>
             <div class="flex items-center gap-2">
               <button type="button" data-action="locate" class="locate-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-300 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/15 border border-slate-200 dark:border-white/15 transition-all cursor-pointer">
                 <span>Map</span>
@@ -2642,17 +2854,29 @@ export async function universalSearch(rawQuery) {
       return supabase.from('department_staff').select('*').or(`name.ilike.%${safeTerm}%,designation.ilike.%${safeTerm}%,staff_type.ilike.%${safeTerm}%`).limit(8);
     })();
 
-    const [deptRes, facRes, newsRes, staffRes] = await Promise.allSettled([
+    // 5. Query library_books table
+    const booksPromise = (async () => {
+      if (!supabase) return { data: [] };
+      try {
+        const res = await supabase.from('library_books').select('*').or(`title.ilike.%${safeTerm}%,author.ilike.%${safeTerm}%,category.ilike.%${safeTerm}%`).limit(6);
+        if (!res.error && res.data) return res;
+      } catch (e) {}
+      return { data: [] };
+    })();
+
+    const [deptRes, facRes, newsRes, staffRes, bookRes] = await Promise.allSettled([
       deptsPromise,
       facsPromise,
       newsPromise,
-      staffPromise
+      staffPromise,
+      booksPromise
     ]);
 
     let depts = (deptRes.status === 'fulfilled' && deptRes.value?.data) ? deptRes.value.data : [];
     let facilities = (facRes.status === 'fulfilled' && facRes.value?.data) ? facRes.value.data : [];
     let news = (newsRes.status === 'fulfilled' && newsRes.value?.data) ? newsRes.value.data : [];
     let staff = (staffRes.status === 'fulfilled' && staffRes.value?.data) ? staffRes.value.data : [];
+    let books = (bookRes.status === 'fulfilled' && bookRes.value?.data) ? bookRes.value.data : [];
 
     // Local supplements & fallbacks from FOE_DATA and state
     const qLower = query.toLowerCase();
@@ -2677,6 +2901,14 @@ export async function universalSearch(rawQuery) {
         n.title.toLowerCase().includes(qLower) || 
         (n.description && n.description.toLowerCase().includes(qLower))
       );
+    }
+    if (books.length === 0) {
+      const allBooks = (state.libraryBooks && state.libraryBooks.length > 0) ? state.libraryBooks : (FOE_DATA.library_books || []);
+      books = allBooks.filter(b => 
+        (b.title || '').toLowerCase().includes(qLower) ||
+        (b.author || '').toLowerCase().includes(qLower) ||
+        (b.category || '').toLowerCase().includes(qLower)
+      ).slice(0, 6);
     }
     if (staff.length === 0) {
       // Local staff fallback for dean and leadership
@@ -2712,7 +2944,7 @@ export async function universalSearch(rawQuery) {
       );
     }
 
-    renderSearchResults(query, { depts, facilities, news, staff });
+    renderSearchResults(query, { depts, facilities, news, staff, books });
 
   } catch (err) {
     console.error('Universal search error:', err);
@@ -2720,24 +2952,25 @@ export async function universalSearch(rawQuery) {
     const depts = (FOE_DATA.departments || []).filter(d => d.name.toLowerCase().includes(qLower) || d.overview.toLowerCase().includes(qLower));
     const facilities = (FOE_DATA.facilities || []).filter(f => f.title.toLowerCase().includes(qLower) || f.shortDesc.toLowerCase().includes(qLower));
     const news = (state.items || []).filter(n => n.title.toLowerCase().includes(qLower) || n.description.toLowerCase().includes(qLower));
-    renderSearchResults(query, { depts, facilities, news, staff: [] });
+    const books = (state.libraryBooks || FOE_DATA.library_books || []).filter(b => (b.title || '').toLowerCase().includes(qLower) || (b.author || '').toLowerCase().includes(qLower));
+    renderSearchResults(query, { depts, facilities, news, staff: [], books });
   }
 }
 
 /**
  * Render Categorized Results in Dropdown with Highlighting and Direct Navigation
  */
-function renderSearchResults(query, { depts, facilities, news, staff }) {
+function renderSearchResults(query, { depts, facilities, news, staff, books = [] }) {
   const desktopResults = document.getElementById('global-search-results');
   const mobileResults = document.getElementById('mobile-search-results');
   const metaLabel = document.getElementById('global-search-meta');
   const mobMetaLabel = document.getElementById('mobile-search-meta');
 
-  const totalResults = depts.length + facilities.length + news.length + staff.length;
+  const totalResults = depts.length + facilities.length + news.length + staff.length + books.length;
   currentSearchItems = [];
   selectedSearchIndex = -1;
 
-  const countText = `${totalResults} result${totalResults === 1 ? '' : 's'} across 4 tables`;
+  const countText = `${totalResults} result${totalResults === 1 ? '' : 's'} across 5 tables`;
   if (metaLabel) metaLabel.textContent = countText;
   if (mobMetaLabel) mobMetaLabel.textContent = countText;
 
@@ -2842,7 +3075,7 @@ function renderSearchResults(query, { depts, facilities, news, staff }) {
         >
           <div class="flex items-center gap-2.5 flex-1 min-w-0" data-action="navigate">
             <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-slate-900 border border-slate-300 dark:border-white/15 shadow-sm">
-              <img src="${fac.image_url || fac.image || 'https://eng.sjp.ac.lk/wp-content/uploads/2026/09/FOE-Library-2.jpg'}" alt="${fac.title}" class="w-full h-full object-cover">
+              <img src="${resolveFacilityImageUrl(fac.image_url || fac.image, fac.title)}" alt="${fac.title}" class="w-full h-full object-cover">
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5">
@@ -2973,6 +3206,59 @@ function renderSearchResults(query, { depts, facilities, news, staff }) {
     html += `</div></div>`;
   }
 
+  // 5. Library Books Section
+  if (books && books.length > 0) {
+    html += `
+      <div class="pt-2 border-t border-slate-200/60 dark:border-white/10">
+        <div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 flex items-center justify-between">
+          <span>📚 Library Books (${books.length})</span>
+          <span class="text-slate-400 font-normal">Section & Details</span>
+        </div>
+        <div class="space-y-1 mt-1">
+    `;
+    books.forEach(b => {
+      const itemIndex = currentSearchItems.length;
+      currentSearchItems.push({
+        type: 'book',
+        id: b.id,
+        title: b.title,
+        raw: b
+      });
+      const cover = b.cover_image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80';
+      const isAvail = (b.availability_status || '').toLowerCase() === 'available';
+      html += `
+        <div 
+          class="global-search-item flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-amber-500/10 dark:hover:bg-white/10 cursor-pointer transition-all border border-transparent hover:border-amber-400/30 group"
+          data-index="${itemIndex}"
+        >
+          <div class="flex items-center gap-2.5 flex-1 min-w-0" data-action="navigate">
+            <div class="w-10 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-slate-900 border border-slate-300 dark:border-white/15 shadow-sm">
+              <img src="${cover}" alt="${escapeHtml(b.title)}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-slate-900 dark:text-white truncate">${highlightMatch(b.title)}</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold ${isAvail ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300' : 'bg-amber-500/20 text-amber-700 dark:text-amber-300'}">
+                  ${escapeHtml(b.availability_status || 'BOOK')}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">✍️ ${highlightMatch(b.author || 'Author')} • ${escapeHtml(b.category || 'Engineering')}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 flex-shrink-0">
+            <button class="search-popup-btn text-[10px] font-bold px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 text-amber-800 dark:text-amber-300 border border-amber-500/30 transition-all cursor-pointer" data-index="${itemIndex}" title="View book details popup">
+              Details ↗
+            </button>
+            <button class="search-nav-btn text-[10px] font-bold px-2 py-1 rounded-lg bg-slate-200/80 dark:bg-white/10 hover:bg-slate-300/80 dark:hover:bg-white/20 text-slate-700 dark:text-slate-200 transition-all cursor-pointer" data-index="${itemIndex}" title="Go to library section">
+              Library →
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div></div>`;
+  }
+
   // Populate desktop results
   if (desktopResults) {
     desktopResults.innerHTML = html;
@@ -3075,6 +3361,17 @@ function selectSearchResult(index, preferPopup = false) {
     }, 250);
   } else if (item.type === 'staff') {
     openStaffModal(item.raw || item);
+  } else if (item.type === 'book') {
+    if (preferPopup) {
+      openBookDetailModal(item.raw || item);
+    } else {
+      switchTab('library');
+      openBookDetailModal(item.raw || item);
+      setTimeout(() => {
+        const card = document.getElementById(`library-book-card-${item.id}`);
+        if (card) highlightElement(card);
+      }, 250);
+    }
   }
 }
 
@@ -3155,10 +3452,10 @@ export function openFacilityModal(fac) {
   if (!modal) return;
 
   const facId = fac.id;
-  const foeFac = (FOE_DATA.facilities || []).find(f => 
+  const foeFac = (state.facilities || FOE_DATA.facilities || []).find(f => 
     f.id === facId || 
     f.id === `fac-${facId}` ||
-    (fac.id && f.id.endsWith(String(fac.id))) ||
+    (fac.id && f.id && String(f.id).endsWith(String(fac.id))) ||
     (f.title && fac.title && f.title.toLowerCase().trim() === fac.title.toLowerCase().trim()) ||
     (f.title && fac.title && f.title.toLowerCase().includes(fac.title.toLowerCase())) ||
     (fac.title && f.title && fac.title.toLowerCase().includes(f.title.toLowerCase()))
@@ -3201,7 +3498,7 @@ export function openFacilityModal(fac) {
 
   if (deptEl) deptEl.textContent = foeFac.dept || 'Faculty of Engineering';
 
-  const defaultHeroUrl = fac.image_url || fac.image || foeFac.image || 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg';
+  const defaultHeroUrl = resolveFacilityImageUrl(fac.image_url || fac.image || foeFac.image || foeFac.image_url, fac.title || foeFac.title);
   if (imgEl) {
     imgEl.src = defaultHeroUrl;
     imgEl.alt = foeFac.title || 'Facility Hero';
@@ -3217,11 +3514,15 @@ export function openFacilityModal(fac) {
 
   // Multi-Photo Gallery Showcase
   const galleryItems = (foeFac.gallery && foeFac.gallery.length > 0)
-    ? foeFac.gallery
+    ? foeFac.gallery.map(item => ({
+        url: resolveFacilityImageUrl(item.url, item.title || foeFac.title),
+        title: item.title || foeFac.title,
+        desc: item.desc || 'High-resolution photo perspective'
+      }))
     : [
         { url: defaultHeroUrl, title: foeFac.title || 'Main Perspective', desc: 'Primary view of the facility' },
-        { url: 'https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg', title: 'Mattegoda Complex View', desc: 'Exterior and architectural perspective' },
-        { url: 'https://eng.sjp.ac.lk/wp-content/uploads/2025/08/PXL_20250609_135249611.jpg', title: 'Laboratory Equipment Bay', desc: 'High-precision research instrumentation' }
+        { url: 'https://eng.sjp.ac.lk/wp-content/uploads/2026/08/B1_New.jpg', title: 'Mattegoda Complex View', desc: 'Exterior and architectural perspective' },
+        { url: 'https://eng.sjp.ac.lk/wp-content/uploads/2025/12/Civil-Engineering-Building.jpg', title: 'Campus Facility Bay', desc: 'Specialized departmental complex' }
       ];
 
   if (galleryCountEl) {
@@ -3436,6 +3737,334 @@ export function closeStaffModal() {
 }
 
 /**
+ * ============================================================================
+ * Faculty Library - Supabase Integration & In-Page Modal
+ * ============================================================================
+ */
+
+export async function fetchLibraryBooks() {
+  try {
+    if (!supabase) {
+      state.libraryBooks = FOE_DATA.library_books || [];
+      return state.libraryBooks;
+    }
+    const { data, error } = await supabase
+      .from('library_books')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      state.libraryBooks = FOE_DATA.library_books || [];
+    } else {
+      state.libraryBooks = data;
+    }
+    return state.libraryBooks;
+  } catch (err) {
+    console.warn('Error fetching library books from Supabase:', err);
+    state.libraryBooks = FOE_DATA.library_books || [];
+    return state.libraryBooks;
+  }
+}
+
+export function renderLibraryBooks() {
+  const container = document.getElementById('library-books-grid');
+  const countEl = document.getElementById('library-books-count');
+  const emptyState = document.getElementById('library-empty-state');
+  if (!container) return;
+
+  const allBooks = state.libraryBooks && state.libraryBooks.length > 0
+    ? state.libraryBooks
+    : (FOE_DATA.library_books || []);
+
+  const catFilter = state.libraryFilter.category || 'all';
+  const statusFilter = state.libraryFilter.status || 'all';
+  const searchFilter = (state.libraryFilter.search || '').trim().toLowerCase();
+
+  const filtered = allBooks.filter(book => {
+    if (catFilter !== 'all' && book.category !== catFilter) {
+      return false;
+    }
+    if (statusFilter !== 'all' && book.availability_status !== statusFilter) {
+      return false;
+    }
+    if (searchFilter) {
+      const matchTitle = (book.title || '').toLowerCase().includes(searchFilter);
+      const matchAuthor = (book.author || '').toLowerCase().includes(searchFilter);
+      const matchCat = (book.category || '').toLowerCase().includes(searchFilter);
+      if (!matchTitle && !matchAuthor && !matchCat) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  if (countEl) {
+    countEl.textContent = `${filtered.length} Book${filtered.length === 1 ? '' : 's'} Listed`;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    if (emptyState) emptyState.classList.remove('hidden');
+    return;
+  }
+
+  if (emptyState) emptyState.classList.add('hidden');
+  container.innerHTML = '';
+
+  const fragment = document.createDocumentFragment();
+
+  filtered.forEach(book => {
+    const card = document.createElement('article');
+    card.id = `library-book-card-${book.id}`;
+    card.className = 'ios27-card group relative flex flex-col justify-between overflow-hidden rounded-2xl backdrop-blur-xl border border-slate-200 dark:border-white/10 hover:border-amber-500/50 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 bg-white/70 dark:bg-white/[0.03] cursor-pointer';
+
+    const isAvailable = (book.availability_status || '').toLowerCase() === 'available';
+    const isOnLoan = (book.availability_status || '').toLowerCase() === 'on loan';
+
+    let badgeClass = 'bg-sky-600/95 text-white border-sky-300/40';
+    let badgeText = book.availability_status || 'Reference Only';
+    let badgeIcon = '🔒';
+
+    if (isAvailable) {
+      badgeClass = 'bg-emerald-600/95 text-white border-emerald-300/40 shadow-sm';
+      badgeText = 'Available';
+      badgeIcon = '<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>';
+    } else if (isOnLoan) {
+      badgeClass = 'bg-amber-500/95 text-slate-950 border-amber-300/40 font-bold';
+      badgeText = 'On Loan';
+      badgeIcon = '🕒';
+    }
+
+    const coverUrl = book.cover_image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80';
+
+    card.innerHTML = `
+      <div class="relative w-full aspect-[3/4] overflow-hidden bg-slate-900">
+        <img 
+          src="${coverUrl}" 
+          alt="${escapeHtml(book.title)}" 
+          class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80';"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none"></div>
+
+        <!-- Floating Availability Pill -->
+        <div class="absolute top-2.5 right-2.5 z-10">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide backdrop-blur-md border ${badgeClass}">
+            ${badgeIcon}
+            <span>${badgeText}</span>
+          </span>
+        </div>
+
+        <!-- Discipline Tag -->
+        <div class="absolute bottom-2.5 left-2.5 z-10">
+          <span class="text-[9px] font-mono uppercase px-2 py-0.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/20 text-amber-200 font-bold">
+            ${escapeHtml(book.category || 'General')}
+          </span>
+        </div>
+      </div>
+
+      <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+        <div class="space-y-1.5">
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
+            ${escapeHtml(book.title)}
+          </h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1 font-medium truncate">
+            <span>✍️</span>
+            <span class="truncate">${escapeHtml(book.author || 'Faculty Member')}</span>
+          </p>
+        </div>
+
+        <div class="pt-2 border-t border-slate-200/80 dark:border-white/10">
+          <button 
+            type="button" 
+            class="library-view-details-btn w-full py-2 px-3 rounded-xl font-bold text-xs bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-md hover:shadow-amber-500/25 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            data-book-id="${book.id}"
+          >
+            <span>View Details</span>
+            <span>↗</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    const viewBtn = card.querySelector('.library-view-details-btn');
+    if (viewBtn) {
+      viewBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openBookDetailModal(book);
+      });
+    }
+
+    card.addEventListener('click', () => {
+      openBookDetailModal(book);
+    });
+
+    fragment.appendChild(card);
+  });
+
+  container.appendChild(fragment);
+}
+
+export async function fetchAndRenderLibraryBooks() {
+  if (!state.libraryBooks || state.libraryBooks.length === 0) {
+    await fetchLibraryBooks();
+  }
+  renderLibraryBooks();
+}
+
+export function openBookDetailModal(book) {
+  const modal = document.getElementById('book-detail-modal');
+  if (!modal || !book) return;
+
+  state.selectedBook = book;
+
+  const catEl = document.getElementById('book-modal-category');
+  const badgeEl = document.getElementById('book-modal-availability-badge');
+  const badgeText = document.getElementById('book-modal-availability-text');
+  const badgeDot = document.getElementById('book-modal-dot');
+  const coverEl = document.getElementById('book-modal-cover');
+  const titleEl = document.getElementById('book-modal-title');
+  const authorEl = document.getElementById('book-modal-author');
+  const callNoEl = document.getElementById('book-modal-callno');
+  const statusBox = document.getElementById('book-modal-status-box');
+  const statusHeader = document.getElementById('book-modal-status-header');
+  const statusDesc = document.getElementById('book-modal-status-desc');
+  const officialLink = document.getElementById('book-modal-official-link');
+  const urlDisplay = document.getElementById('book-modal-url-display');
+
+  if (catEl) catEl.textContent = book.category || 'General Engineering';
+  if (titleEl) titleEl.textContent = book.title || 'Book Title';
+  if (authorEl) authorEl.textContent = book.author || 'Engineering Faculty Author';
+  if (callNoEl) callNoEl.textContent = `USJ-ENG-LIB-${String(book.id || 1).padStart(4, '0')}`;
+
+  const isAvailable = (book.availability_status || '').toLowerCase() === 'available';
+  const isOnLoan = (book.availability_status || '').toLowerCase() === 'on loan';
+
+  if (badgeText) badgeText.textContent = book.availability_status || 'Reference Only';
+
+  if (badgeEl && statusBox) {
+    if (isAvailable) {
+      badgeEl.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-sm flex items-center gap-1.5 bg-emerald-600 border border-emerald-400';
+      if (badgeDot) badgeDot.className = 'w-2 h-2 rounded-full bg-white animate-pulse';
+      statusBox.className = 'p-3.5 rounded-2xl border text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-200';
+      if (statusHeader) statusHeader.innerHTML = '<span>✓</span><span>Circulation Status: In Library & Ready for Loan</span>';
+      if (statusDesc) statusDesc.textContent = 'This volume is available on open shelves at the Mattegoda Central Library. Undergraduates may borrow for 14 calendar days using student RFID smart cards.';
+    } else if (isOnLoan) {
+      badgeEl.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-slate-950 shadow-sm flex items-center gap-1.5 bg-amber-500 border border-amber-300';
+      if (badgeDot) badgeDot.className = 'w-2 h-2 rounded-full bg-slate-950';
+      statusBox.className = 'p-3.5 rounded-2xl border text-xs bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200';
+      if (statusHeader) statusHeader.innerHTML = '<span>🕒</span><span>Circulation Status: Currently On Loan</span>';
+      if (statusDesc) statusDesc.textContent = 'This volume is currently checked out by a faculty member or student. You can place a hold request at the circulation desk or access the digital companion.';
+    } else {
+      badgeEl.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-sm flex items-center gap-1.5 bg-sky-600 border border-sky-400';
+      if (badgeDot) badgeDot.className = 'w-2 h-2 rounded-full bg-white';
+      statusBox.className = 'p-3.5 rounded-2xl border text-xs bg-sky-500/10 border-sky-500/30 text-sky-900 dark:text-sky-200';
+      if (statusHeader) statusHeader.innerHTML = '<span>🔒</span><span>Circulation Status: Permanent Reference Stacks</span>';
+      if (statusDesc) statusDesc.textContent = 'Reserved for in-house reading and research within the Silent E-Scholar Lounge on Level 2. High-resolution photocopiers and scanners are provided.';
+    }
+  }
+
+  if (coverEl) {
+    coverEl.src = book.cover_image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80';
+    coverEl.onerror = () => { coverEl.src = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80'; };
+  }
+
+  // Official Link from Database
+  if (officialLink) {
+    const rawLink = book.official_link || 'https://eng.sjp.ac.lk/library-foe/';
+    officialLink.href = rawLink;
+    officialLink.setAttribute('target', '_blank');
+    officialLink.setAttribute('rel', 'noopener noreferrer');
+  }
+  if (urlDisplay) {
+    urlDisplay.textContent = book.official_link || 'https://eng.sjp.ac.lk/library-foe/';
+  }
+
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+export function closeBookDetailModal() {
+  const modal = document.getElementById('book-detail-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  document.body.style.overflow = '';
+  state.selectedBook = null;
+}
+
+export function initLibrarySection() {
+  const searchInput = document.getElementById('library-search-input');
+  const searchClear = document.getElementById('library-search-clear');
+  const categorySelect = document.getElementById('library-category-select');
+  const statusSelect = document.getElementById('library-status-select');
+  const resetBtn = document.getElementById('library-reset-filters-btn');
+  const modal = document.getElementById('book-detail-modal');
+  const closeBtn = document.getElementById('book-modal-close');
+  const actionCloseBtn = document.getElementById('book-modal-action-close');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      state.libraryFilter.search = e.target.value;
+      if (searchClear) searchClear.classList.toggle('hidden', !e.target.value);
+      renderLibraryBooks();
+    });
+  }
+
+  if (searchClear) {
+    searchClear.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      state.libraryFilter.search = '';
+      searchClear.classList.add('hidden');
+      renderLibraryBooks();
+    });
+  }
+
+  if (categorySelect) {
+    categorySelect.addEventListener('change', (e) => {
+      state.libraryFilter.category = e.target.value;
+      renderLibraryBooks();
+    });
+  }
+
+  if (statusSelect) {
+    statusSelect.addEventListener('change', (e) => {
+      state.libraryFilter.status = e.target.value;
+      renderLibraryBooks();
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      if (searchClear) searchClear.classList.add('hidden');
+      if (categorySelect) categorySelect.value = 'all';
+      if (statusSelect) statusSelect.value = 'all';
+      state.libraryFilter = { category: 'all', status: 'all', search: '' };
+      renderLibraryBooks();
+    });
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeBookDetailModal);
+  if (actionCloseBtn) actionCloseBtn.addEventListener('click', closeBookDetailModal);
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeBookDetailModal();
+    });
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.openBookDetailModal = openBookDetailModal;
+  window.closeBookDetailModal = closeBookDetailModal;
+  window.fetchAndRenderLibraryBooks = fetchAndRenderLibraryBooks;
+}
+
+/**
  * Initialize Global Search Listeners (Desktop Header and Mobile Navigation)
  */
 function initGlobalSearch() {
@@ -3603,6 +4232,7 @@ function initGlobalSearch() {
       closeStaffModal();
       closeDeptModal();
       closeFacilityModal();
+      closeBookDetailModal();
       closeModal();
     }
   });
@@ -3643,6 +4273,9 @@ initScrollNavbar();
 setupEventHandlers();
 initWelcomeScreen();
 initTabNavigation();
+initLibrarySection();
 initGlobalSearch();
 fetchAndDisplayAnnouncements();
+fetchFacilitiesFromSupabase();
+fetchLibraryBooks();
 

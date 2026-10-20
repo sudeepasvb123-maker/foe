@@ -50,3 +50,18 @@ jobs:
             echo "Running automated live sync to Supabase table 'sjp_eng_data'..."
             npm run scrape
           fi
+
+      - name: 📚 Run SJP Faculty Library & OPAC Scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_KEY }}
+          SUPABASE_LIBRARY_TABLE: ${{ secrets.SUPABASE_LIBRARY_TABLE || 'library_books' }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "Running library scraper in dry-run mode (--dry-run)..."
+            npm run dry-run:library
+          else
+            echo "Running automated live library sync to Supabase table 'library_books'..."
+            npm run scrape:library
+          fi
+

@@ -10,7 +10,11 @@
     "preview": "vite preview",
     "start": "node scraper.js",
     "scrape": "node scraper.js",
-    "dry-run": "node scraper.js --dry-run"
+    "dry-run": "node scraper.js --dry-run",
+    "scrape:library": "node library_scraper.js",
+    "dry-run:library": "node library_scraper.js --dry-run",
+    "scrape:all": "node scraper.js && node library_scraper.js",
+    "dry-run:all": "node scraper.js --dry-run && node library_scraper.js --dry-run"
   },
   "keywords": [
     "scraper",
